@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { Box } from "@material-ui/core";
+import { Box, Container } from "@material-ui/core";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 
@@ -31,16 +31,18 @@ const App = () => {
         </Box>
         <Box flexGrow={1} style={{ marginBottom: "auto", minHeight: "80vh" }}>
           <Suspense fallback={<div>Loading...</div>}>
-            <Switch>
-              {/* Common routes */}
-              <Route exact path="/" component={LazyLanding} />
-              {/* Student Routes */}
-              <Route path="/student" component={LazyStudent} />
-              {/* Faculty Routes */}
-              <Route path="/faculty" component={LazyFaculty} />
-              {/* not found route should always be last */}
-              <Route path="*" component={LazyPageNotFound} />
-            </Switch>
+            <Container>
+              <Switch>
+                {/* Common routes */}
+                <Route exact path="/" component={LazyLanding} />
+                {/* Student Routes */}
+                <Route path="/student" component={LazyStudent} />
+                {/* Faculty Routes */}
+                <Route path="/faculty" component={LazyFaculty} />
+                {/* not found route should always be last */}
+                <Route path="*" component={LazyPageNotFound} />
+              </Switch>
+            </Container>
           </Suspense>
         </Box>
         <Box>
