@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Button } from "@material-ui/core";
 
-function App() {
+const Landing = () => {
   return (
     <Container maxWidth="xl">
       <h1>Welcome to VJTI Central!</h1>
@@ -10,6 +10,6 @@ function App() {
       </Button>
     </Container>
   );
-}
+};
 
-export default App;
+export default Landing;
