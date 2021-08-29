@@ -1,14 +1,14 @@
 import React from "react";
-import { Container, Button } from "@material-ui/core";
+import { Button, Box } from "@material-ui/core";
 
 const Landing = () => {
   return (
-    <Container maxWidth="xl">
+    <Box>
       <h1>Welcome to VJTI Central!</h1>
       <Button size="medium" variant="contained" color="primary">
         Click
       </Button>
-    </Container>
+    </Box>
   );
 };
 
