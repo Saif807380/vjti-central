@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import { Box, Container } from "@material-ui/core";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
+import Spinner from "./components/Spinner";
 
 // Common Pages
 const LazyLanding = lazy(() => import("./pages/common/Landing"));
@@ -30,7 +31,7 @@ const App = () => {
           <Header />
         </Box>
         <Box flexGrow={1} style={{ marginBottom: "auto", minHeight: "80vh" }}>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<Spinner />}>
             <Container>
               <Switch>
                 {/* Common routes */}
