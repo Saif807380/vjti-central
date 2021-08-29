@@ -29,6 +29,11 @@ const useStyles = makeStyles((theme) => ({
       display: "none"
     }
   },
+  button: {
+    "&:hover": {
+      backgroundColor: "transparent"
+    }
+  },
   navButton: {
     marginRight: "15px"
   }
@@ -84,7 +89,13 @@ const Header = () => {
     <div className={classes.grow}>
       <AppBar position="static">
         <Toolbar>
-          <Button color="inherit" onClick={() => navigationHandler("/")}>
+          <Button
+            color="inherit"
+            disableRipple
+            disableFocusRipple
+            className={classes.button}
+            onClick={() => navigationHandler("/")}
+          >
             <SchoolRoundedIcon />
             <Typography variant="h6" noWrap style={{ marginLeft: "10px" }}>
               VJTI Central
@@ -95,17 +106,22 @@ const Header = () => {
             <Button
               onClick={() => navigationHandler("/student")}
               color="inherit"
-              className={classes.navButton}
+              className={`${classes.navButton} ${classes.button}`}
+              disableRipple
+              disableFocusRipple
             >
-              <Typography variant="h6" noWrap>
+              <Typography variant="body1" noWrap>
                 Student
               </Typography>
             </Button>
             <Button
               onClick={() => navigationHandler("/faculty")}
               color="inherit"
+              disableRipple
+              disableFocusRipple
+              className={classes.button}
             >
-              <Typography variant="h6" noWrap>
+              <Typography variant="body1" noWrap>
                 Faculty
               </Typography>
             </Button>
