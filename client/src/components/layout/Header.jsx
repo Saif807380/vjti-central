@@ -46,14 +46,6 @@ const Header = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  const studentClickHandler = () => {
-    history.push("/student");
-  };
-
-  const facultyClickHandler = () => {
-    history.push("/faculty");
-  };
-
   const navigationHandler = (route) => {
     history.push(route);
   };
@@ -77,10 +69,10 @@ const Header = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={studentClickHandler}>
+      <MenuItem onClick={() => navigationHandler("/student/login")}>
         <p>Student Section</p>
       </MenuItem>
-      <MenuItem onClick={facultyClickHandler}>
+      <MenuItem onClick={() => navigationHandler("/faculty/login")}>
         <p>Faculty Section</p>
       </MenuItem>
     </Menu>
@@ -104,7 +96,7 @@ const Header = () => {
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             <Button
-              onClick={() => navigationHandler("/student")}
+              onClick={() => navigationHandler("/student/login")}
               color="inherit"
               className={`${classes.navButton} ${classes.button}`}
               disableRipple
@@ -115,7 +107,7 @@ const Header = () => {
               </Typography>
             </Button>
             <Button
-              onClick={() => navigationHandler("/faculty")}
+              onClick={() => navigationHandler("/faculty/login")}
               color="inherit"
               disableRipple
               disableFocusRipple
