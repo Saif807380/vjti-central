@@ -37,6 +37,12 @@ const student = new mongoose.Schema({
     type: String,
     required: true
   },
+  degree: {
+    type: String,
+    enum: ["BTech", "MTech", "MCA", "Diploma"],
+    required: true
+  },
+
   admissionYear: {
     type: Number,
     required: true
