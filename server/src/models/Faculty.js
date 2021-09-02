@@ -33,12 +33,13 @@ const faculty = new mongoose.Schema({
   description: {
     type: String
   },
-  acceptedApplications: {
-    type: Array,
-    default: []
-  },
-  rejectApplications: {
-    type: Array,
+  applications: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "application"
+      }
+    ],
     default: []
   }
 });

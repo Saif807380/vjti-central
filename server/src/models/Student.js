@@ -32,22 +32,22 @@ const student = new mongoose.Schema({
     enum: ["BTech", "MTech", "MCA", "Diploma"],
     required: true
   },
-  degree: {
+  publicKey: {
     type: String,
-    enum: ["BTech", "MTech", "MCA", "Diploma"],
+    default: "", // remove this after connecting to vj chain
     required: true
   },
-
   admissionYear: {
     type: Number,
     required: true
   },
-  acceptedApplications: {
-    type: Array,
-    default: []
-  },
-  rejectApplications: {
-    type: Array,
+  applications: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "application"
+      }
+    ],
     default: []
   }
 });

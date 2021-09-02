@@ -16,6 +16,12 @@ exports.registerStudent = catchAsync(async (req, res, next) => {
     });
   }
 
+  if (req.body.password !== req.body.confirmPassword) {
+    return res.status(400).json({
+      error: "Password and Confirm Password do not match"
+    });
+  }
+
   const newStudent = await Student.create(req.body);
 
   const token = jwt.sign({ id: newStudent._id }, process.env.JWT_SECRET, {
@@ -40,6 +46,12 @@ exports.registerFaculty = catchAsync(async (req, res, next) => {
   if (faculty) {
     return res.status(400).json({
       error: "Faculty with this ID or email already exists"
+    });
+  }
+
+  if (req.body.password !== req.body.confirmPassword) {
+    return res.status(400).json({
+      error: "Password and Confirm Password do not match"
     });
   }
 
