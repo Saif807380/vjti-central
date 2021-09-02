@@ -12,6 +12,7 @@ import {
   Menu,
   MenuItem
 } from "@material-ui/core";
+import { useAuthDispatch, useAuthState } from "../../context/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -42,6 +43,8 @@ const useStyles = makeStyles((theme) => ({
 const Header = () => {
   const classes = useStyles();
   const history = useHistory();
+  const { isAuthenticated } = useAuthState();
+  const dispatch = useAuthDispatch();
 
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -58,6 +61,11 @@ const Header = () => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleLogout = () => {
+    dispatch({ type: "LOGOUT" });
+    history.replace("/");
+  };
+
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -69,12 +77,20 @@ const Header = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={() => navigationHandler("/student/login")}>
-        <p>Student Section</p>
-      </MenuItem>
-      <MenuItem onClick={() => navigationHandler("/faculty/login")}>
-        <p>Faculty Section</p>
-      </MenuItem>
+      {isAuthenticated ? (
+        <MenuItem onClick={handleLogout}>
+          <p>Logout</p>
+        </MenuItem>
+      ) : (
+        <div>
+          <MenuItem onClick={() => navigationHandler("/student/login")}>
+            <p>Student Section</p>
+          </MenuItem>
+          <MenuItem onClick={() => navigationHandler("/faculty/login")}>
+            <p>Faculty Section</p>
+          </MenuItem>
+        </div>
+      )}
     </Menu>
   );
   return (
@@ -95,28 +111,44 @@ const Header = () => {
           </Button>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <Button
-              onClick={() => navigationHandler("/student/login")}
-              color="inherit"
-              className={`${classes.navButton} ${classes.button}`}
-              disableRipple
-              disableFocusRipple
-            >
-              <Typography variant="body1" noWrap>
-                Student
-              </Typography>
-            </Button>
-            <Button
-              onClick={() => navigationHandler("/faculty/login")}
-              color="inherit"
-              disableRipple
-              disableFocusRipple
-              className={classes.button}
-            >
-              <Typography variant="body1" noWrap>
-                Faculty
-              </Typography>
-            </Button>
+            {isAuthenticated ? (
+              <Button
+                onClick={handleLogout}
+                color="inherit"
+                className={`${classes.navButton} ${classes.button}`}
+                disableRipple
+                disableFocusRipple
+              >
+                <Typography variant="body1" noWrap>
+                  Logout
+                </Typography>
+              </Button>
+            ) : (
+              <div>
+                <Button
+                  onClick={() => navigationHandler("/student/login")}
+                  color="inherit"
+                  className={`${classes.navButton} ${classes.button}`}
+                  disableRipple
+                  disableFocusRipple
+                >
+                  <Typography variant="body1" noWrap>
+                    Student
+                  </Typography>
+                </Button>
+                <Button
+                  onClick={() => navigationHandler("/faculty/login")}
+                  color="inherit"
+                  disableRipple
+                  disableFocusRipple
+                  className={classes.button}
+                >
+                  <Typography variant="body1" noWrap>
+                    Faculty
+                  </Typography>
+                </Button>
+              </div>
+            )}
           </div>
           <div className={classes.sectionMobile}>
             <IconButton
