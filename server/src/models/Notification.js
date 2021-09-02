@@ -1,11 +1,6 @@
 const mongoose = require("mongoose");
 
 const NotificationSchema = new mongoose.Schema({
-  notification_id: {
-    type: Number,
-    required: true,
-    unique: true
-  },
   description: {
     type: String,
     required: true
@@ -15,12 +10,12 @@ const NotificationSchema = new mongoose.Schema({
     default: Date.now,
     required: true
   },
-  student_id: {
+  studentID: {
     type: Schema.Types.ObjectId,
     ref: "student",
     required: true
   },
-  faculty_id: {
+  facultyID: {
     type: Schema.Types.ObjectId,
     ref: "faculty",
     required: true

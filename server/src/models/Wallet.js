@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const WalletSchema = new Schema({
-  public_key: {
+  publicKey: {
     type: String,
     required: true
   }
