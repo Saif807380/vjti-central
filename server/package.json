@@ -6,8 +6,8 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "format:server": "prettier --config .prettierrc 'src/**/*.js' --write",
-    "format:client": "prettier --config .prettierrc '../client/src/**/*.{js, jsx, css}' --write"
+    "format:server": "prettier --config .prettierrc ../server/src/**/*.js --write",
+    "format:client": "prettier --config .prettierrc ../client/src/**/*.{js, jsx, css} --write"
   },
   "husky": {
     "hooks": {
@@ -21,6 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "date-fns": "^2.23.0",
     "dotenv": "^10.0.0",
@@ -28,7 +29,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.13.7",
     "morgan": "^1.10.0",
-    "password-hasher": "^1.0.1"
+    "password-hasher": "^1.0.1",
+    "validator": "^13.6.0"
   },
   "devDependencies": {
     "husky": "^4.3.8",
