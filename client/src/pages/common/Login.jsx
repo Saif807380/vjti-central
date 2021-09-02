@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Box,
@@ -13,7 +13,12 @@ import {
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { Link } from "react-router-dom";
-import Spinner from "../../../components/Spinner";
+import Spinner from "../../components/Spinner";
+import { useAuthState, useAuthDispatch } from "../../context/AuthContext";
+import { useHistory } from "react-router-dom";
+import { login } from "../../actions/authActions";
+import { SnackbarContext } from "../../context/SnackbarContext";
+import { REQUEST_LOGIN, LOGIN_ERROR } from "../../reducers/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,13 +49,17 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const Login = () => {
+const Login = (props) => {
   const classes = useStyles();
+  const { isAuthenticated, loading, userType } = useAuthState();
+  const dispatch = useAuthDispatch();
+  const history = useHistory();
+  const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberme, setRememberme] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleEmail = (e) => setEmail(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
@@ -61,6 +70,12 @@ const Login = () => {
     email: "",
     password: ""
   });
+
+  useEffect(() => {
+    if (isAuthenticated && userType === props.userType) {
+      history.push(`/${props.userType}`);
+    }
+  }, [history, isAuthenticated, userType, props.userType]);
 
   function isFormValid() {
     let formIsValid = true;
@@ -95,22 +110,37 @@ const Login = () => {
         password: ""
       }));
     }
-    console.log(errors);
 
     return formIsValid;
   }
 
-  function handleFormSubmit(event) {
+  const handleFormSubmit = (event) => {
+    dispatch({ type: REQUEST_LOGIN });
     event.preventDefault();
-    setIsLoading(true);
     if (isFormValid()) {
-      const faculty = { email, password, rememberme };
-      console.log(faculty);
+      login({
+        dispatch,
+        email,
+        password,
+        rememberme,
+        userType: props.userType
+      }).then((res) => {
+        if (res.error) {
+          setSeverity("error");
+          setMessage(res.error);
+          setOpen(true);
+        } else {
+          setSeverity("success");
+          setMessage("You have successfully logged in.");
+          setOpen(true);
+          history.push(`/${props.userType}`);
+        }
+      });
     }
-    setIsLoading(false);
-  }
+    dispatch({ type: LOGIN_ERROR });
+  };
 
-  return isLoading ? (
+  return loading ? (
     <Spinner />
   ) : (
     <Box
@@ -122,7 +152,7 @@ const Login = () => {
     >
       <Paper elevation={3} className={classes.paper}>
         <div style={{ marginTop: "24px" }}>
-          <Typography variant="h5">Faculty Login</Typography>
+          <Typography variant="h5">{props.name} Login</Typography>
         </div>
         <form className={classes.form} noValidate>
           <div className={classes.formInner}>
@@ -192,7 +222,7 @@ const Login = () => {
           style={{ color: "#303F9E", fontSize: 15, marginBottom: "15px" }}
         >
           Don't have an account?
-          <Link style={{ color: "#303F9E" }} to="/faculty/register">
+          <Link style={{ color: "#303F9E" }} to={`/${props.userType}/register`}>
             {" "}
             Sign Up
           </Link>

@@ -7,7 +7,7 @@
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "format:server": "prettier --config .prettierrc ../server/src/**/*.js --write",
-    "format:client": "prettier --config .prettierrc ../client/src/**/*.{js, jsx, css} --write"
+    "format:client": "prettier --config .prettierrc '../client/src/**/*.{js, jsx, css}' --write"
   },
   "husky": {
     "hooks": {
