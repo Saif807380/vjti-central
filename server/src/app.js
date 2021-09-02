@@ -6,6 +6,8 @@ const path = require("path");
 const routes = require("./routes");
 const config = require("./config");
 const dbconnect = require("./config/dbconnect.js");
+const AppError = require("./middleware/appError");
+const globalErrorHandler = require("./controllers/errorController");
 
 const app = express();
 
@@ -20,6 +22,13 @@ app.use(cors(corsOptions));
 app.use(morgan("combined"));
 
 routes(app);
+
+//Global Error Handling
+app.all("*", (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
+
+app.use(globalErrorHandler);
 
 dbconnect();
 
