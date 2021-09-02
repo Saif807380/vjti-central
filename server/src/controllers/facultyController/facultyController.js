@@ -1,7 +1,7 @@
 const Faculty = require("./../../models/Faculty");
 const catchAsync = require("./../../middleware/catchAsync");
 
-exports.getAllFaculties = (req, res) => {
+exports.getAllFaculties = catchAsync(async (req, res, next) => {
   const faculties = await Faculty.find();
 
   res.status(200).json({
@@ -11,7 +11,7 @@ exports.getAllFaculties = (req, res) => {
       faculties
     }
   });
-};
+});
 
 exports.getFaculty = (req, res) => {
   res.status(500).json({
