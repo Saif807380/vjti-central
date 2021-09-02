@@ -1,15 +1,20 @@
-const authController = require("./controllers/authController");
+const authStudentController = require("./controllers/studentController/authStudentController");
+const authFacultyController = require("./controllers/facultyController/authFacultyController");
+const studentController = require("./controllers/studentController/studentController");
+const facultyController = require("./controllers/facultyController/facultyController");
 
 module.exports = (app) => {
   app.get("/api/check", (req, res) => {
     res.json("Hello World");
   });
 
-  // Student routes
-  app.post("/api/student/register", authController.registerStudent);
-  app.post("/api/student/login", authController.loginStudent);
+  //Student Routes
+  app.post("/api/student/register", authStudentController.registerStudent);
+  app.post("/api/student/login", authStudentController.loginStudent);
+  app.get("/api/student", studentController.getAllStudents);
 
-  // Faculty routes
-  app.post("/api/faculty/register", authController.registerFaculty);
-  app.post("/api/faculty/login", authController.loginFaculty);
+  //Faculty Routes
+  app.post("/api/faculty/register", authFacultyController.registerFaculty);
+  app.post("/api/faculty/login", authFacultyController.loginFaculty);
+  app.get("/api/faculty", facultyController.getAllFaculties);
 };
