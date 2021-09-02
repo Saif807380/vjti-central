@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 
 const FacilitySchema = new mongoose.Schema({
-  facility_id: {
+  facilityID: {
     type: Number,
     required: true,
     unique: true
   },
-  facility_type: {
+  facilityType: {
     type: String,
     enum: ["Canteen", "Library", "Xerox"],
     required: true
