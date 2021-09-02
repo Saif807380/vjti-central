@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 
 const faculty = new mongoose.Schema({
   facultyID: {
-    type: Number,
+    type: String,
     required: true,
     unique: true
   },
@@ -23,16 +23,6 @@ const faculty = new mongoose.Schema({
     type: String,
     required: true
   },
-  passwordConfirm: {
-    type: String,
-    required: true,
-    validate: {
-      validator: function (el) {
-        return el === this.password;
-      },
-      message: "Passwords are not the same!"
-    }
-  },
   department: {
     type: String,
     required: true
@@ -43,11 +33,14 @@ const faculty = new mongoose.Schema({
   description: {
     type: String
   },
-  acceptedApplications: {
-    type: Array
-  },
-  rejectApplications: {
-    type: Array
+  applications: {
+    type: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "application"
+      }
+    ],
+    default: []
   }
 });
 
@@ -55,7 +48,6 @@ faculty.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
   this.password = await bcrypt.hash(this.password, 12);
-  this.passwordConfirm = undefined;
   next();
 });
 
