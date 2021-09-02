@@ -3,16 +3,12 @@ const Schema = mongoose.Schema;
 
 const ApplicationSchema = new Schema(
   {
-    application_id: {
-      type: Number,
-      required: true
-    },
-    student_id: {
+    studentID: {
       type: Schema.Types.ObjectId,
       ref: "student",
       required: true
     },
-    faculty_id: {
+    facultyID: {
       type: Schema.Types.ObjectId,
       ref: "faculty",
       required: true
@@ -23,7 +19,7 @@ const ApplicationSchema = new Schema(
       default: "Pending",
       required: true
     },
-    domain_achievement: {
+    domainAchievement: {
       type: String,
       enum: [
         "Hackathon",
