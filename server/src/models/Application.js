@@ -27,12 +27,7 @@ const ApplicationSchema = new Schema({
     enum: ["Hackathon", "Research Paper", "Committee Position", "Competition"],
     default: "Competition",
     required: true
-  },
-  date_created: {
-    type: Date,
-    required: true
-  },
-  date_edited: Date
+  }
 });
 
 const Application = mongoose.model("application", ApplicationSchema);
