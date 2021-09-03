@@ -35,8 +35,7 @@ const student = new mongoose.Schema({
   },
   publicKey: {
     type: String,
-    default: "", // remove this after connecting to vj chain
-    required: true
+    default: "" // remove this after connecting to vj chain
   },
   admissionYear: {
     type: Number,

@@ -5,7 +5,6 @@ import {
   Typography,
   Button,
   Paper,
-  TextField,
   FormControlLabel,
   Checkbox,
   InputAdornment,
@@ -18,7 +17,8 @@ import { useAuthState, useAuthDispatch } from "../../context/AuthContext";
 import { useHistory } from "react-router-dom";
 import { login } from "../../actions/authActions";
 import { SnackbarContext } from "../../context/SnackbarContext";
-import { REQUEST_LOGIN, LOGIN_ERROR } from "../../reducers/types";
+import { REQUEST_AUTH, AUTH_ERROR } from "../../reducers/types";
+import FormField from "../../components/FormField";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,7 +66,7 @@ const Login = (props) => {
   const handleRememberme = (e) => setRememberme(e.target.checked);
   const toggleShowPassword = () => setShowPassword(!showPassword);
 
-  const [errors, updateErrors] = React.useState({
+  const [errors, updateErrors] = useState({
     email: "",
     password: ""
   });
@@ -77,7 +77,7 @@ const Login = (props) => {
     }
   }, [history, isAuthenticated, userType, props.userType]);
 
-  function isFormValid() {
+  const isFormValid = () => {
     let formIsValid = true;
     if (!email) {
       formIsValid = false;
@@ -112,10 +112,10 @@ const Login = (props) => {
     }
 
     return formIsValid;
-  }
+  };
 
   const handleFormSubmit = (event) => {
-    dispatch({ type: REQUEST_LOGIN });
+    dispatch({ type: REQUEST_AUTH });
     event.preventDefault();
     if (isFormValid()) {
       login({
@@ -137,7 +137,7 @@ const Login = (props) => {
         }
       });
     }
-    dispatch({ type: LOGIN_ERROR });
+    dispatch({ type: AUTH_ERROR });
   };
 
   return loading ? (
@@ -156,42 +156,32 @@ const Login = (props) => {
         </div>
         <form className={classes.form} noValidate>
           <div className={classes.formInner}>
-            <div className={classes.formControl}>
-              <TextField
-                variant="outlined"
-                label="Email"
-                required
-                onChange={handleEmail}
-                error={errors.email.length !== 0}
-                helperText={errors.email}
-                fullWidth
-              />
-            </div>
-            <div className={classes.formControl}>
-              <TextField
-                variant="outlined"
-                label="Password"
-                required
-                onChange={handlePassword}
-                error={errors.password.length !== 0}
-                helperText={errors.password}
-                fullWidth
-                InputProps={{
-                  type: showPassword ? "text" : "password",
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={toggleShowPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }}
-              />
-            </div>
+            <FormField
+              label="Email"
+              name="email"
+              onChange={handleEmail}
+              error={errors.email}
+            />
+            <FormField
+              label="Password"
+              name="password"
+              onChange={handlePassword}
+              error={errors.password}
+              InputProps={{
+                type: showPassword ? "text" : "password",
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={toggleShowPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+            />
             <FormControlLabel
               style={{ marginBottom: "5px" }}
               control={

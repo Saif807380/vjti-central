@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOGIN_SUCCESS, LOGIN_ERROR } from "../reducers/types";
+import { AUTH_SUCCESS, AUTH_ERROR } from "../reducers/types";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
@@ -16,7 +16,7 @@ export const login = async ({
       password
     });
     dispatch({
-      type: LOGIN_SUCCESS,
+      type: AUTH_SUCCESS,
       payload: { ...res.data, rememberme, userType }
     });
     return {
@@ -24,9 +24,31 @@ export const login = async ({
       status: res.status
     };
   } catch (err) {
-    dispatch({ type: LOGIN_ERROR });
+    dispatch({ type: AUTH_ERROR });
     return {
       error: err.response.data.message,
+      status: err.response.status
+    };
+  }
+};
+
+export const register = async ({ dispatch, user, userType }) => {
+  try {
+    const res = await axios.post(BASE_URL + `/${userType}/register`, {
+      ...user
+    });
+    dispatch({
+      type: AUTH_SUCCESS,
+      payload: { ...res.data, rememberme: false, userType }
+    });
+    return {
+      data: res.data,
+      status: res.status
+    };
+  } catch (err) {
+    dispatch({ type: AUTH_ERROR });
+    return {
+      error: err.response.data.error,
       status: err.response.status
     };
   }

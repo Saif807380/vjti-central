@@ -1,4 +1,4 @@
-import { REQUEST_LOGIN, LOGIN_SUCCESS, LOGIN_ERROR, LOGOUT } from "./types";
+import { REQUEST_AUTH, AUTH_SUCCESS, AUTH_ERROR, LOGOUT } from "./types";
 
 let token = localStorage.getItem("token");
 let isAuthenticated = localStorage.getItem("isAuthenticated") ? true : false;
@@ -15,13 +15,12 @@ export const initialState = {
 
 export const AuthReducer = (initialState, action) => {
   switch (action.type) {
-    case REQUEST_LOGIN:
+    case REQUEST_AUTH:
       return {
         ...initialState,
         loading: true
       };
-    case LOGIN_SUCCESS:
-      // localStorage.setItem("user", JSON.stringify(action.payload.user));
+    case AUTH_SUCCESS:
       if (action.payload.rememberme) {
         localStorage.setItem("token", action.payload.token);
         localStorage.setItem("isAuthenticated", true);
@@ -29,7 +28,6 @@ export const AuthReducer = (initialState, action) => {
       }
       return {
         ...initialState,
-        // user: action.payload.user,
         token: action.payload.token,
         isAuthenticated: true,
         loading: false,
@@ -44,7 +42,7 @@ export const AuthReducer = (initialState, action) => {
         loading: false,
         userType: ""
       };
-    case LOGIN_ERROR:
+    case AUTH_ERROR:
       return {
         ...initialState,
         loading: false,
