@@ -15,12 +15,6 @@ exports.registerStudent = catchAsync(async (req, res, next) => {
     });
   }
 
-  if (req.body.password !== req.body.confirmPassword) {
-    return res.status(400).json({
-      error: "Password and Confirm Password do not match"
-    });
-  }
-
   const newStudent = await Student.create(req.body);
 
   const token = auth.signToken(newStudent._id);
@@ -29,7 +23,7 @@ exports.registerStudent = catchAsync(async (req, res, next) => {
     status: "success",
     token,
     data: {
-      student: newStudent
+      userID: newStudent._id
     }
   });
 });
@@ -54,6 +48,9 @@ exports.loginStudent = catchAsync(async (req, res, next) => {
   const token = auth.signToken(student._id);
   res.status(200).json({
     status: "success",
-    token
+    token,
+    data: {
+      userID: student._id
+    }
   });
 });
