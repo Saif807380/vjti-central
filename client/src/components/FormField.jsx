@@ -17,7 +17,7 @@ const FormField = (props) => {
         variant="outlined"
         label={props.label}
         name={props.name}
-        required
+        required={props.required}
         onChange={props.onChange}
         error={props.error.length !== 0}
         helperText={props.error}

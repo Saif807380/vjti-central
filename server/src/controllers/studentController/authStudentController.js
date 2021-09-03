@@ -23,7 +23,7 @@ exports.registerStudent = catchAsync(async (req, res, next) => {
     status: "success",
     token,
     data: {
-      student: newStudent
+      userID: newStudent._id
     }
   });
 });
@@ -48,6 +48,9 @@ exports.loginStudent = catchAsync(async (req, res, next) => {
   const token = auth.signToken(student._id);
   res.status(200).json({
     status: "success",
-    token
+    token,
+    data: {
+      userID: student._id
+    }
   });
 });

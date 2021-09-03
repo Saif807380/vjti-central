@@ -159,12 +159,14 @@ const Login = (props) => {
             <FormField
               label="Email"
               name="email"
+              required={true}
               onChange={handleEmail}
               error={errors.email}
             />
             <FormField
               label="Password"
               name="password"
+              required={true}
               onChange={handlePassword}
               error={errors.password}
               InputProps={{

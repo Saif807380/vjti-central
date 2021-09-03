@@ -222,24 +222,28 @@ const Register = () => {
             <FormField
               label="Student ID"
               name="studentID"
+              required={true}
               onChange={handleStudent}
               error={errors.studentID}
             />
             <FormField
               label="Student Name"
               name="name"
+              required={true}
               onChange={handleStudent}
               error={errors.name}
             />
             <FormField
               label="Email"
               name="email"
+              required={true}
               onChange={handleStudent}
               error={errors.email}
             />
             <FormField
               label="Password"
               name="password"
+              required={true}
               onChange={handleStudent}
               error={errors.password}
               InputProps={{
@@ -260,6 +264,7 @@ const Register = () => {
             <FormField
               label="Confirm Password"
               name="confirmPassword"
+              required={true}
               onChange={handleConfirmPassword}
               error={errors.confirmPassword}
               InputProps={{
