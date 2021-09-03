@@ -2,6 +2,7 @@ const authStudentController = require("./controllers/studentController/authStude
 const authFacultyController = require("./controllers/facultyController/authFacultyController");
 const studentController = require("./controllers/studentController/studentController");
 const facultyController = require("./controllers/facultyController/facultyController");
+const applicationController = require("./controllers/ApplicationController");
 
 module.exports = (app) => {
   app.get("/api/check", (req, res) => {
@@ -17,4 +18,11 @@ module.exports = (app) => {
   app.post("/api/faculty/register", authFacultyController.registerFaculty);
   app.post("/api/faculty/login", authFacultyController.loginFaculty);
   app.get("/api/faculty", facultyController.getAllFaculties);
+
+  //Application Routes
+  app.post("/api/apply", applicationController.applyForReward);
+  app.get(
+    "/api/get-applications/:id",
+    applicationController.getAllApplications
+  );
 };
