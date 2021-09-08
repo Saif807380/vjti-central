@@ -28,6 +28,6 @@ module.exports = (app) => {
   );
 
   //Application Routes
-  app.post("/api/apply", applicationController.applyForReward);
+  app.post("/api/applications/apply", applicationController.applyForReward);
   app.get("/api/applications/:id", applicationController.getApplication);
 };

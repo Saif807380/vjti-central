@@ -29,6 +29,37 @@ const ApplicationSchema = new Schema(
       ],
       default: "Competition",
       required: true
+    },
+    title: {
+      type: String,
+      required: true
+    },
+    description: {
+      type: String,
+      required: false
+    },
+    files: {
+      type: [
+        {
+          type: String
+        }
+      ],
+      required: false,
+      default: []
+    },
+    links: {
+      type: [
+        {
+          type: String
+        }
+      ],
+      required: false,
+      default: []
+    },
+    reward: {
+      type: Number,
+      required: false,
+      default: 0
     }
   },
   { timestamps: true }
