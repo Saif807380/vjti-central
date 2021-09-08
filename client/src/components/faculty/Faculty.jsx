@@ -4,6 +4,8 @@ import Login from "../common/Login";
 import Register from "./auth/Register";
 import Dashboard from "./Dashboard";
 import ProtectedRoute from "../../components/ProtectedRoute";
+import ApplicationDetail from "../applications/ApplicationDetail";
+import FacultyActions from "../applications/FacultyActions";
 
 const Faculty = () => {
   return (
@@ -16,6 +18,12 @@ const Faculty = () => {
         exact
         path="/faculty"
         component={Dashboard}
+        userType={"faculty"}
+      />
+      <ProtectedRoute
+        exact
+        path="/faculty/applications/:id"
+        component={() => <ApplicationDetail actions={FacultyActions} />}
         userType={"faculty"}
       />
     </Switch>

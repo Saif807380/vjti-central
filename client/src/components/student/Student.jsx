@@ -5,6 +5,9 @@ import Register from "./auth/Register";
 import Dashboard from "./Dashboard";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import ApplicationsList from "../applications/ApplicationList";
+import ApplicationDetail from "../applications/ApplicationDetail";
+import StudentActions from "../applications/StudentActions";
+
 const Student = () => {
   return (
     <Switch>
@@ -22,6 +25,12 @@ const Student = () => {
         exact
         path="/student/applications"
         component={ApplicationsList}
+        userType={"student"}
+      />
+      <ProtectedRoute
+        exact
+        path="/student/applications/:id"
+        component={() => <ApplicationDetail actions={StudentActions} />}
         userType={"student"}
       />
     </Switch>
