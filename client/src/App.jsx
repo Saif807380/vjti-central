@@ -7,14 +7,15 @@ import Spinner from "./components/Spinner";
 import { AuthProvider } from "./context/AuthContext";
 import { SnackbarProvider } from "./context/SnackbarContext";
 import SnackBar from "./components/SnackBar";
-import "../node_modules/bootstrap/dist/css/bootstrap.css";
+
+import ApplicationsList from "./components/applications/ApplicationList";
 // Common Pages
 const LazyLanding = lazy(() => import("./components/common/Landing"));
 const LazyPageNotFound = lazy(() => import("./components/common/PageNotFound"));
 
 // Student components
 const LazyStudent = lazy(() => import("./components/student/Student"));
-const LazyApplicationsList = lazy(() => import("./components/applications/applicationList"));
+
 
 // Faculty components
 const LazyFaculty = lazy(() => import("./components/faculty/Faculty"));
@@ -46,7 +47,11 @@ const App = () => {
                   <Switch>
                     {/* Common routes */}
                     <Route exact path="/" component={LazyLanding} />
-                    <Route exact path="/applicationsList" component={LazyApplicationsList} />
+                    <Route
+                      exact
+                      path="/applications"
+                      component={ApplicationsList}
+                    />
                     {/* Student Routes */}
                     <Route path="/student" component={LazyStudent} />
                     {/* Faculty Routes */}
