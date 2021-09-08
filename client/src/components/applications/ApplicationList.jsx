@@ -10,8 +10,8 @@ const ApplicationsList = () => {
   }, []);
 
   const loadUsers = async () => {
-   // const result = await axios.get("http://localhost:3003/users");
-    const result=[  {
+    // const result = await axios.get("http://localhost:3003/users");
+    const result = [{
       "id": 1,
       "name": "Error 404 Hackathon",
       "username": "Hackathon",
@@ -24,7 +24,7 @@ const ApplicationsList = () => {
         "bs": "harness real-time e-markets"
       }
     }
-  ]
+    ]
     setUser(result);
   };
 

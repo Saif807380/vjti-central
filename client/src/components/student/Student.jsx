@@ -4,7 +4,7 @@ import Login from "../common/Login";
 import Register from "./auth/Register";
 import Dashboard from "./Dashboard";
 import ProtectedRoute from "../../components/ProtectedRoute";
-
+import ApplicationsList from "../applications/ApplicationList";
 const Student = () => {
   return (
     <Switch>
@@ -16,6 +16,12 @@ const Student = () => {
         exact
         path="/student"
         component={Dashboard}
+        userType={"student"}
+      />
+      <ProtectedRoute
+        exact
+        path="/applications"
+        component={ApplicationsList}
         userType={"student"}
       />
     </Switch>
