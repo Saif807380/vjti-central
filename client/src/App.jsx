@@ -9,14 +9,14 @@ import { SnackbarProvider } from "./context/SnackbarContext";
 import SnackBar from "./components/SnackBar";
 
 // Common Pages
-const LazyLanding = lazy(() => import("./pages/common/Landing"));
-const LazyPageNotFound = lazy(() => import("./pages/common/PageNotFound"));
+const LazyLanding = lazy(() => import("./components/common/Landing"));
+const LazyPageNotFound = lazy(() => import("./components/common/PageNotFound"));
 
-// Student Pages
-const LazyStudent = lazy(() => import("./pages/student/Student"));
+// Student components
+const LazyStudent = lazy(() => import("./components/student/Student"));
 
-// Faculty Pages
-const LazyFaculty = lazy(() => import("./pages/faculty/Faculty"));
+// Faculty components
+const LazyFaculty = lazy(() => import("./components/faculty/Faculty"));
 
 const App = () => {
   return (
