@@ -8,7 +8,6 @@ import { AuthProvider } from "./context/AuthContext";
 import { SnackbarProvider } from "./context/SnackbarContext";
 import SnackBar from "./components/SnackBar";
 
-import ApplicationsList from "./components/applications/ApplicationList";
 // Common Pages
 const LazyLanding = lazy(() => import("./components/common/Landing"));
 const LazyPageNotFound = lazy(() => import("./components/common/PageNotFound"));
@@ -47,11 +46,7 @@ const App = () => {
                   <Switch>
                     {/* Common routes */}
                     <Route exact path="/" component={LazyLanding} />
-                    <Route
-                      exact
-                      path="/applications"
-                      component={ApplicationsList}
-                    />
+
                     {/* Student Routes */}
                     <Route path="/student" component={LazyStudent} />
                     {/* Faculty Routes */}
