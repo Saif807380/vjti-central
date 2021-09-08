@@ -22,6 +22,7 @@ module.exports = (app) => {
   app.post("/api/faculty/register", authFacultyController.registerFaculty);
   app.post("/api/faculty/login", authFacultyController.loginFaculty);
   app.get("/api/faculty", facultyController.getAllFaculties);
+  app.get("/api/faculty/:facultyID", facultyController.getFaculty);
   app.get(
     "/api/faculty/:id/applications",
     applicationController.getFacultyApplications
