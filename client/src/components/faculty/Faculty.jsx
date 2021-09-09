@@ -6,6 +6,7 @@ import Dashboard from "./Dashboard";
 import ProtectedRoute from "../../components/ProtectedRoute";
 import ApplicationDetail from "../applications/ApplicationDetail";
 import FacultyActions from "../applications/FacultyActions";
+import ApplicationsList from "../applications/ApplicationsList";
 
 const Faculty = () => {
   return (
@@ -18,6 +19,12 @@ const Faculty = () => {
         exact
         path="/faculty"
         component={Dashboard}
+        userType={"faculty"}
+      />
+      <ProtectedRoute
+        exact
+        path="/faculty/applications"
+        component={ApplicationsList}
         userType={"faculty"}
       />
       <ProtectedRoute

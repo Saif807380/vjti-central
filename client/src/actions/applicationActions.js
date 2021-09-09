@@ -20,3 +20,22 @@ export const getApplicationDetails = async ({ id, token }) => {
     };
   }
 };
+
+export const getApplications = async ({ id, token, userType }) => {
+  try {
+    const res = await axios.get(BASE_URL + `/${userType}/${id}/applications`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return {
+      data: res.data,
+      status: res.status
+    };
+  } catch (err) {
+    return {
+      error: err.response.data.error,
+      status: err.response.status
+    };
+  }
+};
