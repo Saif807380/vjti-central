@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { Box, Grid, Typography, Divider, Paper } from "@material-ui/core";
+import {
+  Box,
+  Grid,
+  Typography,
+  Divider,
+  Paper,
+  useMediaQuery
+} from "@material-ui/core";
 import { useParams, useHistory } from "react-router-dom";
 import { getApplicationDetails } from "../../actions/applicationActions";
 import { useAuthState } from "../../context/AuthContext";
@@ -70,11 +76,12 @@ const ApplicationDetail = (props) => {
     setLoading(true);
     getApplicationDetails({ id, token }).then((res) => {
       if (res.error) {
+        setLoading(false);
       } else {
         setApplicationData(res.data);
+        setLoading(false);
       }
     });
-    setLoading(false);
   }, [history, id, token]);
 
   return loading ? (

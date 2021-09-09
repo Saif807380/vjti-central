@@ -43,13 +43,14 @@ const useStyles = makeStyles((theme) => ({
 const Header = () => {
   const classes = useStyles();
   const history = useHistory();
-  const { isAuthenticated } = useAuthState();
+  const { isAuthenticated, userType } = useAuthState();
   const dispatch = useAuthDispatch();
 
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const navigationHandler = (route) => {
+    handleMobileMenuClose();
     history.push(route);
   };
 
@@ -78,9 +79,16 @@ const Header = () => {
       onClose={handleMobileMenuClose}
     >
       {isAuthenticated ? (
-        <MenuItem onClick={handleLogout}>
-          <p>Logout</p>
-        </MenuItem>
+        <div>
+          <MenuItem
+            onClick={() => navigationHandler(`/${userType}/applications`)}
+          >
+            <p>Applications</p>
+          </MenuItem>
+          <MenuItem onClick={handleLogout}>
+            <p>Logout</p>
+          </MenuItem>
+        </div>
       ) : (
         <div>
           <MenuItem onClick={() => navigationHandler("/student/login")}>
@@ -112,17 +120,30 @@ const Header = () => {
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
             {isAuthenticated ? (
-              <Button
-                onClick={handleLogout}
-                color="inherit"
-                className={`${classes.navButton} ${classes.button}`}
-                disableRipple
-                disableFocusRipple
-              >
-                <Typography variant="body1" noWrap>
-                  Logout
-                </Typography>
-              </Button>
+              <div>
+                <Button
+                  onClick={() => navigationHandler(`/${userType}/applications`)}
+                  color="inherit"
+                  className={`${classes.navButton} ${classes.button}`}
+                  disableRipple
+                  disableFocusRipple
+                >
+                  <Typography variant="body1" noWrap>
+                    Applications
+                  </Typography>
+                </Button>
+                <Button
+                  onClick={handleLogout}
+                  color="inherit"
+                  className={`${classes.navButton} ${classes.button}`}
+                  disableRipple
+                  disableFocusRipple
+                >
+                  <Typography variant="body1" noWrap>
+                    Logout
+                  </Typography>
+                </Button>
+              </div>
             ) : (
               <div>
                 <Button

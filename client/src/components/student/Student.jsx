@@ -4,7 +4,7 @@ import Login from "../common/Login";
 import Register from "./auth/Register";
 import Dashboard from "./Dashboard";
 import ProtectedRoute from "../../components/ProtectedRoute";
-import ApplicationsList from "../applications/ApplicationList";
+import ApplicationsList from "../applications/ApplicationsList";
 import ApplicationDetail from "../applications/ApplicationDetail";
 import StudentActions from "../applications/StudentActions";
 
