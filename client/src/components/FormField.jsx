@@ -14,6 +14,7 @@ const FormField = (props) => {
   return (
     <div className={classes.formControl}>
       <TextField
+        value={props.value}
         variant="outlined"
         label={props.label}
         name={props.name}
@@ -23,6 +24,7 @@ const FormField = (props) => {
         helperText={props.error}
         fullWidth
         InputProps={props.InputProps}
+        disabled={props.disabled}
       />
     </div>
   );

@@ -147,7 +147,7 @@ const ApplicationDetail = (props) => {
               </Typography>
             </Box>
 
-            <Box>
+            <Box style={{ marginBottom: "30px" }}>
               <ApplicationItem label="Links" value="" />
               {applicationData.links.map((link) => (
                 <a href={link} target="_blank" rel="noopener noreferrer">
@@ -156,7 +156,10 @@ const ApplicationDetail = (props) => {
               ))}
             </Box>
             {applicationData.status === "Pending" && (
-              <Actions position={isSmallScreen ? "center" : "end"} />
+              <Actions
+                position={isSmallScreen ? "center" : "start"}
+                id={applicationData.studentID}
+              />
             )}
           </Grid>
         </Grid>
