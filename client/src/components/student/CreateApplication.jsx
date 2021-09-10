@@ -45,7 +45,7 @@ const MyTextField = ({
     );
 };
 
-export default function AddProduct() {
+export default function CreateApplication() {
     const { token } = useAuthState();
     const [productType, setProductType] = useState("course");
     const [selectedDate, setSelectedDate] = useState(new Date());
