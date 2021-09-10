@@ -1,4 +1,4 @@
-import { Storage } from "@google-cloud/storage";
+const { Storage } = require("@google-cloud/storage");
 
 const storage = new Storage({
   projectId: process.env.GCLOUD_PROJECT_ID,
@@ -7,4 +7,4 @@ const storage = new Storage({
 
 const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET_URL);
 
-export default bucket;
+module.exports = bucket;
