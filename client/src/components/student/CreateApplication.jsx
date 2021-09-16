@@ -15,14 +15,8 @@ import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import { useParams } from "react-router-dom";
 import { useAuthState } from "../../context/AuthContext";
-/*{
-studentID:
-facultyID:
-title:
-description:
-domainAchievement:
+const BASE_URL = process.env.REACT_APP_API_URL;
 
-}*/
 const MyTextField = ({
     placeholder,
     type = "text",
@@ -47,48 +41,60 @@ const MyTextField = ({
 
 export default function CreateApplication() {
     const { token } = useAuthState();
-    const [productType, setProductType] = useState("course");
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [product, setProduct] = useState({
-        Title: "",
-        Description: "",
-        DomainofAchievement: "",
+    const [application, setApplication] = useState({
+        title: "",
+        description: "",
+        domainAchievement: "",
+        fileUrl: ""
     });
-    const [imageUrl, setImageUrl] = useState();
+    const [applicationType, setApplicationType] = useState("Hackathon");
+    var [faculty, setFaculty] = useState("61307e34e424192afc56a613");
     const [file, setFile] = useState();
-    const productId = useParams().productId;
-    const isEditPage = !!productId;
+    const { userID } = useAuthState();
+    const isEditPage = false;
     const [isLoading, setIsLoading] = useState(isEditPage);
-    useEffect(() => {
-        if (isEditPage) {
-            axios
-                .get(`/products/${productId}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                })
-                .then((res) => {
-                    console.log(res.data);
-                    setProduct(res.data.data);
-                    //  setProductType(checkType(res.data.data));
-                })
-                .catch((err) => console.log(err))
-                .finally(() => setIsLoading(false));
-        }
-    }, [isEditPage]);
-
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
+    // useEffect(() => {
+    //     if (isEditPage) {
+    //         axios
+    //             .get(`/api/editApplication/${userID}`, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`
+    //                 }
+    //             })
+    //             .then((res) => {
+    //                 console.log(res.data);
+    //                 setApplication(res.data.data);
+    //             })
+    //             .catch((err) => console.log(err))
+    //             .finally(() => setIsLoading(false));
+    //     }
+    // }, [isEditPage]);
+    // var [faculty, setFaculty] = "SSS"
+    const fetchingOrders = async () => {
+        const fetchedOrders = await axios.get(
+            `${BASE_URL}/faculty`,
+        );
+        setValue(fetchedOrders.data.data["faculties"]);
+        [faculty, setFaculty] = fetchedOrders.data.data["faculties"][0]["_id"];
+        setIsLoading(false);
     };
+
+    useEffect(() => {
+        fetchingOrders();
+    }, []);
 
     const handleChange = (event) => {
-        setProductType(event.target.value);
+        setApplicationType(event.target.value);
     };
 
-    // Validator schema for Formik
+    const handleFacultyChange = (event) => {
+        setFaculty(event.target.value);
+    };
+    const [value, setValue] = useState([]);
+
     const validationSchema = yup.object({
-        Title: yup.string().required(),
-        Description: yup.string().required(),
+        title: yup.string().required(),
+        description: yup.string().required(),
     });
 
     return (
@@ -103,24 +109,27 @@ export default function CreateApplication() {
                     </Typography>
                 </div>
             </header>
-
             <Formik
                 validateOnChange={true}
-                initialValues={product}
+                initialValues={application}
                 validationSchema={validationSchema}
                 onSubmit={async (data, { setSubmitting, resetForm }) => {
                     setSubmitting(true);
                     let formData = new FormData();
                     let reqBody = { ...data };
-                    formData.append("Title", reqBody["title"]);
-                    formData.append("Description", reqBody["description"]);
-                    formData.append("files", imageUrl);
-
-                    // Finish preprocessing
+                    console.log(reqBody)
+                    console.log(applicationType);
+                    console.log(faculty)
+                    formData.append("title", reqBody["title"]);
+                    formData.append("description", reqBody["description"]);
+                    formData.append("domainAchievement", applicationType);
+                    formData.append("file", file);
+                    formData.append("studentID", userID);
+                    formData.append("facultyID", faculty);
                     let response;
                     if (isEditPage) {
                         response = await axios.put(
-                            "/api/student/editApplication/" + productId,
+                            "/api/student/editApplication/" + userID,
                             {
                                 ...reqBody
                             },
@@ -131,14 +140,11 @@ export default function CreateApplication() {
                             }
                         );
                     } else {
+                        console.log(formData)
+                        console.log(file);
                         response = await axios.post(
-                            "/api/applications/apply",
+                            BASE_URL + "/applications/apply",
                             formData,
-                            {
-                                headers: {
-                                    Authorization: `Bearer ${token}`
-                                }
-                            }
                         );
                     }
                     console.log("submit: Done ", response.data);
@@ -162,20 +168,39 @@ export default function CreateApplication() {
                                 <br></br>
                                 <br></br>
                                 <Grid item xs={12}>
-                                    <InputLabel id="product-select-label">
+                                    <InputLabel id="domainAchievement">
                                         Domain of Achievement
                                     </InputLabel>
                                     <Select
-                                        value={productType}
-                                        defaultValue="Competition"
+                                        value={applicationType}
+                                        defaultValue="Hackathon"
                                         onChange={handleChange}
-                                        labelId="product-select-label"
+                                        labelId="domainAchievement"
                                         disabled={isEditPage}
                                     >
-                                        <MenuItem value="hacakthon">Hacakathon</MenuItem>
+                                        <MenuItem value="Hackathon">Hacakathon</MenuItem>
+                                        <MenuItem value="Competition">Competition</MenuItem>
+                                        <MenuItem value="Research">Research</MenuItem>
+                                    </Select>
+                                </Grid>
+                                <br></br>
+                                <br></br>
 
-                                        <MenuItem value="competition">Competition</MenuItem>
-                                        <MenuItem value="research">Research</MenuItem>
+                                <Grid item xs={12}>
+                                    <InputLabel id="faculty">
+                                        Select Faculty
+                                    </InputLabel>
+                                    <Select
+                                        value={faculty}
+                                        defaultValue="61307e34e424192afc56a613"
+                                        onChange={handleFacultyChange}
+                                        labelId="faculty"
+                                        disabled={isEditPage}
+                                    >
+
+                                        {value.map((orderedItem) => (
+                                            <MenuItem value={orderedItem._id}>{orderedItem.name}</MenuItem>
+                                        ))}
                                     </Select>
                                 </Grid>
 
@@ -184,27 +209,28 @@ export default function CreateApplication() {
                                 <Grid item xs={12}>
                                     <input
                                         type="file"
-                                        name="imageUrl"
-                                        id="imageUrl"
-                                        onChange={(e) => setImageUrl(e.target.files[0])}
+                                        name="fileUrl"
+                                        id="fileUrl"
+                                        onChange={(e) => setFile(e.target.files[0])}
                                     />
                                 </Grid>
+                                <br></br>
+                                <br></br>
                                 <Grid item xs={12}>
-                                    <Typography
-                                        variant="h5"
-                                        style={{ color: "green", textAlign: "center" }}
+                                    <Button
+                                        color="secondary"
+                                        variant="contained"
+                                        disabled={isSubmitting}
+                                        type="submit"
                                     >
-
-                                    </Typography>
+                                        submit
+                                    </Button>
                                 </Grid>
-
-
                             </Paper>
                         </Container>
                     </Form>
                 )}
             </Formik>
-
         </Container >
     );
 }

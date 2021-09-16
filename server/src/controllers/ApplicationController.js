@@ -8,41 +8,32 @@ const bucket = require("../config/firebase");
 module.exports = {
   async applyForReward(req, res) {
     try {
-      if (!req.files) {
+      if (!req.file) {
         return res.status(400).send("No file uploaded.");
       }
-
-      // Create new blob in the bucket referencing the file
-      const files = req.files;
-      const blob = bucket.file(files[0].originalname);
-
+      const blob = await bucket.file(req.file.originalname);    
       const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${
         bucket.name
       }/o/${encodeURI(blob.name)}?alt=media`;
-
+      console.log(imageUrl);
       // Create writable stream and specifying file mimetype
       const blobWriter = blob.createWriteStream({
         metadata: {
-          contentType: files[0].mimetype
+          contentType: req.file.mimetype
         }
       });
-
-      blobWriter.on("error", (err) =>
-        res.status(500).json({ error: err.message })
-      );
-
-      blobWriter.end(files[0].buffer);
-
-      const fileUrl = imageUrl;
-      const { title, description, domainAchievement } = req.body;
-
+      console.log(blobWriter);
+      blobWriter.on("error", async (err) => res.status(500).json({ error: err.message }));
+      blobWriter.end(req.file.buffer);   
+      const { title, description, domainAchievement, facultyID, studentID} = req.body;
       const application = await Application.create({
-        title,
-        description,
-        domainAchievement,
-        fileUrl
+        title:title,
+        description: description,
+        domainAchievement:  domainAchievement,
+        files: imageUrl, 
+        facultyID:facultyID,
+        studentID:studentID,
       });
-
       await Student.findByIdAndUpdate(req.body.studentID, {
         $push: { applications: application }
       });
@@ -50,7 +41,6 @@ module.exports = {
         $push: { applications: application }
       });
       res.status(201).json({
-        status: "OK",
         message: "Application for reward created, status pending"
       });
     } catch (e) {

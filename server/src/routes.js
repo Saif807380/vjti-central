@@ -31,7 +31,7 @@ module.exports = (app) => {
   //Application Routes
   app.post(
     "/api/applications/apply",
-    uploader.array("files"),
+    uploader.single("file"),
     applicationController.applyForReward
   );
   app.get("/api/applications/:id", applicationController.getApplication);

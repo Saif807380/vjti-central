@@ -29,7 +29,7 @@ const Student = () => {
       />
       <ProtectedRoute
         exact
-        path="/student/createApplications"
+        path="/student/createApplication"
         component={CreateApplication}
         userType={"student"}
       />
