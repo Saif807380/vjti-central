@@ -165,7 +165,7 @@ const ApplicationDetail = (props) => {
             {applicationData.status === "Pending" && (
               <Actions
                 position={isSmallScreen ? "center" : "start"}
-                id={applicationData.studentID}
+                applicationData={applicationData}
               />
             )}
           </Grid>

@@ -9,12 +9,16 @@ import {
   DialogActions
 } from "@material-ui/core";
 import { Clear, CheckCircle } from "@material-ui/icons";
+import axios from "axios";
+import { useAuthState } from "../../context/AuthContext";
+
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import FormField from "../FormField";
+const BASE_URL = process.env.REACT_APP_API_URL;
 
 const StudentActions = (props) => {
   const [title, setTitle] = useState("");
@@ -31,9 +35,12 @@ const StudentActions = (props) => {
       reward: ""
     });
   };
+  console.log("here")
+  console.log(props.applicationData.studentID._id);
+  console.log(props.applicationData._id);
   const [isVerified, setIsVerified] = useState(false);
   const [verificationSuccess, setVerificationSuccess] = useState(false);
-
+  const { userID } = useAuthState();
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => {
@@ -41,7 +48,7 @@ const StudentActions = (props) => {
     setIsOpen(false);
   };
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
     if (!title) {
       updateErrors((prevErrors) => ({
         ...prevErrors,
@@ -50,12 +57,22 @@ const StudentActions = (props) => {
       return;
     }
     console.log(title, selectedDate.toLocaleDateString("en-GB"));
-    setIsVerified(true);
-    setVerificationSuccess(true);
+    let response = await axios.post(
+      BASE_URL + "/applications/verify",
+      { "title": title, "date": selectedDate.toLocaleDateString("en-GB"), "domainAchievement": "Competition", "facultyID": userID, "studentID": props.applicationData.studentID._id, "applicationID": props.applicationData._id },
+    );
+    console.log("submit: Done ", response.data);
+    if (response.data.message == "Not Found") {
+      setIsVerified(true);
+      setVerificationSuccess(true);
+    } else {
+      setIsVerified(false);
+      setVerificationSuccess(false);
+    }
     clearErrors();
   };
 
-  const handleApprove = () => {
+  const handleApprove = async () => {
     if (reward <= 0) {
       updateErrors((prevErrors) => ({
         ...prevErrors,
@@ -63,11 +80,21 @@ const StudentActions = (props) => {
       }));
       return;
     }
+
     console.log(title, selectedDate.toLocaleDateString("en-GB"), reward);
+
+    let response = await axios.post(
+      BASE_URL + "/applications/approve",
+      { "status": "Accepted", "applicationID": props.applicationData._id },
+    );
     handleClose();
   };
 
-  const handleReject = () => {
+  const handleReject = async () => {
+    let response = await axios.post(
+      BASE_URL + "/applications/approve",
+      { "status": "Rejected", "applicationID": props.applicationData._id },
+    );
     handleClose();
   };
 
@@ -130,9 +157,9 @@ const StudentActions = (props) => {
               style={
                 isVerified
                   ? {
-                      backgroundColor: "#4caf50",
-                      color: "white"
-                    }
+                    backgroundColor: "#4caf50",
+                    color: "white"
+                  }
                   : {}
               }
               startIcon={<CheckCircle />}

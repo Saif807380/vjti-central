@@ -1,9 +1,14 @@
 const mongoose = require("mongoose");
-
+const Schema = mongoose.Schema;
 const record = new mongoose.Schema({
   studentID: {
     type: Schema.Types.ObjectId,
     ref: "student",
+    required: true
+  },
+  applicationID: {
+    type: Schema.Types.ObjectId,
+    ref: "application",
     required: true
   },
   facultyID: {
