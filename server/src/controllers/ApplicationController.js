@@ -112,7 +112,6 @@ module.exports = {
             if (res.statusCode == 200) {
               console.log("here");
               application["status"] = "Accepted";
-              application["title"] = "Test";
               await application.save();
               res.status(200).json({
                 status: "OK",
