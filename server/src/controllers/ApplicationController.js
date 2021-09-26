@@ -1,19 +1,44 @@
 const Application = require("../models/Application");
 const Student = require("../models/Student");
 const Faculty = require("../models/Faculty");
+const Record = require("../models/Record");
 const mongoose = require("mongoose");
+const bucket = require("../config/firebase");
 const http = require("http");
 
 //All IDs are default mongo provided IDs
-
 module.exports = {
   async applyForReward(req, res) {
     try {
-      /*
-        TODO: Upload files in req.files to firebase
-        and store array of urls in req.body.files
-      */
-      const application = await Application.create(req.body);
+      if (!req.file) {
+        return res.status(400).send("No file uploaded.");
+      }
+      const blob = await bucket.file(req.file.originalname);
+      const fileUrl = `https://firebasestorage.googleapis.com/v0/b/${
+        bucket.name
+      }/o/${encodeURI(blob.name)}?alt=media`;
+      console.log(fileUrl);
+      // Create writable stream and specifying file mimetype
+      const blobWriter = blob.createWriteStream({
+        metadata: {
+          contentType: req.file.mimetype
+        }
+      });
+      console.log(blobWriter);
+      blobWriter.on("error", async (err) =>
+        res.status(500).json({ error: err.message })
+      );
+      blobWriter.end(req.file.buffer);
+      const { title, description, domainAchievement, facultyID, studentID } =
+        req.body;
+      const application = await Application.create({
+        title: title,
+        description: description,
+        domainAchievement: domainAchievement,
+        files: fileUrl,
+        facultyID: facultyID,
+        studentID: studentID
+      });
       await Student.findByIdAndUpdate(req.body.studentID, {
         $push: { applications: application }
       });
@@ -21,7 +46,6 @@ module.exports = {
         $push: { applications: application }
       });
       res.status(201).json({
-        status: "OK",
         message: "Application for reward created, status pending"
       });
     } catch (e) {
