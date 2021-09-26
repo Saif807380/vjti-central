@@ -1,21 +1,22 @@
 const Application = require("../models/Application");
 const Student = require("../models/Student");
 const Faculty = require("../models/Faculty");
+const Record = require("../models/Record");
 const mongoose = require("mongoose");
 const bucket = require("../config/firebase");
 //All IDs are default mongo provided IDs
-
 module.exports = {
+
   async applyForReward(req, res) {
     try {
       if (!req.file) {
         return res.status(400).send("No file uploaded.");
       }
       const blob = await bucket.file(req.file.originalname);    
-      const imageUrl = `https://firebasestorage.googleapis.com/v0/b/${
+      const fileUrl = `https://firebasestorage.googleapis.com/v0/b/${
         bucket.name
       }/o/${encodeURI(blob.name)}?alt=media`;
-      console.log(imageUrl);
+      console.log(fileUrl);
       // Create writable stream and specifying file mimetype
       const blobWriter = blob.createWriteStream({
         metadata: {
@@ -30,7 +31,7 @@ module.exports = {
         title:title,
         description: description,
         domainAchievement:  domainAchievement,
-        files: imageUrl, 
+        files: fileUrl, 
         facultyID:facultyID,
         studentID:studentID,
       });
@@ -81,4 +82,5 @@ module.exports = {
       res.status(500).json({ error: e.message });
     }
   }
+
 };

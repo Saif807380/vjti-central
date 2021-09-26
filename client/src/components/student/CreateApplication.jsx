@@ -69,18 +69,18 @@ export default function CreateApplication() {
     //             .finally(() => setIsLoading(false));
     //     }
     // }, [isEditPage]);
-    // var [faculty, setFaculty] = "SSS"
-    const fetchingOrders = async () => {
-        const fetchedOrders = await axios.get(
+
+    const fetchingFaculties = async () => {
+        const fetchedFaculties = await axios.get(
             `${BASE_URL}/faculty`,
         );
-        setValue(fetchedOrders.data.data["faculties"]);
-        [faculty, setFaculty] = fetchedOrders.data.data["faculties"][0]["_id"];
+        setValue(fetchedFaculties.data.data["faculties"]);
+        [faculty, setFaculty] = fetchedFaculties.data.data["faculties"][0]["_id"];
         setIsLoading(false);
     };
 
     useEffect(() => {
-        fetchingOrders();
+        fetchingFaculties();
     }, []);
 
     const handleChange = (event) => {
@@ -117,9 +117,6 @@ export default function CreateApplication() {
                     setSubmitting(true);
                     let formData = new FormData();
                     let reqBody = { ...data };
-                    console.log(reqBody)
-                    console.log(applicationType);
-                    console.log(faculty)
                     formData.append("title", reqBody["title"]);
                     formData.append("description", reqBody["description"]);
                     formData.append("domainAchievement", applicationType);
@@ -178,7 +175,7 @@ export default function CreateApplication() {
                                         labelId="domainAchievement"
                                         disabled={isEditPage}
                                     >
-                                        <MenuItem value="Hackathon">Hacakathon</MenuItem>
+                                        <MenuItem value="Hackathon">Hackathon</MenuItem>
                                         <MenuItem value="Competition">Competition</MenuItem>
                                         <MenuItem value="Research">Research</MenuItem>
                                     </Select>
@@ -197,9 +194,8 @@ export default function CreateApplication() {
                                         labelId="faculty"
                                         disabled={isEditPage}
                                     >
-
-                                        {value.map((orderedItem) => (
-                                            <MenuItem value={orderedItem._id}>{orderedItem.name}</MenuItem>
+                                        {value.map((faculty) => (
+                                            <MenuItem value={faculty._id}>{faculty.name}</MenuItem>
                                         ))}
                                     </Select>
                                 </Grid>
