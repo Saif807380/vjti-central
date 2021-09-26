@@ -87,6 +87,25 @@ module.exports = {
     }
   },
 
+  async verifyApplication(req, res) {
+    try {
+      console.log(req.body);
+      const record = await Record.find({
+        studentID: req.body.studentID,
+        domainAchievement: req.body.domainAchievement,
+        title: req.body.title,
+        date: req.body.date
+      });
+      console.log(record);
+      if (record == []) {
+        res.status(200).json({ message: "Found" });
+      } else {
+        res.status(200).json({ message: "Not Found" });
+      }
+    }catch(err){
+      console.log(err);
+    }
+  },
   async approveApplication(req, res) {
     try {
       const appln_id = req.params.id;
