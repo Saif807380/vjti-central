@@ -31,7 +31,5 @@ module.exports = (app) => {
   //Application Routes
   app.post("/api/applications/apply", applicationController.applyForReward);
   app.get("/api/applications/:id", applicationController.getApplication);
-  app.post("/api/applications/approve", applicationController.validateApplication);
   app.post("/api/applications/verify", applicationController.verifyApplication);
-  
 };

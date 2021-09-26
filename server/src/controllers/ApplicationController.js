@@ -63,40 +63,23 @@ module.exports = {
     }
   },
 
-  async verifyApplication(req,res){
-    try{
-      console.log("here");
-      console.log(req.body)
-      const record = await Record.find({ studentID: req.body.studentID, domainAchievement: req.body.domainAchievement , title: req.body.title , date: req.body.date });
+  async verifyApplication(req, res) {
+    try {
+      console.log(req.body);
+      const record = await Record.find({
+        studentID: req.body.studentID,
+        domainAchievement: req.body.domainAchievement,
+        title: req.body.title,
+        date: req.body.date
+      });
       console.log(record);
-      if(record==[]){
-        res.status(200).json({"message":"Found"});
-      }else{
-        res.status(200).json({"message":"Not Found"}); 
-      }    
+      if (record == []) {
+        res.status(200).json({ message: "Found" });
+      } else {
+        res.status(200).json({ message: "Not Found" });
+      }
     } catch (e) {
       res.status(500).json({ error: e.message });
     }
-  },
-  async validateApplication(req,res){
-    try{
-      if(req.body.status=="Approved"){
-        await Application.findByIdAndUpdate(req.body.applidationID, {
-         status:req.body.status
-        });
-        //deduct coins from vjtichain
-        // add to record schema
-
-      }else{
-        await Application.findByIdAndUpdate(req.body.applicationID, {
-          status:req.body.status
-         });
-      } 
-      res.status(200).json({ "message":"Validated" });
-    } catch (e) {
-      res.status(500).json({ error: e.message });
-    }
-  },
- 
-
+  }
 };
