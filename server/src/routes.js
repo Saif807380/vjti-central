@@ -35,4 +35,12 @@ module.exports = (app) => {
     applicationController.applyForReward
   );
   app.get("/api/applications/:id", applicationController.getApplication);
+  app.post(
+    "/api/applications/:id/approve",
+    applicationController.approveApplication
+  );
+  app.post(
+    "/api/applications/:id/reject",
+    applicationController.rejectApplication
+  );
 };
