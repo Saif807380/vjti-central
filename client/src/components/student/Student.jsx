@@ -7,7 +7,7 @@ import ProtectedRoute from "../../components/ProtectedRoute";
 import ApplicationsList from "../applications/ApplicationsList";
 import ApplicationDetail from "../applications/ApplicationDetail";
 import StudentActions from "../applications/StudentActions";
-
+import CreateApplication from "./CreateApplication";
 const Student = () => {
   return (
     <Switch>
@@ -25,6 +25,12 @@ const Student = () => {
         exact
         path="/student/applications"
         component={ApplicationsList}
+        userType={"student"}
+      />
+      <ProtectedRoute
+        exact
+        path="/student/applications/new"
+        component={CreateApplication}
         userType={"student"}
       />
       <ProtectedRoute

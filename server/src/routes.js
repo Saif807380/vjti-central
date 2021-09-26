@@ -3,7 +3,7 @@ const authFacultyController = require("./controllers/facultyController/authFacul
 const studentController = require("./controllers/studentController/studentController");
 const facultyController = require("./controllers/facultyController/facultyController");
 const applicationController = require("./controllers/ApplicationController");
-
+const uploader = require("./utilities/uploader");
 module.exports = (app) => {
   app.get("/api/check", (req, res) => {
     res.json("Hello World");
@@ -29,7 +29,19 @@ module.exports = (app) => {
   );
 
   //Application Routes
-  app.post("/api/applications/apply", applicationController.applyForReward);
+  app.post(
+    "/api/applications/apply",
+    uploader.single("file"),
+    applicationController.applyForReward
+  );
   app.get("/api/applications/:id", applicationController.getApplication);
   app.post("/api/applications/verify", applicationController.verifyApplication);
+  app.post(
+    "/api/applications/:id/approve",
+    applicationController.approveApplication
+  );
+  app.post(
+    "/api/applications/:id/reject",
+    applicationController.rejectApplication
+  );
 };
