@@ -115,7 +115,7 @@ module.exports = {
       if (application.status !== "Pending")
         return res
           .status(404)
-          .json({ error: "Only pending application can be approved" });
+          .json({ error: "Only pending applications can be approved" });
 
       let student = await Student.findById(application["studentID"]);
 
@@ -175,7 +175,7 @@ module.exports = {
       if (application.status !== "Pending")
         return res
           .status(404)
-          .json({ error: "Only pending application can be rejected" });
+          .json({ error: "Only pending applications can be rejected" });
 
       application.status = "Rejected";
       await application.save();
@@ -185,6 +185,84 @@ module.exports = {
       });
     } catch (e) {
       return res.status(500).json({ error: e.message });
+    }
+  },
+  async updateApplication(req, res) {
+    try {
+      let application = await Application.findById(req.params.id);
+      if (!application) {
+        return res.status(404).json({ error: "Invalid Application ID" });
+      }
+
+      if (application.status !== "Pending")
+        return res
+          .status(404)
+          .json({ error: "Only pending applications can be updated" });
+
+      var altered = false;
+      if (req.body.hasOwnProperty("domainAchievement")) {
+        application["domainAchievement"] = req.body["domainAchievement"];
+        altered = true;
+      }
+
+      if (req.body.hasOwnProperty("title")) {
+        application.title = req.body.title;
+        altered = true;
+      }
+
+      if (req.body.hasOwnProperty("description")) {
+        application.description = req.body.description;
+        altered = true;
+      }
+
+      if (req.body.hasOwnProperty("links")) {
+        application.links = req.body.links;
+        altered = true;
+      }
+
+      if (!altered) {
+        return res.status(200).json({
+          status: "OK",
+          message: "Nothing to be updated"
+        });
+      }
+      await application.save();
+      res.status(200).json({
+        status: "OK",
+        message: "Application updated successfully"
+      });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
+    }
+  },
+
+  async deleteApplication(req, res) {
+    try {
+      const appln_id = req.params.id;
+      let application = await Application.findById(appln_id);
+      if (!application)
+        return res.status(404).json({ error: "Invalid Application ID" });
+
+      if (application.status != "Pending")
+        return res
+          .status(404)
+          .json({ error: "Only pending applications can be deleted" });
+
+      await application.remove();
+      await Student.updateOne(
+        { _id: application.studentID },
+        { $pull: { applications: appln_id } }
+      );
+      await Faculty.updateOne(
+        { _id: application.facultyID },
+        { $pull: { applications: appln_id } }
+      );
+      res.status(200).json({
+        status: "OK",
+        message: "Application deleted successfully"
+      });
+    } catch (e) {
+      res.status(500).json({ error: e.message });
     }
   }
 };
