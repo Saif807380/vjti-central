@@ -66,7 +66,6 @@ const ApplicationsList = () => {
       if (res.error) {
         setLoading(false);
       } else {
-        console.log(res.data.applications);
         setApplications(res.data.applications);
         setLoading(false);
       }

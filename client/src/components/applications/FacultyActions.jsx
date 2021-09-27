@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import {
   Box,
   Button,
@@ -9,7 +10,6 @@ import {
   DialogActions
 } from "@material-ui/core";
 import { Clear, CheckCircle } from "@material-ui/icons";
-import axios from "axios";
 import { useAuthState } from "../../context/AuthContext";
 
 import {
@@ -18,9 +18,16 @@ import {
 } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import FormField from "../FormField";
-const BASE_URL = process.env.REACT_APP_API_URL;
+import {
+  approveApplication,
+  rejectApplication,
+  verifyApplication
+} from "../../actions/applicationActions";
+import { SnackbarContext } from "../../context/SnackbarContext";
 
-const StudentActions = (props) => {
+const FacultyActions = (props) => {
+  const history = useHistory();
+  const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
   const [title, setTitle] = useState("");
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [reward, setReward] = useState(0);
@@ -35,12 +42,9 @@ const StudentActions = (props) => {
       reward: ""
     });
   };
-  console.log("here")
-  console.log(props.applicationData.studentID._id);
-  console.log(props.applicationData._id);
   const [isVerified, setIsVerified] = useState(false);
   const [verificationSuccess, setVerificationSuccess] = useState(false);
-  const { userID } = useAuthState();
+  const { token } = useAuthState();
   const [isOpen, setIsOpen] = useState(false);
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => {
@@ -56,19 +60,23 @@ const StudentActions = (props) => {
       }));
       return;
     }
-    console.log(title, selectedDate.toLocaleDateString("en-GB"));
-    let response = await axios.post(
-      BASE_URL + "/applications/verify",
-      { "title": title, "date": selectedDate.toLocaleDateString("en-GB"), "domainAchievement": "Competition", "facultyID": userID, "studentID": props.applicationData.studentID._id, "applicationID": props.applicationData._id },
-    );
-    console.log("submit: Done ", response.data);
-    if (response.data.message == "Not Found") {
-      setIsVerified(true);
-      setVerificationSuccess(true);
-    } else {
-      setIsVerified(false);
-      setVerificationSuccess(false);
-    }
+
+    const body = {
+      title: title,
+      date: selectedDate.toLocaleDateString("en-GB"),
+      studentID: props.applicationData.studentID._id
+    };
+
+    verifyApplication({ body, token }).then((res) => {
+      if (res.error) {
+        return;
+      } else {
+        setIsVerified(true);
+        if (res.data.message === "Verification Successful")
+          setVerificationSuccess(true);
+        else setVerificationSuccess(false);
+      }
+    });
     clearErrors();
   };
 
@@ -80,21 +88,37 @@ const StudentActions = (props) => {
       }));
       return;
     }
-
-    console.log(title, selectedDate.toLocaleDateString("en-GB"), reward);
-
-    let response = await axios.post(
-      BASE_URL + "/applications/approve",
-      { "status": "Accepted", "applicationID": props.applicationData._id },
-    );
     handleClose();
+    props.setLoading(true);
+    approveApplication({
+      id: props.applicationData._id,
+      token,
+      title,
+      reward,
+      date: selectedDate.toLocaleDateString("en-GB")
+    }).then((res) => {
+      if (res.error) {
+        setSeverity("error");
+        setMessage(res.error);
+        setOpen(true);
+        return;
+      } else {
+        history.replace(`/faculty/applications/${props.applicationData._id}`);
+        setSeverity("success");
+        setMessage("Application approved. Reward will be mined shortly.");
+        setOpen(true);
+      }
+      props.setLoading(false);
+    });
   };
 
   const handleReject = async () => {
-    let response = await axios.post(
-      BASE_URL + "/applications/approve",
-      { "status": "Rejected", "applicationID": props.applicationData._id },
-    );
+    rejectApplication({ id: props.applicationData._id, token }).then((res) => {
+      if (res.error) return;
+      else {
+        history.replace(`/faculty/applications/${props.applicationData._id}`);
+      }
+    });
     handleClose();
   };
 
@@ -106,7 +130,7 @@ const StudentActions = (props) => {
           <DialogContent>
             <DialogContentText>
               Please enter the details to verify that this application is not a
-              duplicate.
+              duplicate. If there is no date mentioned, select 1st January 2000.
             </DialogContentText>
             <FormField
               label="Achievement Title"
@@ -157,9 +181,9 @@ const StudentActions = (props) => {
               style={
                 isVerified
                   ? {
-                    backgroundColor: "#4caf50",
-                    color: "white"
-                  }
+                      backgroundColor: "#4caf50",
+                      color: "white"
+                    }
                   : {}
               }
               startIcon={<CheckCircle />}
@@ -192,4 +216,4 @@ const StudentActions = (props) => {
   );
 };
 
-export default StudentActions;
+export default FacultyActions;

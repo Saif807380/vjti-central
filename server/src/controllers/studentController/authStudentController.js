@@ -1,3 +1,4 @@
+const axios = require("axios");
 const Student = require("./../../models/Student");
 const catchAsync = require("./../../middleware/catchAsync");
 const AppError = require("./../../middleware/appError");
@@ -15,15 +16,37 @@ exports.registerStudent = catchAsync(async (req, res, next) => {
     });
   }
 
-  const newStudent = await Student.create(req.body);
+  const response = await axios.get(
+    process.env.VJ_CHAIN_NODE_URL + "/newWallet",
+    {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+  );
 
+  if (response.status !== 200) {
+    return res
+      .status(500)
+      .json({ error: "An error occurred while fetching keys from VJ Chain" });
+  }
+
+  // console.log(response.data.private_key);
+  const newStudent = await Student.create({
+    ...req.body,
+    publicKey: response.data.public_key
+  });
   const token = auth.signToken(newStudent._id);
 
   res.status(201).json({
     status: "success",
     token,
     data: {
-      userID: newStudent._id
+      userID: newStudent._id,
+      keys: {
+        publicKey: newStudent.publicKey,
+        privateKey: response.data.private_key
+      }
     }
   });
 });
