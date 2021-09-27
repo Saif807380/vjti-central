@@ -19,7 +19,7 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(morgan("combined"));
+app.use(morgan("dev"));
 
 routes(app);
 

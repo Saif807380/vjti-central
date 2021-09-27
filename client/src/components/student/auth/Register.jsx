@@ -13,9 +13,18 @@ import {
   Select,
   IconButton,
   FormHelperText,
-  Grid
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from "@material-ui/core";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+import {
+  FormatColorResetRounded,
+  Visibility,
+  VisibilityOff
+} from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
 import { Link } from "react-router-dom";
@@ -54,6 +63,11 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     marginBottom: "20px",
     width: "100%"
+  },
+  key: {
+    backgroundColor: "#D6D6D6",
+    padding: theme.spacing(1),
+    marginTop: theme.spacing(1)
   }
 }));
 
@@ -92,6 +106,11 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [keys, setKeys] = useState({
+    publicKey: "",
+    privateKey: ""
+  });
 
   const handleConfirmPassword = (e) => setConfirmPassword(e.target.value);
   const toggleShowPassword = () => setShowPassword(!showPassword);
@@ -193,10 +212,11 @@ const Register = () => {
           setMessage(res.error);
           setOpen(true);
         } else {
+          setKeys(res.data.data.keys);
+          setIsRegistered(true);
           setSeverity("success");
           setMessage("You have successfully registered.");
           setOpen(true);
-          history.push(`/student/login`);
         }
       });
     }
@@ -206,182 +226,226 @@ const Register = () => {
   return loading ? (
     <Spinner />
   ) : (
-    <Box
-      className={classes.root}
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <Paper elevation={isSmallScreen ? 0 : 3} className={classes.paper}>
-        <div style={{ marginTop: "24px" }}>
-          <Typography variant="h5">Student Registration</Typography>
-        </div>
-        <form className={classes.form} noValidate>
-          <div className={classes.formInner}>
-            <FormField
-              label="Student ID"
-              name="studentID"
-              required={true}
-              onChange={handleStudent}
-              error={errors.studentID}
-            />
-            <FormField
-              label="Student Name"
-              name="name"
-              required={true}
-              onChange={handleStudent}
-              error={errors.name}
-            />
-            <FormField
-              label="Email"
-              name="email"
-              required={true}
-              onChange={handleStudent}
-              error={errors.email}
-            />
-            <FormField
-              label="Password"
-              name="password"
-              required={true}
-              onChange={handleStudent}
-              error={errors.password}
-              InputProps={{
-                type: showPassword ? "text" : "password",
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={toggleShowPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-            />
-            <FormField
-              label="Confirm Password"
-              name="confirmPassword"
-              required={true}
-              onChange={handleConfirmPassword}
-              error={errors.confirmPassword}
-              InputProps={{
-                type: showConfirmPassword ? "text" : "password",
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={toggleShowConfirmPassword}
-                      edge="end"
-                    >
-                      {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-            />
-            <Grid container spacing={1}>
-              <Grid item xs={12} md={6}>
-                <FormControl
-                  variant="outlined"
-                  required
-                  className={classes.formControl}
-                  error={errors.degree.length !== 0}
-                >
-                  <InputLabel id="degree-label">Degree</InputLabel>
-                  <Select
-                    labelId="degree-label"
-                    id="degree"
-                    name="degree"
-                    value={student.degree}
-                    onChange={handleStudent}
-                    label="Degree"
-                  >
-                    {constants.DEGREE.map((degree) => (
-                      <MenuItem key={degree} value={degree}>
-                        {degree}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>{errors.degree}</FormHelperText>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <FormControl
-                  variant="outlined"
-                  required
-                  className={classes.formControl}
-                  error={errors.admissionYear.length !== 0}
-                >
-                  <InputLabel id="admission-year-label">
-                    Admission Year
-                  </InputLabel>
-                  <Select
-                    labelId="admission-year-label"
-                    id="admission-year"
-                    name="admissionYear"
-                    value={student.admissionYear}
-                    onChange={handleStudent}
-                    label="Admission Year"
-                  >
-                    {[0, 1, 2, 3].map((number) => (
-                      <MenuItem key={number} value={`${currentYear - number}`}>
-                        {currentYear - number}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>{errors.admissionYear}</FormHelperText>
-                </FormControl>
-              </Grid>
-              <FormControl
-                variant="outlined"
-                required
-                className={classes.formControl}
-                error={errors.department.length !== 0}
-              >
-                <InputLabel id="department-label">Department</InputLabel>
-                <Select
-                  labelId="department-label"
-                  id="department"
-                  name="department"
-                  value={student.department}
-                  onChange={handleStudent}
-                  label="Department"
-                >
-                  {constants.BRANCHES.map((branch) => (
-                    <MenuItem key={branch} value={branch}>
-                      {branch}
-                    </MenuItem>
-                  ))}
-                </Select>
-                <FormHelperText>{errors.department}</FormHelperText>
-              </FormControl>
-            </Grid>
-            <Button
-              onClick={handleFormSubmit}
-              size="large"
-              color="primary"
-              type="submit"
-              fullWidth
-              variant="contained"
-            >
-              Register
-            </Button>
+    <React.Fragment>
+      <Dialog open={isRegistered}>
+        <DialogTitle>Key Pair</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please copy and save your Public and Private Keys. These keys will
+            not be shown again. We store your Public key in our database for
+            sending your rewards to you.
+          </DialogContentText>
+          <Typography variant="body1">Public Key</Typography>
+          <Paper elevation={0} className={classes.key} square>
+            <Typography variant="body2" style={{ wordWrap: "break-word" }}>
+              {keys.publicKey}
+            </Typography>
+          </Paper>
+          <Typography variant="body1" style={{ marginTop: "24px" }}>
+            Private Key
+          </Typography>
+          <Paper elevation={0} className={classes.key} square>
+            <Typography variant="body2" style={{ wordWrap: "break-word" }}>
+              {keys.privateKey}
+            </Typography>
+          </Paper>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              history.push(`/student/login`);
+            }}
+          >
+            Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Box
+        className={classes.root}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Paper elevation={isSmallScreen ? 0 : 3} className={classes.paper}>
+          <div style={{ marginTop: "24px" }}>
+            <Typography variant="h5">Student Registration</Typography>
           </div>
-        </form>
-        <Typography
-          style={{ color: "#303F9E", fontSize: 15, marginBottom: "15px" }}
-        >
-          Already have an account?
-          <Link style={{ color: "#303F9E" }} to={`/student/login`}>
-            {" "}
-            Login
-          </Link>
-        </Typography>
-      </Paper>
-    </Box>
+          <form className={classes.form} noValidate>
+            <div className={classes.formInner}>
+              <FormField
+                label="Student ID"
+                name="studentID"
+                required={true}
+                onChange={handleStudent}
+                error={errors.studentID}
+              />
+              <FormField
+                label="Student Name"
+                name="name"
+                required={true}
+                onChange={handleStudent}
+                error={errors.name}
+              />
+              <FormField
+                label="Email"
+                name="email"
+                required={true}
+                onChange={handleStudent}
+                error={errors.email}
+              />
+              <FormField
+                label="Password"
+                name="password"
+                required={true}
+                onChange={handleStudent}
+                error={errors.password}
+                InputProps={{
+                  type: showPassword ? "text" : "password",
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={toggleShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <FormField
+                label="Confirm Password"
+                name="confirmPassword"
+                required={true}
+                onChange={handleConfirmPassword}
+                error={errors.confirmPassword}
+                InputProps={{
+                  type: showConfirmPassword ? "text" : "password",
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={toggleShowConfirmPassword}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <Grid container spacing={1}>
+                <Grid item xs={12} md={6}>
+                  <FormControl
+                    variant="outlined"
+                    required
+                    className={classes.formControl}
+                    error={errors.degree.length !== 0}
+                  >
+                    <InputLabel id="degree-label">Degree</InputLabel>
+                    <Select
+                      labelId="degree-label"
+                      id="degree"
+                      name="degree"
+                      value={student.degree}
+                      onChange={handleStudent}
+                      label="Degree"
+                    >
+                      {constants.DEGREE.map((degree) => (
+                        <MenuItem key={degree} value={degree}>
+                          {degree}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>{errors.degree}</FormHelperText>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <FormControl
+                    variant="outlined"
+                    required
+                    className={classes.formControl}
+                    error={errors.admissionYear.length !== 0}
+                  >
+                    <InputLabel id="admission-year-label">
+                      Admission Year
+                    </InputLabel>
+                    <Select
+                      labelId="admission-year-label"
+                      id="admission-year"
+                      name="admissionYear"
+                      value={student.admissionYear}
+                      onChange={handleStudent}
+                      label="Admission Year"
+                    >
+                      {[0, 1, 2, 3].map((number) => (
+                        <MenuItem
+                          key={number}
+                          value={`${currentYear - number}`}
+                        >
+                          {currentYear - number}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>{errors.admissionYear}</FormHelperText>
+                  </FormControl>
+                </Grid>
+                <FormControl
+                  variant="outlined"
+                  required
+                  className={classes.formControl}
+                  error={errors.department.length !== 0}
+                >
+                  <InputLabel id="department-label">Department</InputLabel>
+                  <Select
+                    labelId="department-label"
+                    id="department"
+                    name="department"
+                    value={student.department}
+                    onChange={handleStudent}
+                    label="Department"
+                  >
+                    {constants.BRANCHES.map((branch) => (
+                      <MenuItem key={branch} value={branch}>
+                        {branch}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>{errors.department}</FormHelperText>
+                </FormControl>
+              </Grid>
+              <Button
+                onClick={handleFormSubmit}
+                size="large"
+                color="primary"
+                type="submit"
+                fullWidth
+                variant="contained"
+              >
+                Register
+              </Button>
+            </div>
+          </form>
+          <Typography
+            style={{ color: "#303F9E", fontSize: 15, marginBottom: "15px" }}
+          >
+            Already have an account?
+            <Link style={{ color: "#303F9E" }} to={`/student/login`}>
+              {" "}
+              Login
+            </Link>
+          </Typography>
+        </Paper>
+      </Box>
+    </React.Fragment>
   );
 };
 

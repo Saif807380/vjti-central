@@ -39,7 +39,7 @@ export const register = async ({ dispatch, user, userType }) => {
     });
     dispatch({
       type: AUTH_SUCCESS,
-      payload: { ...res.data, rememberme: false, userType }
+      payload: { ...res.data, rememberme: true, userType }
     });
     return {
       data: res.data,

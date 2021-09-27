@@ -39,3 +39,74 @@ export const getApplications = async ({ id, token, userType }) => {
     };
   }
 };
+
+export const verifyApplication = async ({ body, token }) => {
+  try {
+    const res = await axios.post(BASE_URL + "/applications/verify", body, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return {
+      data: res.data,
+      status: res.status
+    };
+  } catch (err) {
+    return {
+      error: err.response.data.error,
+      status: err.response.status
+    };
+  }
+};
+
+export const approveApplication = async ({
+  title,
+  date,
+  reward,
+  id,
+  token
+}) => {
+  try {
+    const res = await axios.post(
+      BASE_URL + `/applications/${id}/approve`,
+      { title, date, reward },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    return {
+      data: res.data,
+      status: res.status
+    };
+  } catch (err) {
+    return {
+      error: err.response.data.error,
+      status: err.response.status
+    };
+  }
+};
+
+export const rejectApplication = async ({ id, token }) => {
+  try {
+    const res = await axios.post(
+      BASE_URL + `/applications/${id}/reject`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+    return {
+      data: res.data,
+      status: res.status
+    };
+  } catch (err) {
+    return {
+      error: err.response.data.error,
+      status: err.response.status
+    };
+  }
+};
