@@ -44,4 +44,6 @@ module.exports = (app) => {
     "/api/applications/:id/reject",
     applicationController.rejectApplication
   );
+  app.put("/api/applications/:id", applicationController.updateApplication);
+  app.delete("/api/applications/:id", applicationController.deleteApplication);
 };
