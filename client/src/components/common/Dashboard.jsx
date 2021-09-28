@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core";
-import Profile from "./Profile";
+import Profile from "./profile/Profile";
 
 const useStyles = makeStyles((theme) => ({
   root: {
