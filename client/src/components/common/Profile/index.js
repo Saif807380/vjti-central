@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState }  from "react";
 import { Link as RouterLink, useLocation } from "react-router-dom";
+import Spinner from "../../Spinner";
 import PropTypes from "prop-types";
 import {
   Avatar,
@@ -21,42 +22,73 @@ import {
   Database
 } from "react-feather";
 import ProfileItem from "./ProfileItem";
+import axios from "axios";
+import { useAuthState } from "../../../context/AuthContext";
+const BASE_URL = process.env.REACT_APP_API_URL;
 
-
-const details = [
+const studentDetails = [
     {
         icon: BarChartIcon,
-        title: "Name : Computer Engineering"
+        title: "Name"
+      },
+      {
+        icon: UsersIcon,
+        title: "ID No"
+      },
+      {
+        icon: Database,
+        title: "Email"
+      },
+      {
+        icon: ShoppingBagIcon,
+        title: "Public Key"
       },
   {
     icon: BarChartIcon,
-    title: "Deparment : Computer Engineering"
+    title: "Deparment"
   },
+  {
+    icon: BarChartIcon,
+    title: "Year"
+  },
+  {
+    icon: BarChartIcon,
+    title: "Degree"
+  },
+  {
+    icon: BarChartIcon,
+    title: "Wallet Balance"
+  },
+];
+
+const facultyDetails =  [
+    {
+        icon: BarChartIcon,
+        title: "Name"
+      },
+  
   {
     icon: UsersIcon,
-    title: "ID No : 181071035"
-  },
-  {
-    icon: ShoppingBagIcon,
-    title: "Public Key : 111111111111111111111111111111111111111111111111"
+    title: "ID No"
   },
   {
     icon: Database,
-    title: "Email : mantrypalak@gmail.com"
+    title: "Email"
   },
   {
     icon: BarChartIcon,
-    title: "Deparment : Computer Engineering"
+    title: "Deparment"
   },
   {
     icon: BarChartIcon,
-    title: "Degree : Computer Engineering"
+    title: "Position"
   },
   {
     icon: BarChartIcon,
-    title: "Admission Year : Computer Engineering"
+    title: "Description"
   },
 ];
+
 
 const useStyles = makeStyles(() => ({
   mobileDrawer: {
@@ -67,7 +99,7 @@ const useStyles = makeStyles(() => ({
     marginTop:75,
     width: 850,
     top: 60,
-    marginLeft:200,
+    marginLeft:320,
     maxHeight:400
   },
   avatar: {
@@ -78,36 +110,39 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const Profile = ({ onMobileClose, openMobile, setContents }) => {
+export default function Profile({ onMobileClose, openMobile, setContents }){
   const classes = useStyles();
+  const {userType,userID } = useAuthState();
+  const [detailList, setdetailList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const fetchingDetails = async () => {
+  
+  if(userType=="student"){
+  
+  const fetchedStudents = await axios.get(`${BASE_URL}/student/${userID}`,);
+  const details=[fetchedStudents.data["name"],fetchedStudents.data["studentID"],fetchedStudents.data["email"],fetchedStudents.data["publicKey"],fetchedStudents.data["department"],fetchedStudents.data["degree"],fetchedStudents.data["year"],fetchedStudents.data["walletBalance"]];
+  setdetailList(details);
+ 
+}else{
+  const fetchedFaculty = await axios.get(`${BASE_URL}/faculty/${userID}`,);
+  const details=[fetchedFaculty.data["name"],fetchedFaculty.data["facultyID"],fetchedFaculty.data["email"],fetchedFaculty.data["department"],fetchedFaculty.data["position"],fetchedFaculty.data["description"]];
+  setdetailList(details);
+}
+} 
 
-  const content = (
-    <Box height="50%" width="100%" display="flex" >
-      <Box alignItems="center" display="flex" flexDirection="column" p={2}>
-        <Avatar className={classes.avatar} src={User} />
-        <Typography className={classes.name} color="textPrimary" variant="h5">
-          Palak Mantry
-        </Typography>
-      </Box>
-      <Divider />
-      <Box p={2}>
-        <List>
-          {details.map((detail, idx) => (
-            <ProfileItem
-              key={detail.title}
-              title={detail.title}
-              icon={detail.icon}
-              index={idx}
-              setContents={setContents}
-            />
-          ))}
-        </List>
-      </Box>
-      <Box flexGrow={1} />
-    </Box>
-  );
+useEffect(() => {
+    setLoading(true);
+    fetchingDetails().then((res) => {
+      setLoading(false);
+    });
+    
+}, []);
 
+ 
   return (
+    loading ? (
+      <Spinner />
+    ) : (
     <>
       <Hidden lgUp>
         <Drawer
@@ -117,7 +152,40 @@ const Profile = ({ onMobileClose, openMobile, setContents }) => {
           open={openMobile}
           variant="temporary"
         >
-          {content}
+            <Box height="50%" width="100%" display="flex" >
+      <Box alignItems="center" display="flex" flexDirection="column" p={2}>
+        <Avatar className={classes.avatar} src={User} />
+        <Typography className={classes.name} color="textPrimary" variant="h5">
+        { detailList[0]}
+        </Typography>
+      </Box>
+      <Divider />
+      <Box p={2}>
+        <List>
+        {userType=="student"?
+          studentDetails.map((detail, idx) => (
+            <ProfileItem
+              key={detail.title}
+              title={detail.title}
+              value={detailList[idx]}
+              icon={detail.icon}
+              index={idx}
+              setContents={setContents}
+            />
+          )): facultyDetails.map((detail, idx) => (
+            <ProfileItem
+              key={detail.title}
+              title={detail.title}
+              icon={detail.icon}
+              index={idx}
+              setContents={setContents}
+            />
+          ))
+}
+        </List>
+      </Box>
+      <Box flexGrow={1} />
+    </Box>
         </Drawer>
       </Hidden>
       <Hidden mdDown>
@@ -127,10 +195,44 @@ const Profile = ({ onMobileClose, openMobile, setContents }) => {
           open
           variant="persistent"
         >
-          {content}
+            <Box height="50%" width="100%" display="flex" >
+      <Box alignItems="center" display="flex" flexDirection="column" p={2}>
+        <Avatar className={classes.avatar} src={User} />
+        <Typography className={classes.name} color="textPrimary" variant="h5">
+          Palak Mantry
+        </Typography>
+      </Box>
+      <Divider />
+      <Box p={2}>
+        <List>
+        {userType=="student"?
+          studentDetails.map((detail, idx) => (
+            <ProfileItem
+              key={detail.title}
+              title={detail.title}
+              value={detailList[idx]}
+              icon={detail.icon}
+              index={idx}
+              setContents={setContents}
+            />
+          )): facultyDetails.map((detail, idx) => (
+            <ProfileItem
+              key={detail.title}
+              title={detail.title}
+              icon={detail.icon}
+              index={idx}
+              setContents={setContents}
+            />
+          ))
+}
+        </List>
+      </Box>
+      <Box flexGrow={1} />
+    </Box>
         </Drawer>
       </Hidden>
     </>
+    )
   );
 };
 
@@ -145,4 +247,3 @@ Profile.defaultProps = {
   openMobile: false
 };
 
-export default Profile;

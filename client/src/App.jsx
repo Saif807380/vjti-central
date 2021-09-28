@@ -7,7 +7,6 @@ import Spinner from "./components/Spinner";
 import { AuthProvider } from "./context/AuthContext";
 import { SnackbarProvider } from "./context/SnackbarContext";
 import SnackBar from "./components/SnackBar";
-import DashboardLayout from "./components/common/Dashboard";
 // Common Pages
 const LazyLanding = lazy(() => import("./components/common/Landing"));
 const LazyPageNotFound = lazy(() => import("./components/common/PageNotFound"));
@@ -46,7 +45,7 @@ const App = () => {
                   <Switch>
                     {/* Common routes */}
                     <Route exact path="/" component={LazyLanding} />
-                    <Route exact path="/profile" component={DashboardLayout} />
+
                     {/* Student Routes */}
                     <Route path="/student" component={LazyStudent} />
                     {/* Faculty Routes */}

@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core";
 import Profile from "./Profile";
 
 
-
 const useStyles = makeStyles((theme) => ({
     root: {
         display: "flex",
