@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import {
+  Button,
   Box,
   Typography,
   Divider,
@@ -101,6 +102,14 @@ const ApplicationsList = () => {
         <Typography variant="h6">
           {"Applications".toLocaleUpperCase()}
         </Typography>
+
+
+        <Typography variant="h6">
+          {userType == "student" ?
+            <Button variant="contained" color="primary">Create Application</Button> : ""}
+        </Typography>
+
+
         <ToggleButtonGroup
           value={statusFilter}
           exclusive

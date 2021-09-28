@@ -7,7 +7,7 @@ import ProtectedRoute from "../../components/ProtectedRoute";
 import ApplicationDetail from "../applications/ApplicationDetail";
 import FacultyActions from "../applications/FacultyActions";
 import ApplicationsList from "../applications/ApplicationsList";
-
+import DashboardLayout from "../../components/common/Dashboard";
 const Faculty = () => {
   return (
     <Switch>
@@ -19,6 +19,11 @@ const Faculty = () => {
         exact
         path="/faculty"
         component={Dashboard}
+        userType={"faculty"}
+      />
+      <ProtectedRoute
+        exact path="/faculty/profile"
+        component={DashboardLayout}
         userType={"faculty"}
       />
       <ProtectedRoute

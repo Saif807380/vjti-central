@@ -122,6 +122,17 @@ const Header = () => {
             {isAuthenticated ? (
               <div>
                 <Button
+                  onClick={() => navigationHandler(`/${userType}/profile`)}
+                  color="inherit"
+                  className={`${classes.navButton} ${classes.button}`}
+                  disableRipple
+                  disableFocusRipple
+                >
+                  <Typography variant="body1" noWrap>
+                    Profile
+                  </Typography>
+                </Button>
+                <Button
                   onClick={() => navigationHandler(`/${userType}/applications`)}
                   color="inherit"
                   className={`${classes.navButton} ${classes.button}`}

@@ -36,12 +36,13 @@ exports.getStudent = async (req, res, next) => {
       });
 
     return res.status(200).json({
-      studentID: student.studentID,
       name: student.name,
+      studentID: student.studentID,
+      email: student.email,
+      publicKey:student.publicKey,
       department: student.department,
       year: student.admissionYear,
       degree: student.degree,
-      email: student.email,
       walletBalance: response.data
     });
   } catch (e) {

@@ -7,7 +7,6 @@ import Spinner from "./components/Spinner";
 import { AuthProvider } from "./context/AuthContext";
 import { SnackbarProvider } from "./context/SnackbarContext";
 import SnackBar from "./components/SnackBar";
-
 // Common Pages
 const LazyLanding = lazy(() => import("./components/common/Landing"));
 const LazyPageNotFound = lazy(() => import("./components/common/PageNotFound"));

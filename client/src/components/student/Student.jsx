@@ -8,6 +8,7 @@ import ApplicationsList from "../applications/ApplicationsList";
 import ApplicationDetail from "../applications/ApplicationDetail";
 import StudentActions from "../applications/StudentActions";
 import CreateApplication from "./CreateApplication";
+import DashboardLayout from "../../components/common/Dashboard";
 const Student = () => {
   return (
     <Switch>
@@ -19,6 +20,11 @@ const Student = () => {
         exact
         path="/student"
         component={Dashboard}
+        userType={"student"}
+      />
+      <ProtectedRoute
+        exact path="/student/profile"
+        component={DashboardLayout}
         userType={"student"}
       />
       <ProtectedRoute
@@ -39,6 +45,8 @@ const Student = () => {
         component={() => <ApplicationDetail actions={StudentActions} />}
         userType={"student"}
       />
+
+
     </Switch>
   );
 };
