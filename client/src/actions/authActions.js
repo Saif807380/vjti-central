@@ -53,3 +53,22 @@ export const register = async ({ dispatch, user, userType }) => {
     };
   }
 };
+
+export const getUser = async ({ id, token, userType }) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/${userType}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return {
+      data: res.data,
+      status: res.status
+    };
+  } catch (err) {
+    return {
+      error: err.response.data.error,
+      status: err.response.status
+    };
+  }
+};

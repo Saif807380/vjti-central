@@ -189,6 +189,7 @@ const ApplicationDetail = (props) => {
                 position={isSmallScreen ? "center" : "start"}
                 applicationData={applicationData}
                 setLoading={setLoading}
+                id={applicationData._id}
               />
             )}
           </Grid>

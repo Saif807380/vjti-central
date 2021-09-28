@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import {
   Button,
@@ -11,15 +12,15 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  useMediaQuery
+  useMediaQuery,
 } from "@material-ui/core";
 import {
   AccessTimeOutlined,
   CheckCircle,
-  ClearOutlined
+  ClearOutlined,
+  Add,
 } from "@material-ui/icons";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
-import { Link, useHistory } from "react-router-dom";
 import Spinner from "../Spinner";
 import { useAuthState } from "../../context/AuthContext";
 import StatusChip from "./StatusChip";
@@ -28,27 +29,27 @@ import { getApplications } from "../../actions/applicationActions";
 const useStyles = makeStyles((theme) => ({
   container: {
     minHeight: "80vh",
-    padding: "20px"
+    padding: "20px",
   },
   divider: {
     backgroundColor: "rgba(0, 0, 0, 0.12)",
-    width: "100%"
+    width: "100%",
   },
   titleLink: {
     textDecoration: "none",
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
   },
   root: {
     "&$selected": {
       backgroundColor: theme.palette.primary.main,
-      color: "white"
+      color: "white",
     },
     "&$selected&:hover": {
       backgroundColor: theme.palette.primary.main,
-      color: "white"
-    }
+      color: "white",
+    },
   },
-  selected: {}
+  selected: {},
 }));
 
 const ApplicationsList = () => {
@@ -61,10 +62,7 @@ const ApplicationsList = () => {
   const [applications, setApplications] = useState([]);
   const [filteredApplications, setFilteredApplications] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
-  const navigationHandler = (route) => {
 
-    history.push(route);
-  };
   useEffect(() => {
     setLoading(true);
     getApplications({ id: userID, token, userType }).then((res) => {
@@ -107,12 +105,20 @@ const ApplicationsList = () => {
           {"Applications".toLocaleUpperCase()}
         </Typography>
 
-
-        <Typography variant="h6">
-          {userType == "student" ?
-            <Button variant="contained" color="primary" onClick={() => navigationHandler(`/${userType}/applications/new`)}>Create Application</Button> : ""}
-        </Typography>
-
+        {userType === "student" && (
+          <Typography variant="h6">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                history.push("/student/applications/new");
+              }}
+              startIcon={<Add />}
+            >
+              New Application
+            </Button>
+          </Typography>
+        )}
 
         <ToggleButtonGroup
           value={statusFilter}

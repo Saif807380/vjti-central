@@ -20,11 +20,7 @@ import {
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
-import {
-  FormatColorResetRounded,
-  Visibility,
-  VisibilityOff
-} from "@material-ui/icons";
+import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
 import { Link } from "react-router-dom";

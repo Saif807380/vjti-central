@@ -133,7 +133,7 @@ const Login = (props) => {
           setSeverity("success");
           setMessage("You have successfully logged in.");
           setOpen(true);
-          history.push(`/${props.userType}`);
+          history.push(`/${props.userType}/applications`);
         }
       });
     }

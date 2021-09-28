@@ -14,7 +14,7 @@ exports.getAllStudents = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getStudent = async (req, res, next) => {
+exports.getStudent = async (req, res) => {
   try {
     let student = await Student.findById(req.params.studentID);
     if (!student) return res.status(404).json({ error: "Invalid Student ID" });
@@ -39,7 +39,7 @@ exports.getStudent = async (req, res, next) => {
       name: student.name,
       studentID: student.studentID,
       email: student.email,
-      publicKey:student.publicKey,
+      publicKey: student.publicKey,
       department: student.department,
       year: student.admissionYear,
       degree: student.degree,
