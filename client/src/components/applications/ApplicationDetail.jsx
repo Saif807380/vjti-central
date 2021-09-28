@@ -68,7 +68,8 @@ const ApplicationDetail = (props) => {
     reward: 0,
     status: "",
     domainAchievement: "",
-    links: []
+    links: [],
+    files: []
   });
   const [loading, setLoading] = useState(false);
 
@@ -155,9 +156,30 @@ const ApplicationDetail = (props) => {
             </Box>
 
             <Box style={{ marginBottom: "30px" }}>
+              <ApplicationItem label="Files" value="" />
+              {applicationData.files.map((file, index) => (
+                <li>
+                  <a
+                    href={file}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    key={index}
+                  >
+                    Click to view the certificate
+                  </a>
+                </li>
+              ))}
+            </Box>
+
+            <Box style={{ marginBottom: "30px" }}>
               <ApplicationItem label="Links" value="" />
-              {applicationData.links.map((link) => (
-                <a href={link} target="_blank" rel="noopener noreferrer">
+              {applicationData.links.map((link, index) => (
+                <a
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  key={index}
+                >
                   {link}
                 </a>
               ))}

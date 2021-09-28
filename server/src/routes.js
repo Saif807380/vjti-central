@@ -17,6 +17,7 @@ module.exports = (app) => {
     "/api/student/:id/applications",
     applicationController.getStudentApplications
   );
+  app.get("/api/student/:studentID", studentController.getStudent);
 
   //Faculty Routes
   app.post("/api/faculty/register", authFacultyController.registerFaculty);
@@ -44,4 +45,6 @@ module.exports = (app) => {
     "/api/applications/:id/reject",
     applicationController.rejectApplication
   );
+  app.put("/api/applications/:id", applicationController.updateApplication);
+  app.delete("/api/applications/:id", applicationController.deleteApplication);
 };
