@@ -25,6 +25,8 @@ const FormField = (props) => {
         fullWidth
         InputProps={props.InputProps}
         disabled={props.disabled}
+        multiline={props.multiline}
+        maxRows={props.maxRows}
       />
     </div>
   );

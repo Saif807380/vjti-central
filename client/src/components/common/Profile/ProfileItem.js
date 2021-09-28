@@ -59,7 +59,9 @@ const ProfileItem = ({
         onClick={() => setContents(index)}
       >
         {Icon && <Icon className={classes.icon} size="20" />}
-        <span className={classes.title}>{title} : {value}</span>
+        <span className={classes.title}>
+          {title} : {value}
+        </span>
       </Button>
     </ListItem>
   );
