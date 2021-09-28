@@ -39,7 +39,7 @@ exports.getStudent = async (req, res, next) => {
       name: student.name,
       studentID: student.studentID,
       email: student.email,
-      publicKey:"11111111",
+      publicKey:student.publicKey,
       department: student.department,
       year: student.admissionYear,
       degree: student.degree,
