@@ -125,8 +125,7 @@ export default function Profile({ onMobileClose, openMobile, setContents }){
  
 }else{
   const fetchedFaculty = await axios.get(`${BASE_URL}/faculty/${userID}`,);
-  console.log(userID);
-  console.log(fetchedFaculty);
+ 
   const details=[fetchedFaculty.data["name"],fetchedFaculty.data["facultyID"],fetchedFaculty.data["email"],fetchedFaculty.data["department"],fetchedFaculty.data["position"],fetchedFaculty.data["description"]];
   setdetailList(details);
 }

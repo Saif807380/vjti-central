@@ -15,8 +15,7 @@ exports.getAllFaculties = catchAsync(async (req, res, next) => {
 
 exports.getFaculty = catchAsync(async (req, res, next) => {
   let faculty = await Faculty.findById(req.params.facultyID);
-  if (!faculty) return res.status(404).json({ error: "Invalid Student ID" });
-
+  if (!faculty) return res.status(404).json({ error: "Invalid Faculty ID" });
 
   return res.status(200).json({
     name: faculty.name,
