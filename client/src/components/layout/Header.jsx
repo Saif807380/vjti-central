@@ -81,13 +81,20 @@ const Header = () => {
       {isAuthenticated ? (
         <div>
           <MenuItem
+            onClick={() => navigationHandler(`/${userType}/profile`)}
+          >
+            <p>Profile</p>
+          </MenuItem>
+          <MenuItem
             onClick={() => navigationHandler(`/${userType}/applications`)}
           >
             <p>Applications</p>
           </MenuItem>
+
           <MenuItem onClick={handleLogout}>
             <p>Logout</p>
           </MenuItem>
+
         </div>
       ) : (
         <div>

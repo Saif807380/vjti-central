@@ -28,7 +28,7 @@ const BASE_URL = process.env.REACT_APP_API_URL;
 
 const studentDetails = [
     {
-        icon: BarChartIcon,
+        icon: UsersIcon,
         title: "Name"
       },
       {
@@ -40,7 +40,7 @@ const studentDetails = [
         title: "Email"
       },
       {
-        icon: ShoppingBagIcon,
+        icon:Database,
         title: "Public Key"
       },
   {
@@ -56,14 +56,14 @@ const studentDetails = [
     title: "Degree"
   },
   {
-    icon: BarChartIcon,
+    icon: ShoppingBagIcon,
     title: "Wallet Balance"
   },
 ];
 
 const facultyDetails =  [
     {
-        icon: BarChartIcon,
+        icon: UsersIcon,
         title: "Name"
       },
   
@@ -97,9 +97,9 @@ const useStyles = makeStyles(() => ({
   },
   desktopDrawer: {
     marginTop:75,
-    width: 850,
+    width: 1400,
     top: 60,
-    marginLeft:320,
+    marginLeft:1,
     maxHeight:400
   },
   avatar: {
@@ -125,6 +125,8 @@ export default function Profile({ onMobileClose, openMobile, setContents }){
  
 }else{
   const fetchedFaculty = await axios.get(`${BASE_URL}/faculty/${userID}`,);
+  console.log(userID);
+  console.log(fetchedFaculty);
   const details=[fetchedFaculty.data["name"],fetchedFaculty.data["facultyID"],fetchedFaculty.data["email"],fetchedFaculty.data["department"],fetchedFaculty.data["position"],fetchedFaculty.data["description"]];
   setdetailList(details);
 }
@@ -176,6 +178,7 @@ useEffect(() => {
             <ProfileItem
               key={detail.title}
               title={detail.title}
+              value={detailList[idx]}
               icon={detail.icon}
               index={idx}
               setContents={setContents}
@@ -199,7 +202,7 @@ useEffect(() => {
       <Box alignItems="center" display="flex" flexDirection="column" p={2}>
         <Avatar className={classes.avatar} src={User} />
         <Typography className={classes.name} color="textPrimary" variant="h5">
-          Palak Mantry
+        { detailList[0]}
         </Typography>
       </Box>
       <Divider />
@@ -219,6 +222,7 @@ useEffect(() => {
             <ProfileItem
               key={detail.title}
               title={detail.title}
+              value={detailList[idx]}
               icon={detail.icon}
               index={idx}
               setContents={setContents}

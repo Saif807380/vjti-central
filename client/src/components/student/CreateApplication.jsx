@@ -177,7 +177,8 @@ export default function CreateApplication() {
                                     >
                                         <MenuItem value="Hackathon">Hackathon</MenuItem>
                                         <MenuItem value="Competition">Competition</MenuItem>
-                                        <MenuItem value="Research">Research</MenuItem>
+                                        <MenuItem value="Research Paper">Research Paper</MenuItem>
+                                        <MenuItem value="Committee Position"> Committee Position</MenuItem>
                                     </Select>
                                 </Grid>
                                 <br></br>

@@ -19,21 +19,21 @@ exports.getStudent = async (req, res, next) => {
     let student = await Student.findById(req.params.studentID);
     if (!student) return res.status(404).json({ error: "Invalid Student ID" });
 
-    const response = await axios.post(
-      process.env.VJ_CHAIN_NODE_URL + "/checkBalance",
-      {
-        public_key: student.publicKey
-      },
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-    );
-    if (response.status !== 200)
-      return res.status(500).json({
-        error: "An error occurred while fetching wallet balance from VJ Chain"
-      });
+    // const response = await axios.post(
+    //   process.env.VJ_CHAIN_NODE_URL + "/checkBalance",
+    //   {
+    //     public_key: student.publicKey
+    //   },
+    //   {
+    //     headers: {
+    //       "Content-Type": "application/json"
+    //     }
+    //   }
+    // );
+    // if (response.status !== 200)
+    //   return res.status(500).json({
+    //     error: "An error occurred while fetching wallet balance from VJ Chain"
+    //   });
 
     return res.status(200).json({
       name: student.name,
@@ -43,7 +43,7 @@ exports.getStudent = async (req, res, next) => {
       department: student.department,
       year: student.admissionYear,
       degree: student.degree,
-      walletBalance: response.data
+      walletBalance:"1233"
     });
   } catch (e) {
     res.status(500).json({ error: e.message });
