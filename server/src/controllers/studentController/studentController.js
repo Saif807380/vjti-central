@@ -14,7 +14,7 @@ exports.getAllStudents = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getStudent = catchAsync(async (req, res, next) => {
+exports.getStudent = async (req, res, next) => {
   try {
     let student = await Student.findById(req.params.studentID);
     if (!student) return res.status(404).json({ error: "Invalid Student ID" });
@@ -31,11 +31,9 @@ exports.getStudent = catchAsync(async (req, res, next) => {
       }
     );
     if (response.status !== 200)
-      return res
-        .status(500)
-        .json({
-          error: "An error occurred while fetching wallet balance from VJ Chain"
-        });
+      return res.status(500).json({
+        error: "An error occurred while fetching wallet balance from VJ Chain"
+      });
 
     return res.status(200).json({
       studentID: student.studentID,
@@ -49,7 +47,7 @@ exports.getStudent = catchAsync(async (req, res, next) => {
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
-});
+};
 
 exports.createStudent = (req, res) => {
   res.status(500).json({
