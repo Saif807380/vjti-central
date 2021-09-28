@@ -17,6 +17,7 @@ module.exports = (app) => {
     "/api/student/:id/applications",
     applicationController.getStudentApplications
   );
+  app.get("/api/student/:studentID", studentController.getStudent);
 
   //Faculty Routes
   app.post("/api/faculty/register", authFacultyController.registerFaculty);
