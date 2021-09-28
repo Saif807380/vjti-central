@@ -14,16 +14,18 @@ exports.getAllFaculties = catchAsync(async (req, res, next) => {
 });
 
 exports.getFaculty = catchAsync(async (req, res, next) => {
-  const faculty = await Faculty.findOne({
-    facultyID: req.params.facultyID
-  }).select(["facultyID", "name", "email", "department", "position"]);
+  let faculty = await Faculty.findById(req.params.facultyID);
+  if (!faculty) return res.status(404).json({ error: "Invalid Faculty ID" });
 
-  res.status(200).json({
-    status: "success",
-    data: {
-      faculty
-    }
+  return res.status(200).json({
+    name: faculty.name,
+    facultyID: faculty.facultyID,
+    email: faculty.email,
+    department: faculty.department,
+    description: faculty.description,
+    position:faculty.position
   });
+
 });
 
 exports.createFaculty = (req, res) => {

@@ -19,7 +19,7 @@ import {
   ClearOutlined
 } from "@material-ui/icons";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Spinner from "../Spinner";
 import { useAuthState } from "../../context/AuthContext";
 import StatusChip from "./StatusChip";
@@ -52,6 +52,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ApplicationsList = () => {
+  const history = useHistory();
   const classes = useStyles();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -60,7 +61,10 @@ const ApplicationsList = () => {
   const [applications, setApplications] = useState([]);
   const [filteredApplications, setFilteredApplications] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
+  const navigationHandler = (route) => {
 
+    history.push(route);
+  };
   useEffect(() => {
     setLoading(true);
     getApplications({ id: userID, token, userType }).then((res) => {
@@ -106,7 +110,7 @@ const ApplicationsList = () => {
 
         <Typography variant="h6">
           {userType == "student" ?
-            <Button variant="contained" color="primary">Create Application</Button> : ""}
+            <Button variant="contained" color="primary" onClick={() => navigationHandler(`/${userType}/applications/new`)}>Create Application</Button> : ""}
         </Typography>
 
 
