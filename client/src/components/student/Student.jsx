@@ -7,7 +7,6 @@ import ProtectedRoute from "../../components/ProtectedRoute";
 import ApplicationsList from "../applications/ApplicationsList";
 import ApplicationDetail from "../applications/ApplicationDetail";
 import StudentActions from "../applications/StudentActions";
-import CreateApplication from "./CreateApplication";
 import NewApplication from "../applications/NewApplication";
 import DashboardLayout from "../../components/common/Dashboard";
 const Student = () => {
@@ -38,12 +37,6 @@ const Student = () => {
       <ProtectedRoute
         exact
         path="/student/applications/new"
-        component={CreateApplication}
-        userType={"student"}
-      />
-      <ProtectedRoute
-        exact
-        path="/student/applications/new/2"
         component={NewApplication}
         userType={"student"}
       />

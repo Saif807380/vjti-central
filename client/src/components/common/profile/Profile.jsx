@@ -1,154 +1,147 @@
 import React, { useEffect, useState } from "react";
-import { Link as RouterLink, useLocation } from "react-router-dom";
 import Spinner from "../../Spinner";
-import PropTypes from "prop-types";
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   Drawer,
   Hidden,
   List,
   Typography,
-  makeStyles,
+  makeStyles
 } from "@material-ui/core";
 import {
   BarChart as BarChartIcon,
   ShoppingBag as ShoppingBagIcon,
   Users as UsersIcon,
-  HelpCircle as HelpCircleIcon,
   User,
-  Database,
+  Database
 } from "react-feather";
 import ProfileItem from "./ProfileItem";
-import axios from "axios";
 import { useAuthState } from "../../../context/AuthContext";
-const BASE_URL = process.env.REACT_APP_API_URL;
+import { getUser } from "../../../actions/authActions";
 
 const studentDetails = [
   {
     icon: UsersIcon,
-    title: "Name",
+    title: "Name"
   },
   {
     icon: UsersIcon,
-    title: "ID No",
+    title: "ID No"
   },
   {
     icon: Database,
-    title: "Email",
+    title: "Email"
   },
   {
     icon: Database,
-    title: "Public Key",
+    title: "Public Key"
   },
   {
     icon: BarChartIcon,
-    title: "Deparment",
+    title: "Deparment"
   },
   {
     icon: BarChartIcon,
-    title: "Year",
+    title: "Year"
   },
   {
     icon: BarChartIcon,
-    title: "Degree",
+    title: "Degree"
   },
   {
     icon: ShoppingBagIcon,
-    title: "Wallet Balance",
-  },
+    title: "Wallet Balance"
+  }
 ];
 
 const facultyDetails = [
   {
     icon: UsersIcon,
-    title: "Name",
+    title: "Name"
   },
 
   {
     icon: UsersIcon,
-    title: "ID No",
+    title: "ID No"
   },
   {
     icon: Database,
-    title: "Email",
+    title: "Email"
   },
   {
     icon: BarChartIcon,
-    title: "Deparment",
+    title: "Deparment"
   },
   {
     icon: BarChartIcon,
-    title: "Position",
+    title: "Position"
   },
   {
     icon: BarChartIcon,
-    title: "Description",
-  },
+    title: "Description"
+  }
 ];
 
 const useStyles = makeStyles(() => ({
   mobileDrawer: {
     width: 256,
-    backgroundColor: "#f1f1f1",
+    backgroundColor: "#f1f1f1"
   },
   desktopDrawer: {
     marginTop: 75,
     width: 1400,
     top: 60,
     marginLeft: 1,
-    maxHeight: 400,
+    maxHeight: 400
   },
   avatar: {
     cursor: "pointer",
     width: 64,
     height: 64,
-    backgroundColor: "black",
-  },
+    backgroundColor: "black"
+  }
 }));
 
-export default function Profile({ onMobileClose, openMobile, setContents }) {
+export default function Profile({ onMobileClose, openMobile }) {
   const classes = useStyles();
-  const { userType, userID } = useAuthState();
-  const [detailList, setdetailList] = useState([]);
+  const { userType, userID, token } = useAuthState();
+  const [detailList, setDetailList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const fetchingDetails = async () => {
-    if (userType == "student") {
-      const fetchedStudents = await axios.get(`${BASE_URL}/student/${userID}`);
-      const details = [
-        fetchedStudents.data["name"],
-        fetchedStudents.data["studentID"],
-        fetchedStudents.data["email"],
-        fetchedStudents.data["publicKey"],
-        fetchedStudents.data["department"],
-        fetchedStudents.data["degree"],
-        fetchedStudents.data["year"],
-        fetchedStudents.data["walletBalance"],
-      ];
-      setdetailList(details);
-    } else {
-      const fetchedFaculty = await axios.get(`${BASE_URL}/faculty/${userID}`);
-
-      const details = [
-        fetchedFaculty.data["name"],
-        fetchedFaculty.data["facultyID"],
-        fetchedFaculty.data["email"],
-        fetchedFaculty.data["department"],
-        fetchedFaculty.data["position"],
-        fetchedFaculty.data["description"],
-      ];
-      setdetailList(details);
-    }
-  };
 
   useEffect(() => {
     setLoading(true);
-    fetchingDetails().then((res) => {
-      setLoading(false);
-    });
-  }, []);
+    if (userType === "student") {
+      getUser({ id: userID, token, userType }).then((fetchedStudents) => {
+        const details = [
+          fetchedStudents.data["name"],
+          fetchedStudents.data["studentID"],
+          fetchedStudents.data["email"],
+          fetchedStudents.data["publicKey"],
+          fetchedStudents.data["department"],
+          fetchedStudents.data["degree"],
+          fetchedStudents.data["year"],
+          fetchedStudents.data["walletBalance"]
+        ];
+        setDetailList(details);
+        setLoading(false);
+      });
+    } else {
+      getUser({ id: userID, token, userType }).then((fetchedFaculty) => {
+        const details = [
+          fetchedFaculty.data["name"],
+          fetchedFaculty.data["facultyID"],
+          fetchedFaculty.data["email"],
+          fetchedFaculty.data["department"],
+          fetchedFaculty.data["position"],
+          fetchedFaculty.data["description"]
+        ];
+        setDetailList(details);
+        setLoading(false);
+      });
+    }
+  }, [token, userID, userType]);
 
   return loading ? (
     <Spinner />
@@ -181,7 +174,7 @@ export default function Profile({ onMobileClose, openMobile, setContents }) {
             <Divider />
             <Box p={2}>
               <List>
-                {userType == "student"
+                {userType === "student"
                   ? studentDetails.map((detail, idx) => (
                       <ProfileItem
                         key={detail.title}
@@ -189,7 +182,6 @@ export default function Profile({ onMobileClose, openMobile, setContents }) {
                         value={detailList[idx]}
                         icon={detail.icon}
                         index={idx}
-                        setContents={setContents}
                       />
                     ))
                   : facultyDetails.map((detail, idx) => (
@@ -199,7 +191,6 @@ export default function Profile({ onMobileClose, openMobile, setContents }) {
                         value={detailList[idx]}
                         icon={detail.icon}
                         index={idx}
-                        setContents={setContents}
                       />
                     ))}
               </List>
@@ -234,7 +225,7 @@ export default function Profile({ onMobileClose, openMobile, setContents }) {
             <Divider />
             <Box p={2}>
               <List>
-                {userType == "student"
+                {userType === "student"
                   ? studentDetails.map((detail, idx) => (
                       <ProfileItem
                         key={detail.title}
@@ -242,7 +233,6 @@ export default function Profile({ onMobileClose, openMobile, setContents }) {
                         value={detailList[idx]}
                         icon={detail.icon}
                         index={idx}
-                        setContents={setContents}
                       />
                     ))
                   : facultyDetails.map((detail, idx) => (
@@ -252,7 +242,6 @@ export default function Profile({ onMobileClose, openMobile, setContents }) {
                         value={detailList[idx]}
                         icon={detail.icon}
                         index={idx}
-                        setContents={setContents}
                       />
                     ))}
               </List>
@@ -264,14 +253,3 @@ export default function Profile({ onMobileClose, openMobile, setContents }) {
     </>
   );
 }
-
-Profile.propTypes = {
-  onMobileClose: PropTypes.func,
-  openMobile: PropTypes.bool,
-  setContents: PropTypes.func,
-};
-
-Profile.defaultProps = {
-  onMobileClose: () => {},
-  openMobile: false,
-};

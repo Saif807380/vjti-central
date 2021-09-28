@@ -238,12 +238,11 @@ module.exports = {
 
   async deleteApplication(req, res) {
     try {
-      const appln_id = req.params.id;
-      let application = await Application.findById(appln_id);
+      let application = await Application.findById(req.params.id);
       if (!application)
         return res.status(404).json({ error: "Invalid Application ID" });
 
-      if (application.status != "Pending")
+      if (application.status !== "Pending")
         return res
           .status(404)
           .json({ error: "Only pending applications can be deleted" });
@@ -251,11 +250,11 @@ module.exports = {
       await application.remove();
       await Student.updateOne(
         { _id: application.studentID },
-        { $pull: { applications: appln_id } }
+        { $pull: { applications: req.params.id } }
       );
       await Faculty.updateOne(
         { _id: application.facultyID },
-        { $pull: { applications: appln_id } }
+        { $pull: { applications: req.params.id } }
       );
       res.status(200).json({
         status: "OK",

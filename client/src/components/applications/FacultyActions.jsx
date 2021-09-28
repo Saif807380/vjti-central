@@ -177,9 +177,9 @@ const FacultyActions = (props) => {
             </Button>
             <Button
               variant="contained"
-              color="primary"
+              color="default"
               style={
-                isVerified
+                isVerified && verificationSuccess
                   ? {
                       backgroundColor: "#4caf50",
                       color: "white"
@@ -187,7 +187,7 @@ const FacultyActions = (props) => {
                   : {}
               }
               startIcon={<CheckCircle />}
-              disabled={!isVerified}
+              disabled={!isVerified || !verificationSuccess}
               onClick={handleApprove}
             >
               Approve
