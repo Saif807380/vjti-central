@@ -149,7 +149,7 @@ export default function Profile({ onMobileClose, openMobile }) {
     <>
       <Hidden lgUp>
         <Drawer
-          anchor="center"
+          anchor="top"
           classes={{ paper: classes.mobileDrawer }}
           onClose={onMobileClose}
           open={openMobile}

@@ -1,50 +1,49 @@
-const authStudentController = require("./controllers/studentController/authStudentController");
-const authFacultyController = require("./controllers/facultyController/authFacultyController");
-const studentController = require("./controllers/studentController/studentController");
-const facultyController = require("./controllers/facultyController/facultyController");
-const applicationController = require("./controllers/ApplicationController");
+const StudentController = require("./controllers/StudentController");
+const FacultyController = require("./controllers/FacultyController");
+const ApplicationController = require("./controllers/ApplicationController");
 const uploader = require("./utilities/uploader");
+
 module.exports = (app) => {
   app.get("/api/check", (req, res) => {
     res.json("Hello World");
   });
 
   //Student Routes
-  app.post("/api/student/register", authStudentController.registerStudent);
-  app.post("/api/student/login", authStudentController.loginStudent);
-  app.get("/api/student", studentController.getAllStudents);
+  app.post("/api/student/register", StudentController.registerStudent);
+  app.post("/api/student/login", StudentController.loginStudent);
+  app.get("/api/student", StudentController.getAllStudents);
   app.get(
     "/api/student/:id/applications",
-    applicationController.getStudentApplications
+    ApplicationController.getStudentApplications
   );
-  app.get("/api/student/:studentID", studentController.getStudent);
+  app.get("/api/student/:studentID", StudentController.getStudent);
 
   //Faculty Routes
-  app.post("/api/faculty/register", authFacultyController.registerFaculty);
-  app.post("/api/faculty/login", authFacultyController.loginFaculty);
-  app.get("/api/faculty", facultyController.getAllFaculties);
-  app.get("/api/faculty/:facultyID", facultyController.getFaculty);
+  app.post("/api/faculty/register", FacultyController.registerFaculty);
+  app.post("/api/faculty/login", FacultyController.loginFaculty);
+  app.get("/api/faculty", FacultyController.getAllFaculties);
+  app.get("/api/faculty/:facultyID", FacultyController.getFaculty);
   app.get(
     "/api/faculty/:id/applications",
-    applicationController.getFacultyApplications
+    ApplicationController.getFacultyApplications
   );
 
   //Application Routes
   app.post(
     "/api/applications/apply",
     uploader.single("file"),
-    applicationController.applyForReward
+    ApplicationController.applyForReward
   );
-  app.get("/api/applications/:id", applicationController.getApplication);
-  app.post("/api/applications/verify", applicationController.verifyApplication);
+  app.get("/api/applications/:id", ApplicationController.getApplication);
+  app.post("/api/applications/verify", ApplicationController.verifyApplication);
   app.post(
     "/api/applications/:id/approve",
-    applicationController.approveApplication
+    ApplicationController.approveApplication
   );
   app.post(
     "/api/applications/:id/reject",
-    applicationController.rejectApplication
+    ApplicationController.rejectApplication
   );
-  app.put("/api/applications/:id", applicationController.updateApplication);
-  app.delete("/api/applications/:id", applicationController.deleteApplication);
+  app.put("/api/applications/:id", ApplicationController.updateApplication);
+  app.delete("/api/applications/:id", ApplicationController.deleteApplication);
 };
