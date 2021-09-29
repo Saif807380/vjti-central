@@ -5,7 +5,6 @@ const auth = require("../utilities/auth");
 //Register Student
 exports.registerStudent = async (req, res) => {
   try {
-    console.log(req.body);
     const student = await Student.findOne({
       $or: [{ studentID: req.body.studentID }, { email: req.body.email }]
     });
