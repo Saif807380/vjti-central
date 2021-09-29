@@ -7,6 +7,8 @@ import {
   Button,
   Paper,
   FormControl,
+  FormControlLabel,
+  Checkbox,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -29,7 +31,7 @@ import { SnackbarContext } from "../../../context/SnackbarContext";
 import FormField from "../../../components/FormField";
 import constants from "../../../constants";
 import { register } from "../../../actions/authActions";
-import { REQUEST_AUTH, AUTH_ERROR } from "../../../reducers/types";
+import { REQUEST_AUTH } from "../../../reducers/types";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,7 +87,8 @@ const Register = () => {
     password: "",
     department: "",
     degree: "",
-    admissionYear: ""
+    admissionYear: "",
+    customPublicKey: ""
   });
 
   const [errors, updateErrors] = useState({
@@ -96,7 +99,8 @@ const Register = () => {
     confirmPassword: "",
     department: "",
     degree: "",
-    admissionYear: ""
+    admissionYear: "",
+    customPublicKey: ""
   });
 
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -107,11 +111,13 @@ const Register = () => {
     publicKey: "",
     privateKey: ""
   });
+  const [hasPubKey, setHasPubKey] = useState(false);
 
   const handleConfirmPassword = (e) => setConfirmPassword(e.target.value);
   const toggleShowPassword = () => setShowPassword(!showPassword);
   const toggleShowConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
+  const handleHasPubKey = (e) => setHasPubKey(e.target.checked);
 
   const handleStudent = (e) => {
     setStudent((prevStudent) => ({
@@ -130,7 +136,8 @@ const Register = () => {
       confirmPassword: "",
       department: "",
       degree: "",
-      admissionYear: ""
+      admissionYear: "",
+      customPublicKey: ""
     });
     if (student.studentID.length !== 9) {
       updateErrors((prevErrors) => ({
@@ -173,7 +180,6 @@ const Register = () => {
         confirmPassword: "* Password and Confirm Password do not match"
       }));
     }
-    console.log(!student.department);
     if (!student.department) {
       updateErrors((prevErrors) => ({
         ...prevErrors,
@@ -195,6 +201,13 @@ const Register = () => {
       }));
       formIsValid = false;
     }
+    if (hasPubKey && !student.customPublicKey.length) {
+      updateErrors((prevErrors) => ({
+        ...prevErrors,
+        customPublicKey: "* Please enter a valid public key"
+      }));
+      formIsValid = false;
+    }
     return formIsValid;
   };
 
@@ -208,15 +221,18 @@ const Register = () => {
           setMessage(res.error);
           setOpen(true);
         } else {
-          setKeys(res.data.data.keys);
-          setIsRegistered(true);
+          if (res.data.data.keys.privateKey) {
+            setKeys(res.data.data.keys);
+            setIsRegistered(true);
+          } else {
+            history.push("/student/login");
+          }
           setSeverity("success");
           setMessage("You have successfully registered.");
           setOpen(true);
         }
       });
     }
-    dispatch({ type: AUTH_ERROR });
   };
 
   return loading ? (
@@ -418,6 +434,29 @@ const Register = () => {
                   <FormHelperText>{errors.department}</FormHelperText>
                 </FormControl>
               </Grid>
+              <FormControlLabel
+                style={{ marginBottom: "10px", color: "#757575" }}
+                control={
+                  <Checkbox
+                    value="hasPubKey"
+                    color="primary"
+                    checked={hasPubKey}
+                    onChange={handleHasPubKey}
+                  />
+                }
+                label="Link public key? (If you don't, a new public key-pair will be generated for you)"
+              />
+              {hasPubKey && (
+                <FormField
+                  label="Public Key"
+                  name="customPublicKey"
+                  required={true}
+                  onChange={handleStudent}
+                  error={errors.customPublicKey}
+                  multiline={true}
+                  maxRows={Infinity}
+                />
+              )}
               <Button
                 onClick={handleFormSubmit}
                 size="large"

@@ -44,29 +44,29 @@ module.exports = {
       await Faculty.findByIdAndUpdate(req.body.facultyID, {
         $push: { applications: application }
       });
-      res.status(201).json({
+      return res.status(201).json({
         message: "Application for reward created, status pending"
       });
     } catch (e) {
-      res.status(400).json({ error: e.message });
+      return res.status(400).json({ error: e.message });
     }
   },
 
   async getStudentApplications(req, res) {
     try {
       const applications = await Application.find({ studentID: req.params.id });
-      res.status(200).json({ applications });
+      return res.status(200).json({ applications });
     } catch (e) {
-      res.status(500).json({ error: e.message });
+      return res.status(500).json({ error: e.message });
     }
   },
 
   async getFacultyApplications(req, res) {
     try {
       const applications = await Application.find({ facultyID: req.params.id });
-      res.status(200).json({ applications });
+      return res.status(200).json({ applications });
     } catch (e) {
-      res.status(500).json({ error: e.message });
+      return res.status(500).json({ error: e.message });
     }
   },
 
@@ -77,12 +77,12 @@ module.exports = {
         .populate("facultyID")
         .exec();
       if (application) {
-        res.status(200).json(application);
+        return res.status(200).json(application);
       } else {
-        res.status(404).json({ error: "Invalid Application ID" });
+        return res.status(404).json({ error: "Invalid Application ID" });
       }
     } catch (e) {
-      res.status(500).json({ error: e.message });
+      return res.status(500).json({ error: e.message });
     }
   },
 
@@ -95,12 +95,12 @@ module.exports = {
       });
 
       if (!record) {
-        res.status(200).json({ message: "Verification Successful" });
+        return res.status(200).json({ message: "Verification Successful" });
       } else {
-        res.status(200).json({ message: "Verification Unsuccessful" });
+        return res.status(200).json({ message: "Verification Unsuccessful" });
       }
     } catch (e) {
-      res.status(500).json({ error: e.message });
+      return res.status(500).json({ error: e.message });
     }
   },
 
@@ -180,7 +180,7 @@ module.exports = {
       application.status = "Rejected";
       await application.save();
 
-      res.status(200).json({
+      return res.status(200).json({
         message: "Application rejected by faculty"
       });
     } catch (e) {
@@ -199,7 +199,7 @@ module.exports = {
           .status(404)
           .json({ error: "Only pending applications can be updated" });
 
-      var altered = false;
+      let altered = false;
       if (req.body.hasOwnProperty("domainAchievement")) {
         application["domainAchievement"] = req.body["domainAchievement"];
         altered = true;
@@ -227,12 +227,12 @@ module.exports = {
         });
       }
       await application.save();
-      res.status(200).json({
+      return res.status(200).json({
         status: "OK",
         message: "Application updated successfully"
       });
     } catch (e) {
-      res.status(500).json({ error: e.message });
+      return res.status(500).json({ error: e.message });
     }
   },
 
@@ -256,12 +256,12 @@ module.exports = {
         { _id: application.facultyID },
         { $pull: { applications: req.params.id } }
       );
-      res.status(200).json({
+      return res.status(200).json({
         status: "OK",
         message: "Application deleted successfully"
       });
     } catch (e) {
-      res.status(500).json({ error: e.message });
+      return res.status(500).json({ error: e.message });
     }
   }
 };
