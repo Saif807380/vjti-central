@@ -26,7 +26,7 @@ export const login = async ({
   } catch (err) {
     dispatch({ type: AUTH_ERROR });
     return {
-      error: err.response.data.message,
+      error: err.response.data.error,
       status: err.response.status
     };
   }
