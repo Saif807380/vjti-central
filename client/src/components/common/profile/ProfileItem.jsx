@@ -53,7 +53,7 @@ const ProfileItem = ({
       {...rest}
     >
       <Button
-        activeClassName={classes.active}
+        // activeClassName={classes.active}
         className={classes.button}
         onClick={() => {}}
       >

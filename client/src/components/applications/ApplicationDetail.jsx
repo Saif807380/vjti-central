@@ -158,13 +158,8 @@ const ApplicationDetail = (props) => {
             <Box style={{ marginBottom: "30px" }}>
               <ApplicationItem label="Files" value="" />
               {applicationData.files.map((file, index) => (
-                <li>
-                  <a
-                    href={file}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    key={index}
-                  >
+                <li key={index}>
+                  <a href={file} target="_blank" rel="noopener noreferrer">
                     Click to view the certificate
                   </a>
                 </li>

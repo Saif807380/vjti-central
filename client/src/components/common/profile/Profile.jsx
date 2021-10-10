@@ -94,7 +94,7 @@ const useStyles = makeStyles(() => ({
     width: 1400,
     top: 60,
     marginLeft: 1,
-    maxHeight: 400
+    maxHeight: 500
   },
   avatar: {
     cursor: "pointer",
@@ -122,7 +122,8 @@ export default function Profile({ onMobileClose, openMobile }) {
           fetchedStudents.data["department"],
           fetchedStudents.data["degree"],
           fetchedStudents.data["year"],
-          fetchedStudents.data["walletBalance"]
+          fetchedStudents.data["walletBalance"],
+          fetchedStudents.data["credentialsURL"]
         ];
         setDetailList(details);
         setLoading(false);
@@ -162,7 +163,9 @@ export default function Profile({ onMobileClose, openMobile }) {
               flexDirection="column"
               p={2}
             >
-              <Avatar className={classes.avatar} src={User} />
+              <Avatar className={classes.avatar}>
+                <User />
+              </Avatar>
               <Typography
                 className={classes.name}
                 color="textPrimary"
@@ -194,6 +197,17 @@ export default function Profile({ onMobileClose, openMobile }) {
                       />
                     ))}
               </List>
+              {userType === "student" && (
+                <li>
+                  <a
+                    href={detailList[detailList.length - 1]}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Click to view encrypted credentials
+                  </a>
+                </li>
+              )}
             </Box>
             <Box flexGrow={1} />
           </Box>
@@ -213,7 +227,9 @@ export default function Profile({ onMobileClose, openMobile }) {
               flexDirection="column"
               p={2}
             >
-              <Avatar className={classes.avatar} src={User} />
+              <Avatar className={classes.avatar}>
+                <User />
+              </Avatar>
               <Typography
                 className={classes.name}
                 color="textPrimary"
@@ -225,17 +241,9 @@ export default function Profile({ onMobileClose, openMobile }) {
             <Divider />
             <Box p={2}>
               <List>
-                {userType === "student"
-                  ? studentDetails.map((detail, idx) => (
-                      <ProfileItem
-                        key={detail.title}
-                        title={detail.title}
-                        value={detailList[idx]}
-                        icon={detail.icon}
-                        index={idx}
-                      />
-                    ))
-                  : facultyDetails.map((detail, idx) => (
+                {userType === "student" ? (
+                  <>
+                    {studentDetails.map((detail, idx) => (
                       <ProfileItem
                         key={detail.title}
                         title={detail.title}
@@ -244,6 +252,29 @@ export default function Profile({ onMobileClose, openMobile }) {
                         index={idx}
                       />
                     ))}
+                    {detailList[detailList.length - 1] && (
+                      <li>
+                        <a
+                          href={detailList[detailList.length - 1]}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Click to view encrypted credentials
+                        </a>
+                      </li>
+                    )}
+                  </>
+                ) : (
+                  facultyDetails.map((detail, idx) => (
+                    <ProfileItem
+                      key={detail.title}
+                      title={detail.title}
+                      value={detailList[idx]}
+                      icon={detail.icon}
+                      index={idx}
+                    />
+                  ))
+                )}
               </List>
             </Box>
             <Box flexGrow={1} />
