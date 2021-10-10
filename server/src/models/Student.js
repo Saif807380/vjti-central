@@ -37,6 +37,10 @@ const student = new mongoose.Schema({
     type: String,
     default: "" // remove this after connecting to vj chain
   },
+  credentialsURL: {
+    type: String,
+    default: ""
+  },
   admissionYear: {
     type: Number,
     required: true

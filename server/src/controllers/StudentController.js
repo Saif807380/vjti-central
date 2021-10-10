@@ -41,16 +41,10 @@ exports.registerStudent = async (req, res) => {
       privateKey = response.data.private_key;
     }
 
-    const newStudent = await Student.create({
-      ...req.body,
-      publicKey: publicKey
-    });
-    const token = auth.signToken(newStudent._id);
-
     data = {
-      name: newStudent.name,
-      email: newStudent.email,
-      publicKey: newStudent.publicKey,
+      name: req.body.name,
+      email: req.body.email,
+      publicKey: publicKey,
       privateKey: privateKey,
       pin: req.body.pin
     };
@@ -76,6 +70,13 @@ exports.registerStudent = async (req, res) => {
       console.log("written file contents");
     });
     blobWriter.end();
+
+    const newStudent = await Student.create({
+      ...req.body,
+      publicKey: publicKey,
+      credentialsURL: fileUrl
+    });
+    const token = auth.signToken(newStudent._id);
 
     res.status(201).json({
       status: "success",
