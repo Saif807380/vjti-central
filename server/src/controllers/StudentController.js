@@ -1,6 +1,8 @@
 const Student = require("../models/Student");
 const axios = require("axios");
 const auth = require("../utilities/auth");
+const bucket = require("../config/firebase");
+const EncryptCredentials = require("../utilities/EncryptCredentials");
 
 //Register Student
 exports.registerStudent = async (req, res) => {
@@ -39,9 +41,40 @@ exports.registerStudent = async (req, res) => {
       privateKey = response.data.private_key;
     }
 
+    data = {
+      name: req.body.name,
+      email: req.body.email,
+      publicKey: publicKey,
+      privateKey: privateKey,
+      pin: req.body.pin
+    };
+    let encrypted = EncryptCredentials.encryptCredentials(
+      data,
+      req.body.passphrase
+    );
+    let filename = String(req.body.studentID) + "_credentials.txt";
+    const blob = bucket.file(filename);
+    const fileUrl = `https://firebasestorage.googleapis.com/v0/b/${
+      bucket.name
+    }/o/${encodeURI(blob.name)}?alt=media`;
+    console.log(fileUrl);
+    const blobWriter = blob.createWriteStream({
+      metadata: {
+        contentType: "text/plain"
+      }
+    });
+    blobWriter.on("error", async (err) =>
+      res.status(500).json({ error: err.message + " blob" })
+    );
+    blobWriter.write(encrypted, () => {
+      console.log("written file contents");
+    });
+    blobWriter.end();
+
     const newStudent = await Student.create({
       ...req.body,
-      publicKey: publicKey
+      publicKey: publicKey,
+      credentialsURL: fileUrl
     });
     const token = auth.signToken(newStudent._id);
 
