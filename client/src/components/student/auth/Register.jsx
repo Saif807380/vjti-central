@@ -88,7 +88,9 @@ const Register = () => {
     department: "",
     degree: "",
     admissionYear: "",
-    customPublicKey: ""
+    customPublicKey: "",
+    pin: "",
+    passphrase: ""
   });
 
   const [errors, updateErrors] = useState({
@@ -100,12 +102,15 @@ const Register = () => {
     department: "",
     degree: "",
     admissionYear: "",
-    customPublicKey: ""
+    customPublicKey: "",
+    pin: "",
+    passphrase: ""
   });
 
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPin, setShowPin] = useState(false);
   const [isRegistered, setIsRegistered] = useState(false);
   const [keys, setKeys] = useState({
     publicKey: "",
@@ -117,6 +122,7 @@ const Register = () => {
   const toggleShowPassword = () => setShowPassword(!showPassword);
   const toggleShowConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
+  const toggleShowPin = () => setShowPin(!showPin);
   const handleHasPubKey = (e) => setHasPubKey(e.target.checked);
 
   const handleStudent = (e) => {
@@ -137,7 +143,9 @@ const Register = () => {
       department: "",
       degree: "",
       admissionYear: "",
-      customPublicKey: ""
+      customPublicKey: "",
+      pin: "",
+      passphrase: ""
     });
     if (student.studentID.length !== 9) {
       updateErrors((prevErrors) => ({
@@ -208,6 +216,28 @@ const Register = () => {
       }));
       formIsValid = false;
     }
+    if (!hasPubKey) {
+      if (
+        student.pin.length !== 4 ||
+        isNaN(student.pin) ||
+        +student.pin < 1000 ||
+        +student.pin > 9999
+      ) {
+        updateErrors((prevErrors) => ({
+          ...prevErrors,
+          pin: "* Please enter a valid 4-digit pin"
+        }));
+        formIsValid = false;
+      }
+      if (student.passphrase.length < 12) {
+        updateErrors((prevErrors) => ({
+          ...prevErrors,
+          passphrase: "* Passphrase should be at least 12 characters long"
+        }));
+        formIsValid = false;
+      }
+    }
+
     return formIsValid;
   };
 
@@ -243,9 +273,10 @@ const Register = () => {
         <DialogTitle>Key Pair</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please copy and save your Public and Private Keys. These keys will
-            not be shown again. We store your Public key in our database for
-            sending your rewards to you.
+            Here's the public key that was generated for you. You can download
+            your encrypted credentials file from your profile. This file can be
+            imported into the VJTI-Blockchain Wallet App. We store your Public
+            key in our database for sending your rewards to you.
           </DialogContentText>
           <Typography variant="body1">Public Key</Typography>
           <Paper elevation={0} className={classes.key} square>
@@ -253,14 +284,14 @@ const Register = () => {
               {keys.publicKey}
             </Typography>
           </Paper>
-          <Typography variant="body1" style={{ marginTop: "24px" }}>
+          {/* <Typography variant="body1" style={{ marginTop: "24px" }}>
             Private Key
           </Typography>
           <Paper elevation={0} className={classes.key} square>
             <Typography variant="body2" style={{ wordWrap: "break-word" }}>
               {keys.privateKey}
             </Typography>
-          </Paper>
+          </Paper> */}
         </DialogContent>
         <DialogActions>
           <Button
@@ -398,7 +429,7 @@ const Register = () => {
                       onChange={handleStudent}
                       label="Admission Year"
                     >
-                      {[0, 1, 2, 3].map((number) => (
+                      {[...Array(20).keys()].map((number) => (
                         <MenuItem
                           key={number}
                           value={`${currentYear - number}`}
@@ -444,8 +475,40 @@ const Register = () => {
                     onChange={handleHasPubKey}
                   />
                 }
-                label="Link public key? (If you don't, a new public key-pair will be generated for you)"
+                label="Do you have a public key? (If you don't, enter a pin and passphrase below to generate a new public key-pair for yourself)"
               />
+              {!hasPubKey && (
+                <React.Fragment>
+                  <FormField
+                    label="Pin (4-digit number)"
+                    name="pin"
+                    required={true}
+                    onChange={handleStudent}
+                    error={errors.pin}
+                    InputProps={{
+                      type: showPin ? "text" : "password",
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle pin visibility"
+                            onClick={toggleShowPin}
+                            edge="end"
+                          >
+                            {showPin ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  <FormField
+                    label="Encryption Passphrase"
+                    name="passphrase"
+                    required={true}
+                    onChange={handleStudent}
+                    error={errors.passphrase}
+                  />
+                </React.Fragment>
+              )}
               {hasPubKey && (
                 <FormField
                   label="Public Key"
