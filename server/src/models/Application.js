@@ -25,7 +25,8 @@ const ApplicationSchema = new Schema(
         "Hackathon",
         "Research Paper",
         "Committee Position",
-        "Competition"
+        "Competition",
+        "Other"
       ],
       default: "Competition",
       required: true
