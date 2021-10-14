@@ -10,13 +10,7 @@ const constants = {
     "Production Engineering"
   ],
   DEGREE: ["BTech", "MTech", "MCA", "Diploma"],
-  DOMAINS: [
-    "Hackathon",
-    "Competition",
-    "Research Paper",
-    "Committee Position",
-    "Other"
-  ],
+  DOMAINS: ["Hackathon", "Competition", "Research Paper", "Other"],
   STEPS: {
     STUDENTS: [
       "Register yourself with your public key or generate a new key pair",
@@ -49,6 +43,36 @@ const constants = {
       { LABEL: "Committee Head (40 coins)", VALUE: 40 },
       { LABEL: "Volunteer (20 coins)", VALUE: 20 }
     ]
+  },
+  LABELS: {
+    HACKATHON: {
+      TITLE: "Hackathon Name",
+      DESCRIPTION: "Description",
+      START_DATE: "Start Date",
+      END_DATE: "End Date",
+      ORGANISED_BY: "Organised By"
+    },
+    COMPETITION: {
+      TITLE: "Competition Name",
+      DESCRIPTION: "Description",
+      START_DATE: "Start Date",
+      END_DATE: "End Date",
+      ORGANISED_BY: "Organised By"
+    },
+    RESEARCH_PAPER: {
+      TITLE: "Research Paper Title",
+      DESCRIPTION: "Abstract",
+      START_DATE: "Published On",
+      PUBLISHED_BY: "Published By",
+      DOI: "DOI"
+    },
+    OTHER: {
+      TITLE: "Event Name",
+      DESCRIPTION: "Description",
+      START_DATE: "Start Date",
+      END_DATE: "End Date",
+      ORGANISED_BY: "Organised By"
+    }
   }
 };
 

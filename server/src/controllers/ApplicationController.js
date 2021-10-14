@@ -28,16 +28,12 @@ module.exports = {
         res.status(500).json({ error: err.message })
       );
       blobWriter.end(req.file.buffer);
-      const { title, description, domainAchievement, facultyID, studentID } =
-        req.body;
+
       const application = await Application.create({
-        title: title,
-        description: description,
-        domainAchievement: domainAchievement,
-        files: [fileUrl],
-        facultyID: facultyID,
-        studentID: studentID
+        ...req.body,
+        files: [fileUrl]
       });
+
       await Student.findByIdAndUpdate(req.body.studentID, {
         $push: { applications: application }
       });

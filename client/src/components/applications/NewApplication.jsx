@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import {
   Box,
   Typography,
@@ -10,13 +10,15 @@ import {
   Select,
   FormHelperText,
   Button,
-  Paper
+  Paper,
+  useMediaQuery
 } from "@material-ui/core";
 import { CloudUpload } from "@material-ui/icons";
 import Spinner from "../../components/Spinner";
 import { useHistory } from "react-router-dom";
 import { SnackbarContext } from "../../context/SnackbarContext";
-import FormField from "../../components/FormField";
+import OtherAchievementsForm from "./OtherAchievementsForm";
+import ResearchPaperForm from "./ResearchPaperForm";
 import constants from "../../constants";
 import {
   createApplication,
@@ -26,7 +28,8 @@ import { useAuthState } from "../../context/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    minHeight: "80vh"
+    minHeight: "80vh",
+    marginTop: theme.spacing(2)
   },
   paper: {
     display: "flex",
@@ -48,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "20px 30px"
   },
   formControl: {
-    marginBottom: "20px",
+    marginBottom: "10px",
     width: "100%"
   }
 }));
@@ -56,6 +59,8 @@ const useStyles = makeStyles((theme) => ({
 const NewApplication = () => {
   const classes = useStyles();
   const history = useHistory();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
   const [loading, setLoading] = useState(false);
   const { token, userID } = useAuthState();
@@ -64,7 +69,11 @@ const NewApplication = () => {
     title: "",
     description: "",
     domainAchievement: "",
-    faculty: ""
+    faculty: "",
+    startDate: new Date(),
+    endDate: new Date(),
+    organisedBy: "",
+    doi: ""
   });
 
   const [file, setFile] = useState(null);
@@ -75,6 +84,10 @@ const NewApplication = () => {
     description: "",
     domainAchievement: "",
     faculty: "",
+    startDate: "",
+    endDate: "",
+    organisedBy: "",
+    doi: "",
     file: ""
   });
 
@@ -103,6 +116,10 @@ const NewApplication = () => {
       description: "",
       domainAchievement: "",
       faculty: "",
+      startDate: "",
+      endDate: "",
+      organisedBy: "",
+      doi: "",
       file: ""
     });
     if (!application.title.length) {
@@ -133,6 +150,40 @@ const NewApplication = () => {
       }));
       formIsValid = false;
     }
+    if (!application.organisedBy.length) {
+      updateErrors((prevErrors) => ({
+        ...prevErrors,
+        organisedBy: "* Please enter organiser name"
+      }));
+      formIsValid = false;
+    }
+    if (!application.startDate) {
+      updateErrors((prevErrors) => ({
+        ...prevErrors,
+        startDate: "* Please select a date"
+      }));
+      formIsValid = false;
+    }
+    if (
+      application.domainAchievement !== "Research Paper" &&
+      !application.endDate
+    ) {
+      updateErrors((prevErrors) => ({
+        ...prevErrors,
+        endDate: "* Please select a date"
+      }));
+      formIsValid = false;
+    }
+    if (
+      application.domainAchievement === "Research Paper" &&
+      !application.doi
+    ) {
+      updateErrors((prevErrors) => ({
+        ...prevErrors,
+        doi: "* Please enter the DOI"
+      }));
+      formIsValid = false;
+    }
     if (!file) {
       updateErrors((prevErrors) => ({
         ...prevErrors,
@@ -154,6 +205,10 @@ const NewApplication = () => {
       formData.append("file", file);
       formData.append("studentID", userID);
       formData.append("facultyID", application.faculty);
+      formData.append("organisedBy", application.organisedBy);
+      formData.append("startDate", application.startDate);
+      formData.append("endDate", application.endDate);
+      formData.append("doi", application.doi);
       createApplication({ body: formData, token }).then((res) => {
         setLoading(false);
         if (res.error) {
@@ -168,6 +223,7 @@ const NewApplication = () => {
         }
       });
     }
+    setLoading(false);
   };
 
   return loading ? (
@@ -180,54 +236,15 @@ const NewApplication = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <Paper elevation={3} className={classes.paper}>
-        <div style={{ marginTop: "24px" }}>
-          <Typography variant="h5">New Achievement</Typography>
-        </div>
+      <Paper elevation={isSmallScreen ? 0 : 3} className={classes.paper}>
+        {!application.domainAchievement && (
+          <div style={{ marginTop: "24px" }}>
+            <Typography variant="h5">New Achievement</Typography>
+          </div>
+        )}
         <form className={classes.form} noValidate>
           <div className={classes.formInner}>
-            <FormField
-              label="Title"
-              name="title"
-              required={true}
-              onChange={handleApplication}
-              error={errors.title}
-            />
-            <FormField
-              label="Description"
-              name="description"
-              required={true}
-              onChange={handleApplication}
-              error={errors.description}
-              multiline={true}
-              maxRows={Infinity}
-            />
             <Grid container spacing={1}>
-              <Grid item xs={12} md={6}>
-                <FormControl
-                  variant="outlined"
-                  required
-                  className={classes.formControl}
-                  error={errors.domainAchievement.length !== 0}
-                >
-                  <InputLabel id="domain-label">Domain</InputLabel>
-                  <Select
-                    labelId="domain-label"
-                    id="domain"
-                    name="domainAchievement"
-                    value={application.domainAchievement}
-                    onChange={handleApplication}
-                    label="Domain"
-                  >
-                    {constants.DOMAINS.map((domain) => (
-                      <MenuItem key={domain} value={domain}>
-                        {domain}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>{errors.domainAchievement}</FormHelperText>
-                </FormControl>
-              </Grid>
               <Grid item xs={12} md={6}>
                 <FormControl
                   variant="outlined"
@@ -253,26 +270,100 @@ const NewApplication = () => {
                   <FormHelperText>{errors.faculty}</FormHelperText>
                 </FormControl>
               </Grid>
+              <Grid item xs={12} md={6}>
+                <FormControl
+                  variant="outlined"
+                  required
+                  className={classes.formControl}
+                  error={errors.domainAchievement.length !== 0}
+                >
+                  <InputLabel id="domain-label">Domain</InputLabel>
+                  <Select
+                    labelId="domain-label"
+                    id="domain"
+                    name="domainAchievement"
+                    value={application.domainAchievement}
+                    onChange={handleApplication}
+                    label="Domain"
+                  >
+                    {constants.DOMAINS.map((domain) => (
+                      <MenuItem key={domain} value={domain}>
+                        {domain}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText>{errors.domainAchievement}</FormHelperText>
+                </FormControl>
+              </Grid>
             </Grid>
-            <input
-              type="file"
-              name="file"
-              id="file"
-              style={{ display: "none" }}
-              onChange={(e) => setFile(e.target.files[0])}
-            />
-            <label htmlFor="file">
-              <Button
-                component="span"
-                variant="contained"
-                color="default"
-                style={{ marginRight: "8px", marginBottom: "8px" }}
-                startIcon={<CloudUpload />}
-              >
-                Choose File
-              </Button>
-              <span>{file ? file.name : "No file selected"}</span>
-            </label>
+            <Box style={{ marginBottom: "16px" }}>
+              {
+                {
+                  Hackathon: (
+                    <OtherAchievementsForm
+                      labels={constants.LABELS.HACKATHON}
+                      onFieldChange={handleApplication}
+                      errors={errors}
+                      domainAchievement={application.domainAchievement}
+                      startDate={application.startDate}
+                      endDate={application.endDate}
+                    />
+                  ),
+                  Competition: (
+                    <OtherAchievementsForm
+                      labels={constants.LABELS.COMPETITION}
+                      onFieldChange={handleApplication}
+                      errors={errors}
+                      domainAchievement={application.domainAchievement}
+                      startDate={application.startDate}
+                      endDate={application.endDate}
+                    />
+                  ),
+                  "Research Paper": (
+                    <ResearchPaperForm
+                      labels={constants.LABELS.RESEARCH_PAPER}
+                      onFieldChange={handleApplication}
+                      errors={errors}
+                      domainAchievement={application.domainAchievement}
+                      startDate={application.startDate}
+                    />
+                  ),
+                  Other: (
+                    <OtherAchievementsForm
+                      labels={constants.LABELS.OTHER}
+                      onFieldChange={handleApplication}
+                      errors={errors}
+                      domainAchievement={application.domainAchievement}
+                      startDate={application.startDate}
+                      endDate={application.endDate}
+                    />
+                  )
+                }[application.domainAchievement]
+              }
+            </Box>
+            {application.domainAchievement && (
+              <>
+                <input
+                  type="file"
+                  name="file"
+                  id="file"
+                  style={{ display: "none" }}
+                  onChange={(e) => setFile(e.target.files[0])}
+                />
+                <label htmlFor="file">
+                  <Button
+                    component="span"
+                    variant="contained"
+                    color="default"
+                    style={{ marginRight: "8px", marginBottom: "8px" }}
+                    startIcon={<CloudUpload />}
+                  >
+                    Choose File
+                  </Button>
+                  <span>{file ? file.name : "No file selected"}</span>
+                </label>
+              </>
+            )}
             <Button
               onClick={handleFormSubmit}
               size="large"
@@ -281,6 +372,7 @@ const NewApplication = () => {
               fullWidth
               variant="contained"
               style={{ marginTop: "16px" }}
+              disabled={!application.domainAchievement}
             >
               Submit
             </Button>

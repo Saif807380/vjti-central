@@ -65,6 +65,10 @@ const ApplicationDetail = (props) => {
     facultyID: "",
     title: "",
     description: "",
+    organisedBy: "",
+    startDate: "",
+    endDate: "",
+    doi: "",
     reward: 0,
     status: "",
     domainAchievement: "",
@@ -130,8 +134,6 @@ const ApplicationDetail = (props) => {
               label="Domain of Achievement"
               value={applicationData.domainAchievement}
             />
-
-            <ApplicationItem label="Status" value={applicationData.status} />
             <Box className={classes.item}>
               <Typography variant="body1" className={classes.label}>
                 Status
@@ -143,6 +145,37 @@ const ApplicationDetail = (props) => {
               label="Rewards Received"
               value={`${applicationData.reward} VJ Coins`}
             />
+            {applicationData.domainAchievement === "Research Paper" ? (
+              <>
+                <ApplicationItem
+                  label="Published By"
+                  value={applicationData.organisedBy}
+                />
+                <ApplicationItem
+                  label="Published On"
+                  value={applicationData.startDate.split("T")[0]}
+                />
+                <ApplicationItem
+                  label="Publication DOI"
+                  value={applicationData.doi}
+                />
+              </>
+            ) : (
+              <>
+                <ApplicationItem
+                  label="Organised By"
+                  value={applicationData.organisedBy}
+                />
+                <ApplicationItem
+                  label="Start Date"
+                  value={applicationData.startDate.split("T")[0]}
+                />
+                <ApplicationItem
+                  label="End Date"
+                  value={applicationData.endDate.split("T")[0]}
+                />
+              </>
+            )}
           </Grid>
           <Grid item xs={12} md={6} style={{ paddingRight: "30px" }}>
             <Box className={classes.item}>
