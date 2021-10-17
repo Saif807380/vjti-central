@@ -68,33 +68,33 @@ const FacultyActions = (props) => {
     setIsOpen(false);
   };
 
-  const handleVerify = async () => {
-    if (!title) {
-      updateErrors((prevErrors) => ({
-        ...prevErrors,
-        title: "Please enter the title"
-      }));
-      return;
-    }
+  // const handleVerify = async () => {
+  //   if (!title) {
+  //     updateErrors((prevErrors) => ({
+  //       ...prevErrors,
+  //       title: "Please enter the title",
+  //     }));
+  //     return;
+  //   }
 
-    const body = {
-      title: title,
-      date: selectedDate.toLocaleDateString("en-GB"),
-      studentID: props.applicationData.studentID._id
-    };
+  //   const body = {
+  //     title: title,
+  //     date: selectedDate.toLocaleDateString("en-GB"),
+  //     studentID: props.applicationData.studentID._id,
+  //   };
 
-    verifyApplication({ body, token }).then((res) => {
-      if (res.error) {
-        return;
-      } else {
-        setIsVerified(true);
-        if (res.data.message === "Verification Successful")
-          setVerificationSuccess(true);
-        else setVerificationSuccess(false);
-      }
-    });
-    clearErrors();
-  };
+  //   verifyApplication({ body, token }).then((res) => {
+  //     if (res.error) {
+  //       return;
+  //     } else {
+  //       setIsVerified(true);
+  //       if (res.data.message === "Verification Successful")
+  //         setVerificationSuccess(true);
+  //       else setVerificationSuccess(false);
+  //     }
+  //   });
+  //   clearErrors();
+  // };
 
   const handleApprove = async () => {
     if (+reward <= 0) {
@@ -145,10 +145,10 @@ const FacultyActions = (props) => {
           <DialogTitle>Approve/Reject Application</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Please enter the details to verify that this application is not a
-              duplicate. If there is no date mentioned, select 1st January 2000.
+              Please select a reward from below if you want to approve the
+              application.
             </DialogContentText>
-            <FormField
+            {/* <FormField
               label="Achievement Title"
               name="title"
               required={true}
@@ -164,125 +164,119 @@ const FacultyActions = (props) => {
               onChange={(date) => setSelectedDate(date)}
               format="dd/MM/yyyy"
               style={{ width: "100%" }}
-            />
-            {verificationSuccess && (
-              <>
-                {props.applicationData.domainAchievement !== "Other" ? (
-                  <FormControl
-                    variant="outlined"
-                    required
-                    className={classes.formControl}
-                    error={errors.reward.length !== 0}
-                  >
-                    <InputLabel id="reward-label">
-                      Coin Reward (VJ Coins)
-                    </InputLabel>
-                    <>
+            /> */}
+            <>
+              {props.applicationData.domainAchievement !== "Other" ? (
+                <FormControl
+                  variant="outlined"
+                  required
+                  className={classes.formControl}
+                  error={errors.reward.length !== 0}
+                >
+                  <InputLabel id="reward-label">
+                    Coin Reward (VJ Coins)
+                  </InputLabel>
+                  <>
+                    {
                       {
-                        {
-                          Hackathon: (
-                            <>
-                              <Select
-                                labelId="reward-label"
-                                id="reward"
-                                name="reward"
-                                value={reward}
-                                onChange={(e) => setReward(e.target.value)}
-                                label="Coin Reward (VJ Coins)"
-                              >
-                                <ListSubheader>Hackathon</ListSubheader>
-                                {constants.REWARDS.HACKATHON.map((r, idx) => (
+                        Hackathon: (
+                          <>
+                            <Select
+                              labelId="reward-label"
+                              id="reward"
+                              name="reward"
+                              value={reward}
+                              onChange={(e) => setReward(e.target.value)}
+                              label="Coin Reward (VJ Coins)"
+                            >
+                              <ListSubheader>Hackathon</ListSubheader>
+                              {constants.REWARDS.HACKATHON.map((r, idx) => (
+                                <MenuItem key={idx} value={r.VALUE}>
+                                  {r.LABEL}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </>
+                        ),
+                        Competition: (
+                          <>
+                            <Select
+                              labelId="reward-label"
+                              id="reward"
+                              name="reward"
+                              value={reward}
+                              onChange={(e) => setReward(e.target.value)}
+                              label="Coin Reward (VJ Coins)"
+                            >
+                              <ListSubheader>Coding Competition</ListSubheader>
+                              {constants.REWARDS.COMPETITION.map((r, idx) => (
+                                <MenuItem key={idx} value={r.VALUE}>
+                                  {r.LABEL}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </>
+                        ),
+                        "Research Paper": (
+                          <>
+                            <Select
+                              labelId="reward-label"
+                              id="reward"
+                              name="reward"
+                              value={reward}
+                              onChange={(e) => setReward(e.target.value)}
+                              label="Coin Reward (VJ Coins)"
+                            >
+                              <ListSubheader>Research Paper</ListSubheader>
+                              {constants.REWARDS.RESEARCH_PAPER.map(
+                                (r, idx) => (
                                   <MenuItem key={idx} value={r.VALUE}>
                                     {r.LABEL}
                                   </MenuItem>
-                                ))}
-                              </Select>
-                            </>
-                          ),
-                          Competition: (
-                            <>
-                              <Select
-                                labelId="reward-label"
-                                id="reward"
-                                name="reward"
-                                value={reward}
-                                onChange={(e) => setReward(e.target.value)}
-                                label="Coin Reward (VJ Coins)"
-                              >
-                                <ListSubheader>
-                                  Coding Competition
-                                </ListSubheader>
-                                {constants.REWARDS.COMPETITION.map((r, idx) => (
+                                )
+                              )}
+                            </Select>
+                          </>
+                        ),
+                        "Committee Position": (
+                          <>
+                            <Select
+                              labelId="reward-label"
+                              id="reward"
+                              name="reward"
+                              value={reward}
+                              onChange={(e) => setReward(e.target.value)}
+                              label="Coin Reward (VJ Coins)"
+                            >
+                              <ListSubheader>Committee Position</ListSubheader>
+                              {constants.REWARDS.COMMITTEE_POSITION.map(
+                                (r, idx) => (
                                   <MenuItem key={idx} value={r.VALUE}>
                                     {r.LABEL}
                                   </MenuItem>
-                                ))}
-                              </Select>
-                            </>
-                          ),
-                          "Research Paper": (
-                            <>
-                              <Select
-                                labelId="reward-label"
-                                id="reward"
-                                name="reward"
-                                value={reward}
-                                onChange={(e) => setReward(e.target.value)}
-                                label="Coin Reward (VJ Coins)"
-                              >
-                                <ListSubheader>Research Paper</ListSubheader>
-                                {constants.REWARDS.RESEARCH_PAPER.map(
-                                  (r, idx) => (
-                                    <MenuItem key={idx} value={r.VALUE}>
-                                      {r.LABEL}
-                                    </MenuItem>
-                                  )
-                                )}
-                              </Select>
-                            </>
-                          ),
-                          "Committee Position": (
-                            <>
-                              <Select
-                                labelId="reward-label"
-                                id="reward"
-                                name="reward"
-                                value={reward}
-                                onChange={(e) => setReward(e.target.value)}
-                                label="Coin Reward (VJ Coins)"
-                              >
-                                <ListSubheader>
-                                  Committee Position
-                                </ListSubheader>
-                                {constants.REWARDS.COMMITTEE_POSITION.map(
-                                  (r, idx) => (
-                                    <MenuItem key={idx} value={r.VALUE}>
-                                      {r.LABEL}
-                                    </MenuItem>
-                                  )
-                                )}
-                              </Select>
-                            </>
-                          )
-                        }[props.applicationData.domainAchievement]
-                      }
-                    </>
-                    <FormHelperText>{errors.reward}</FormHelperText>
-                  </FormControl>
-                ) : (
-                  <FormField
-                    label="Coin Reward (VJ Coins)"
-                    name="reward"
-                    required={true}
-                    onChange={(e) => setReward(e.target.value)}
-                    error={errors.reward}
-                    value={reward}
-                    disabled={!verificationSuccess}
-                  />
-                )}
-              </>
-            )}
-            {isVerified &&
+                                )
+                              )}
+                            </Select>
+                          </>
+                        )
+                      }[props.applicationData.domainAchievement]
+                    }
+                  </>
+                  <FormHelperText>{errors.reward}</FormHelperText>
+                </FormControl>
+              ) : (
+                <FormField
+                  label="Coin Reward (VJ Coins)"
+                  name="reward"
+                  required={true}
+                  onChange={(e) => setReward(e.target.value)}
+                  error={errors.reward}
+                  value={reward}
+                  disabled={!verificationSuccess}
+                />
+              )}
+            </>
+            {/* {isVerified &&
               (verificationSuccess ? (
                 <DialogContentText>
                   Verification Successful. This application has not been
@@ -293,25 +287,20 @@ const FacultyActions = (props) => {
                   Verification Failed. This application has already been
                   rewarded. Kindly reject this application
                 </DialogContentText>
-              ))}
+              ))} */}
           </DialogContent>
           <DialogActions>
-            <Button variant="contained" color="primary" onClick={handleVerify}>
+            {/* <Button variant="contained" color="primary" onClick={handleVerify}>
               Verify
-            </Button>
+            </Button> */}
             <Button
               variant="contained"
               color="default"
-              style={
-                isVerified && verificationSuccess
-                  ? {
-                      backgroundColor: "#4caf50",
-                      color: "white"
-                    }
-                  : {}
-              }
+              style={{
+                backgroundColor: "#4caf50",
+                color: "white"
+              }}
               startIcon={<CheckCircle />}
-              disabled={!isVerified || !verificationSuccess}
               onClick={handleApprove}
             >
               Approve
@@ -319,11 +308,8 @@ const FacultyActions = (props) => {
             <Button
               variant="contained"
               color="primary"
-              style={
-                isVerified ? { backgroundColor: "#f44336", color: "white" } : {}
-              }
+              style={{ backgroundColor: "#f44336", color: "white" }}
               startIcon={<Clear />}
-              disabled={!isVerified}
               onClick={handleReject}
             >
               Reject

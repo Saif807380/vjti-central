@@ -12,13 +12,14 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  useMediaQuery,
+  Grid,
+  useMediaQuery
 } from "@material-ui/core";
 import {
   AccessTimeOutlined,
   CheckCircle,
   ClearOutlined,
-  Add,
+  Add
 } from "@material-ui/icons";
 import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 import Spinner from "../Spinner";
@@ -29,27 +30,27 @@ import { getApplications } from "../../actions/applicationActions";
 const useStyles = makeStyles((theme) => ({
   container: {
     minHeight: "80vh",
-    padding: "20px",
+    padding: "20px"
   },
   divider: {
     backgroundColor: "rgba(0, 0, 0, 0.12)",
-    width: "100%",
+    width: "100%"
   },
   titleLink: {
     textDecoration: "none",
-    color: theme.palette.primary.main,
+    color: theme.palette.primary.main
   },
   root: {
     "&$selected": {
       backgroundColor: theme.palette.primary.main,
-      color: "white",
+      color: "white"
     },
     "&$selected&:hover": {
       backgroundColor: theme.palette.primary.main,
-      color: "white",
-    },
+      color: "white"
+    }
   },
-  selected: {},
+  selected: {}
 }));
 
 const ApplicationsList = () => {
@@ -96,62 +97,76 @@ const ApplicationsList = () => {
       justifyContent="start"
       alignItems="center"
     >
-      <Box
-        display="flex"
-        justifyContent="space-between"
+      <Grid
+        container
+        spacing={2}
         style={{ width: "100%", marginBottom: "16px" }}
       >
-        <Typography variant="h6">
-          {"Applications".toLocaleUpperCase()}
-        </Typography>
-
-        {userType === "student" && (
-          <Typography variant="h6">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                history.push("/student/applications/new");
-              }}
-              startIcon={<Add />}
-            >
-              New Application
-            </Button>
-          </Typography>
-        )}
-
-        <ToggleButtonGroup
-          value={statusFilter}
-          exclusive
-          size="small"
-          onChange={(event, status) => setStatusFilter(status)}
+        <Grid
+          item
+          xs={12}
+          md={4}
+          style={{ textAlign: isSmallScreen ? "center" : "left" }}
         >
-          <ToggleButton
-            value="All"
-            classes={{ selected: classes.selected, root: classes.root }}
+          <Typography variant="h6">
+            {"Applications".toLocaleUpperCase()}
+          </Typography>
+        </Grid>
+        <Grid item xs={12} md={4} style={{ textAlign: "center" }}>
+          {userType === "student" && (
+            <Typography variant="h6">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  history.push("/student/applications/new");
+                }}
+                startIcon={<Add />}
+              >
+                New Application
+              </Button>
+            </Typography>
+          )}
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          md={4}
+          style={{ textAlign: isSmallScreen ? "center" : "right" }}
+        >
+          <ToggleButtonGroup
+            value={statusFilter}
+            exclusive
+            size="small"
+            onChange={(event, status) => setStatusFilter(status)}
           >
-            All
-          </ToggleButton>
-          <ToggleButton
-            value="Pending"
-            classes={{ selected: classes.selected, root: classes.root }}
-          >
-            <AccessTimeOutlined />
-          </ToggleButton>
-          <ToggleButton
-            value="Accepted"
-            classes={{ selected: classes.selected, root: classes.root }}
-          >
-            <CheckCircle />
-          </ToggleButton>
-          <ToggleButton
-            value="Rejected"
-            classes={{ selected: classes.selected, root: classes.root }}
-          >
-            <ClearOutlined />
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </Box>
+            <ToggleButton
+              value="All"
+              classes={{ selected: classes.selected, root: classes.root }}
+            >
+              All
+            </ToggleButton>
+            <ToggleButton
+              value="Pending"
+              classes={{ selected: classes.selected, root: classes.root }}
+            >
+              <AccessTimeOutlined />
+            </ToggleButton>
+            <ToggleButton
+              value="Accepted"
+              classes={{ selected: classes.selected, root: classes.root }}
+            >
+              <CheckCircle />
+            </ToggleButton>
+            <ToggleButton
+              value="Rejected"
+              classes={{ selected: classes.selected, root: classes.root }}
+            >
+              <ClearOutlined />
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
+      </Grid>
       <Divider variant="fullWidth" className={classes.divider} />
       <TableContainer component={Box}>
         <Table>
