@@ -114,6 +114,8 @@ export default function Profile({ onMobileClose, openMobile }) {
     setLoading(true);
     if (userType === "student") {
       getUser({ id: userID, token, userType }).then((fetchedStudents) => {
+
+        console.log(fetchedStudents);
         const details = [
           fetchedStudents.data["name"],
           fetchedStudents.data["studentID"],

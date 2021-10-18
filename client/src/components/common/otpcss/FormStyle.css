@@ -1,0 +1,101 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  .form {
+    margin: 20px auto;
+    height: auto;
+    padding: 2rem 2rem;
+    width: 50%;
+  }
+  #formBody{
+    width:100vw;
+    height:100vh;
+    background-color: #f1f1f1!important;
+  }
+  .formOuterBody{
+    padding-top: 50px;
+    padding-bottom: 100px;
+    width: 100%;
+    height: 100%;
+    background-color: #f1f1f1!important;
+  }
+  input{
+    outline: none !important;
+  }
+  input:focus {
+    box-shadow: 0 0 5pt 2pt #D3D3D3;
+    outline-width: 0px;
+  }
+  
+  .mainSection {
+    width: 100%;
+    height: auto;
+    border: 1px solid #ff5200;
+    border-radius: 20px;
+    box-shadow: 2px 2px 8px rgb(0 0 0 / 15%), -2px -2px 8px rgb(0 0 0 / 15%);
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 2rem 2rem;
+  }
+  .heading {
+    font-size: 2rem;
+    color: white;
+    margin-bottom: 20px;
+  }
+  .inputFields {
+    margin: 0 0 1rem 0;
+  }
+  .inputFieldsForDateAndBtn {
+    margin-top: 1rem;
+  }
+  @media (max-width: 900px) {
+    .form {
+      width: 80%;
+    }
+    .inputFieldsForDateAndBtn {
+      margin-left: -1rem !important;
+      width: 100%;
+    }
+  }
+  @media (max-width: 610px) {
+    .form {
+      width: 90%;
+    }
+  }
+  @media (max-width: 512px) {
+    .form {
+      width: 93%;
+    }
+    .inputField {
+      width: 50%;
+    }
+  }
+  @media (max-width: 1400px) {
+    .inputFields{
+      flex-direction: column;
+      width:95%;
+      margin:auto;
+    }
+  }
+  @media (max-width: 567px) {
+    .inputField{
+      width: 92% !important;
+    }
+  }
+  .errorForumber{
+    bottom:-32px;
+  }
+  @media (max-width: 550px) {
+    .errorForumber{
+      bottom:-40px;
+    }
+    .inputField{
+      width: 250px;
+    }
+    
+  }
