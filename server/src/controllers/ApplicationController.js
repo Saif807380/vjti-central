@@ -10,7 +10,20 @@ module.exports = {
   async applyForReward(req, res) {
     try {
       if (!req.file) {
-        return res.status(400).send("No file uploaded.");
+        return res.status(400).json({
+          error: "No file uploaded"
+        });
+      }
+      const existingApplication = await Application.find({
+        title: req.body.title,
+        studentID: req.body.studentID,
+        startDate: req.body.startDate
+      });
+      if (existingApplication) {
+        return res.status(400).json({
+          error:
+            "An application with the same combination of Student ID, title and start date already exists"
+        });
       }
       const blob = bucket.file(req.file.originalname);
       const fileUrl = `https://firebasestorage.googleapis.com/v0/b/${
@@ -142,14 +155,14 @@ module.exports = {
 
       console.log(response.data);
 
-      await Record.create({
-        applicationID: req.params.id,
-        studentID: application.studentID,
-        facultyID: application.facultyID,
-        domainAchievement: application.domainAchievement,
-        title: req.body.title,
-        date: req.body.date
-      });
+      // await Record.create({
+      //   applicationID: req.params.id,
+      //   studentID: application.studentID,
+      //   facultyID: application.facultyID,
+      //   domainAchievement: application.domainAchievement,
+      //   title: req.body.title,
+      //   date: req.body.date
+      // });
 
       application.status = "Accepted";
       application.reward = reward;
