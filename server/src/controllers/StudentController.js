@@ -2,6 +2,7 @@ const Student = require("../models/Student");
 const axios = require("axios");
 const auth = require("../utilities/auth");
 const bucket = require("../config/firebase");
+const WalletCreation = require("../utilities/WalletCreation");
 const EncryptCredentials = require("../utilities/EncryptCredentials");
 
 //Register Student
@@ -23,24 +24,10 @@ exports.registerStudent = async (req, res) => {
     delete req.body.customPublicKey;
 
     if (!publicKey) {
-      const response = await axios.get(
-        process.env.VJ_CHAIN_NODE_URL + "/newWallet",
-        {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      );
+      let keys = WalletCreation.createWallet();
+      publicKey = keys.publicKey;
+      privateKey = keys.privateKey;
 
-      if (response.status !== 200) {
-        return res.status(500).json({
-          error: "An error occurred while fetching keys from VJ Chain"
-        });
-      }
-
-      publicKey = response.data.public_key;
-      privateKey = response.data.private_key;
-  
       const data = {
         name: req.body.name,
         email: req.body.email,
