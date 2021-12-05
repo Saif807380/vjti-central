@@ -115,7 +115,6 @@ export default function Profile({ onMobileClose, openMobile }) {
     if (userType === "student") {
       getUser({ id: userID, token, userType }).then((fetchedStudents) => {
 
-        console.log(fetchedStudents);
         const details = [
           fetchedStudents.data["name"],
           fetchedStudents.data["studentID"],
@@ -181,23 +180,23 @@ export default function Profile({ onMobileClose, openMobile }) {
               <List>
                 {userType === "student"
                   ? studentDetails.map((detail, idx) => (
-                      <ProfileItem
-                        key={detail.title}
-                        title={detail.title}
-                        value={detailList[idx]}
-                        icon={detail.icon}
-                        index={idx}
-                      />
-                    ))
+                    <ProfileItem
+                      key={detail.title}
+                      title={detail.title}
+                      value={detailList[idx]}
+                      icon={detail.icon}
+                      index={idx}
+                    />
+                  ))
                   : facultyDetails.map((detail, idx) => (
-                      <ProfileItem
-                        key={detail.title}
-                        title={detail.title}
-                        value={detailList[idx]}
-                        icon={detail.icon}
-                        index={idx}
-                      />
-                    ))}
+                    <ProfileItem
+                      key={detail.title}
+                      title={detail.title}
+                      value={detailList[idx]}
+                      icon={detail.icon}
+                      index={idx}
+                    />
+                  ))}
               </List>
               {userType === "student" && (
                 <li>

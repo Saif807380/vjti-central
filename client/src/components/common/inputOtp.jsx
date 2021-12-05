@@ -71,8 +71,6 @@ const OtpPage = (props) => {
     const handleClick = () => {
         if (otp.length === 6) {
             if (props.type === "Register") {
-                console.log(otp);
-                console.log(props);
                 register({ dispatch, data: { ...props.values, otp: otp }, userType: "student" }).then((res) => {
                     if (res.error) {
                         setSeverity("error");
@@ -83,7 +81,6 @@ const OtpPage = (props) => {
                         if (res.data.data.keys.privateKey) {
                             setKeys(res.data.data.keys);
                             setIsRegistered(true);
-                            console.log(isRegistered);
                         } else {
                             setIsRegistered(true);
 

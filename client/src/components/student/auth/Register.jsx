@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
@@ -19,6 +19,7 @@ import {
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { Link } from "react-router-dom";
+import { SnackbarContext } from "../../../context/SnackbarContext";
 import { useAuthDispatch } from "../../../context/AuthContext";
 import FormField from "../../../components/FormField";
 import constants from "../../../constants";
@@ -68,6 +69,7 @@ const Register = () => {
   const classes = useStyles();
   const dispatch = useAuthDispatch();
   const theme = useTheme();
+  const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [formData, setFormData] = useState(null);
   const [student, setStudent] = useState({
@@ -242,10 +244,12 @@ const Register = () => {
               student,
               hash: res.data.hash
             });
-          } else if (res.status === 422) {
-            console.log("error");
           } else {
-            console.log("error");
+
+            setSeverity("error");
+            setMessage(res.error);
+            setOpen(true);
+
           }
         }
       );

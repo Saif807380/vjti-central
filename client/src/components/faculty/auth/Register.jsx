@@ -153,7 +153,6 @@ const Register = () => {
         confirmPassword: "* Password and Confirm Password do not match"
       }));
     }
-    console.log(!faculty.department);
     if (!faculty.department) {
       updateErrors((prevErrors) => ({
         ...prevErrors,
