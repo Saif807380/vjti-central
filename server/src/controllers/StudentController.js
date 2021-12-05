@@ -40,7 +40,7 @@ exports.registerStudent = async (req, res) => {
 
       publicKey = response.data.public_key;
       privateKey = response.data.private_key;
-
+  
       const data = {
         name: req.body.name,
         email: req.body.email,

@@ -5,13 +5,14 @@
 }
 #otpSection
 {
+    margin-top: 35px;
  width: 100%;
- height: 80vh;
+ height: 100%;
  display: flex;
  justify-content: center;
  align-items: center;
  background-color: #fff;
- margin-bottom: 540px !important;
+ 
 
 }
 .otpInput {
@@ -88,5 +89,5 @@
 .center_div h2
 {
   text-align: center;
-  color: #f26522;
+  color: black;
 }

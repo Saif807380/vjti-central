@@ -1,9 +1,9 @@
 const crypto = require("crypto");
 
 const email_key = process.env.EMAIL_KEY || "";
-const ttl= 5 * 60 * 1000;
-module.exports = {  
-  generateOtpHash(email,ttl){
+const ttl = 5 * 60 * 1000;
+module.exports = {
+  generateOtpHash(email, ttl) {
     const otp = Math.floor(100000 + Math.random() * 900000);
     const expires = Date.now() + ttl;
     const data = `${email}.${otp}.${expires}`;
@@ -16,7 +16,7 @@ module.exports = {
     return [otp, fullHash];
   },
 
-  verifyOTP(email, hash, otp){
+  verifyOTP(email, hash, otp) {
     const [hashValue, expires] = hash.split(".");
 
     const now = Date.now();
@@ -35,5 +35,3 @@ module.exports = {
     }
   }
 };
-
-

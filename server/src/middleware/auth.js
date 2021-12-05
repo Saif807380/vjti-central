@@ -24,7 +24,7 @@ module.exports = {
     }
   },
 
-  verifyOTP(req,res,next){
+  verifyOTP(req, res, next) {
     const response = OTPUtil.verifyOTP(
       req.body.student.email,
       req.body.hash,
@@ -38,5 +38,5 @@ module.exports = {
     delete req.body.hash;
     delete req.body.otp;
     next();
-  },
+  }
 };

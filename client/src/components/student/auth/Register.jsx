@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
@@ -16,21 +16,13 @@ import {
   IconButton,
   FormHelperText,
   Grid,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import { useHistory } from "react-router-dom";
-import Spinner from "../../../components/Spinner";
 import { Link } from "react-router-dom";
-import { useAuthState, useAuthDispatch } from "../../../context/AuthContext";
-import { SnackbarContext } from "../../../context/SnackbarContext";
+import { useAuthDispatch } from "../../../context/AuthContext";
 import FormField from "../../../components/FormField";
 import constants from "../../../constants";
-import { register, sendOTP } from "../../../actions/authActions";
+import { sendOTP } from "../../../actions/authActions";
 import { REQUEST_AUTH } from "../../../reducers/types";
 import OtpPage from "../../common/inputOtp";
 
@@ -74,10 +66,7 @@ let currentYear = new Date().getFullYear();
 
 const Register = () => {
   const classes = useStyles();
-  const { loading } = useAuthState();
   const dispatch = useAuthDispatch();
-  const history = useHistory();
-  const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [formData, setFormData] = useState(null);
@@ -112,7 +101,6 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPin, setShowPin] = useState(false);
-  const [isRegistered, setIsRegistered] = useState(false);
   const [keys, setKeys] = useState({
     publicKey: "",
     privateKey: ""
@@ -267,42 +255,6 @@ const Register = () => {
   return formData ? (<OtpPage type="Register" values={formData} />)
     : (
       <React.Fragment>
-        <Dialog open={isRegistered}>
-          <DialogTitle>Key Pair</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Here's the public key that was generated for you. You can download
-              your encrypted credentials file from your profile. This file can be
-              imported into the VJTI-Blockchain Wallet App. We store your Public
-              key in our database for sending your rewards to you.
-            </DialogContentText>
-            <Typography variant="body1">Public Key</Typography>
-            <Paper elevation={0} className={classes.key} square>
-              <Typography variant="body2" style={{ wordWrap: "break-word" }}>
-                {keys.publicKey}
-              </Typography>
-            </Paper>
-            {/* <Typography variant="body1" style={{ marginTop: "24px" }}>
-          Private Key
-        </Typography>
-        <Paper elevation={0} className={classes.key} square>
-          <Typography variant="body2" style={{ wordWrap: "break-word" }}>
-            {keys.privateKey}
-          </Typography>
-        </Paper> */}
-          </DialogContent>
-          <DialogActions>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                history.push(`/student/login`);
-              }}
-            >
-              Continue
-            </Button>
-          </DialogActions>
-        </Dialog>
         <Box
           className={classes.root}
           display="flex"
