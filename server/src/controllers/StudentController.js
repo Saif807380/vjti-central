@@ -8,6 +8,7 @@ const EncryptCredentials = require("../utilities/EncryptCredentials");
 //Register Student
 exports.registerStudent = async (req, res) => {
   try {
+    req.body = req.body.student;
     const student = await Student.findOne({
       $or: [{ studentID: req.body.studentID }, { email: req.body.email }]
     });
@@ -17,7 +18,6 @@ exports.registerStudent = async (req, res) => {
         error: "Student with this ID or email already exists"
       });
     }
-
     let publicKey = req.body.customPublicKey;
     let privateKey = "";
     let fileUrl = "";
@@ -67,7 +67,6 @@ exports.registerStudent = async (req, res) => {
       credentialsURL: fileUrl
     });
     const token = auth.signToken(newStudent._id);
-
     res.status(201).json({
       status: "success",
       token,
@@ -80,6 +79,7 @@ exports.registerStudent = async (req, res) => {
       }
     });
   } catch (e) {
+    console.log(e.message);
     return res.status(500).json({ error: e.message });
   }
 };

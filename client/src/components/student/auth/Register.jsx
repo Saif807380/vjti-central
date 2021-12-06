@@ -16,22 +16,16 @@ import {
   IconButton,
   FormHelperText,
   Grid,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
-import { useHistory } from "react-router-dom";
-import Spinner from "../../../components/Spinner";
 import { Link } from "react-router-dom";
-import { useAuthState, useAuthDispatch } from "../../../context/AuthContext";
 import { SnackbarContext } from "../../../context/SnackbarContext";
+import { useAuthDispatch } from "../../../context/AuthContext";
 import FormField from "../../../components/FormField";
 import constants from "../../../constants";
-import { register } from "../../../actions/authActions";
+import { sendOTP } from "../../../actions/authActions";
 import { REQUEST_AUTH } from "../../../reducers/types";
+import OtpPage from "../../common/inputOtp";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,13 +67,11 @@ let currentYear = new Date().getFullYear();
 
 const Register = () => {
   const classes = useStyles();
-  const { loading } = useAuthState();
   const dispatch = useAuthDispatch();
-  const history = useHistory();
-  const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
   const theme = useTheme();
+  const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
+  const [formData, setFormData] = useState(null);
   const [student, setStudent] = useState({
     studentID: "",
     name: "",
@@ -111,7 +103,6 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPin, setShowPin] = useState(false);
-  const [isRegistered, setIsRegistered] = useState(false);
   const [keys, setKeys] = useState({
     publicKey: "",
     privateKey: ""
@@ -245,306 +236,270 @@ const Register = () => {
     dispatch({ type: REQUEST_AUTH });
     event.preventDefault();
     if (isFormValid()) {
-      register({ dispatch, user: student, userType: "student" }).then((res) => {
-        if (res.error) {
-          setSeverity("error");
-          setMessage(res.error);
-          setOpen(true);
-        } else {
-          if (res.data.data.keys.privateKey) {
-            setKeys(res.data.data.keys);
-            setIsRegistered(true);
-          } else {
-            history.push("/student/login");
-          }
-          setSeverity("success");
-          setMessage("You have successfully registered.");
-          setOpen(true);
-        }
-      });
-    }
-  };
 
-  return loading ? (
-    <Spinner />
-  ) : (
-    <React.Fragment>
-      <Dialog open={isRegistered}>
-        <DialogTitle>Key Pair</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Here's the public key that was generated for you. You can download
-            your encrypted credentials file from your profile. This file can be
-            imported into the VJTI-Blockchain Wallet App. We store your Public
-            key in our database for sending your rewards to you.
-          </DialogContentText>
-          <Typography variant="body1">Public Key</Typography>
-          <Paper elevation={0} className={classes.key} square>
-            <Typography variant="body2" style={{ wordWrap: "break-word" }}>
-              {keys.publicKey}
-            </Typography>
-          </Paper>
-          {/* <Typography variant="body1" style={{ marginTop: "24px" }}>
-            Private Key
-          </Typography>
-          <Paper elevation={0} className={classes.key} square>
-            <Typography variant="body2" style={{ wordWrap: "break-word" }}>
-              {keys.privateKey}
-            </Typography>
-          </Paper> */}
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              history.push(`/student/login`);
-            }}
-          >
-            Continue
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Box
-        className={classes.root}
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Paper elevation={isSmallScreen ? 0 : 3} className={classes.paper}>
-          <div style={{ marginTop: "24px" }}>
-            <Typography variant="h5">Student Registration</Typography>
-          </div>
-          <form className={classes.form} noValidate>
-            <div className={classes.formInner}>
-              <FormField
-                label="Student ID"
-                name="studentID"
-                required={true}
-                onChange={handleStudent}
-                error={errors.studentID}
-              />
-              <FormField
-                label="Student Name"
-                name="name"
-                required={true}
-                onChange={handleStudent}
-                error={errors.name}
-              />
-              <FormField
-                label="Email"
-                name="email"
-                required={true}
-                onChange={handleStudent}
-                error={errors.email}
-              />
-              <FormField
-                label="Password"
-                name="password"
-                required={true}
-                onChange={handleStudent}
-                error={errors.password}
-                InputProps={{
-                  type: showPassword ? "text" : "password",
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={toggleShowPassword}
-                        edge="end"
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <FormField
-                label="Confirm Password"
-                name="confirmPassword"
-                required={true}
-                onChange={handleConfirmPassword}
-                error={errors.confirmPassword}
-                InputProps={{
-                  type: showConfirmPassword ? "text" : "password",
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={toggleShowConfirmPassword}
-                        edge="end"
-                      >
-                        {showConfirmPassword ? (
-                          <Visibility />
-                        ) : (
-                          <VisibilityOff />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <Grid container spacing={1}>
-                <Grid item xs={12} md={6}>
-                  <FormControl
-                    variant="outlined"
-                    required
-                    className={classes.formControl}
-                    error={errors.degree.length !== 0}
-                  >
-                    <InputLabel id="degree-label">Degree</InputLabel>
-                    <Select
-                      labelId="degree-label"
-                      id="degree"
-                      name="degree"
-                      value={student.degree}
-                      onChange={handleStudent}
-                      label="Degree"
-                    >
-                      {constants.DEGREE.map((degree) => (
-                        <MenuItem key={degree} value={degree}>
-                          {degree}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>{errors.degree}</FormHelperText>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <FormControl
-                    variant="outlined"
-                    required
-                    className={classes.formControl}
-                    error={errors.admissionYear.length !== 0}
-                  >
-                    <InputLabel id="admission-year-label">
-                      Admission Year
-                    </InputLabel>
-                    <Select
-                      labelId="admission-year-label"
-                      id="admission-year"
-                      name="admissionYear"
-                      value={student.admissionYear}
-                      onChange={handleStudent}
-                      label="Admission Year"
-                    >
-                      {[...Array(20).keys()].map((number) => (
-                        <MenuItem
-                          key={number}
-                          value={`${currentYear - number}`}
-                        >
-                          {currentYear - number}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>{errors.admissionYear}</FormHelperText>
-                  </FormControl>
-                </Grid>
-                <FormControl
-                  variant="outlined"
-                  required
-                  className={classes.formControl}
-                  error={errors.department.length !== 0}
-                >
-                  <InputLabel id="department-label">Department</InputLabel>
-                  <Select
-                    labelId="department-label"
-                    id="department"
-                    name="department"
-                    value={student.department}
-                    onChange={handleStudent}
-                    label="Department"
-                  >
-                    {constants.BRANCHES.map((branch) => (
-                      <MenuItem key={branch} value={branch}>
-                        {branch}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>{errors.department}</FormHelperText>
-                </FormControl>
-              </Grid>
-              <FormControlLabel
-                style={{ marginBottom: "10px", color: "#757575" }}
-                control={
-                  <Checkbox
-                    value="hasPubKey"
-                    color="primary"
-                    checked={hasPubKey}
-                    onChange={handleHasPubKey}
-                  />
-                }
-                label="Do you have a public key? (If you don't, enter a pin and passphrase below to generate a new public key-pair for yourself)"
-              />
-              {!hasPubKey && (
-                <React.Fragment>
-                  <FormField
-                    label="Pin (4-digit number)"
-                    name="pin"
-                    required={true}
-                    onChange={handleStudent}
-                    error={errors.pin}
-                    InputProps={{
-                      type: showPin ? "text" : "password",
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle pin visibility"
-                            onClick={toggleShowPin}
-                            edge="end"
-                          >
-                            {showPin ? <Visibility /> : <VisibilityOff />}
-                          </IconButton>
-                        </InputAdornment>
-                      )
-                    }}
-                  />
-                  <FormField
-                    label="Encryption Passphrase"
-                    name="passphrase"
-                    required={true}
-                    onChange={handleStudent}
-                    error={errors.passphrase}
-                  />
-                </React.Fragment>
-              )}
-              {hasPubKey && (
+      sendOTP({ dispatch, email: student.email, type: "Register" }).then(
+        (res) => {
+          if (res.status === 200) {
+            setFormData({
+              student,
+              hash: res.data.hash
+            });
+          } else {
+
+            setSeverity("error");
+            setMessage(res.error);
+            setOpen(true);
+
+          }
+        }
+      );
+    }
+
+  };
+  return formData ? (<OtpPage type="Register" values={formData} />)
+    : (
+      <React.Fragment>
+        <Box
+          className={classes.root}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Paper elevation={isSmallScreen ? 0 : 3} className={classes.paper}>
+            <div style={{ marginTop: "24px" }}>
+              <Typography variant="h5">Student Registration</Typography>
+            </div>
+            <form className={classes.form} noValidate>
+              <div className={classes.formInner}>
                 <FormField
-                  label="Public Key"
-                  name="customPublicKey"
+                  label="Student ID"
+                  name="studentID"
                   required={true}
                   onChange={handleStudent}
-                  error={errors.customPublicKey}
-                  multiline={true}
-                  maxRows={Infinity}
+                  error={errors.studentID}
                 />
-              )}
-              <Button
-                onClick={handleFormSubmit}
-                size="large"
-                color="primary"
-                type="submit"
-                fullWidth
-                variant="contained"
-              >
-                Register
-              </Button>
-            </div>
-          </form>
-          <Typography
-            style={{ color: "#303F9E", fontSize: 15, marginBottom: "15px" }}
-          >
-            Already have an account?
-            <Link style={{ color: "#303F9E" }} to={`/student/login`}>
-              {" "}
-              Login
-            </Link>
-          </Typography>
-        </Paper>
-      </Box>
-    </React.Fragment>
-  );
-};
+                <FormField
+                  label="Student Name"
+                  name="name"
+                  required={true}
+                  onChange={handleStudent}
+                  error={errors.name}
+                />
+                <FormField
+                  label="Email"
+                  name="email"
+                  required={true}
+                  onChange={handleStudent}
+                  error={errors.email}
+                />
+                <FormField
+                  label="Password"
+                  name="password"
+                  required={true}
+                  onChange={handleStudent}
+                  error={errors.password}
+                  InputProps={{
+                    type: showPassword ? "text" : "password",
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={toggleShowPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                />
+                <FormField
+                  label="Confirm Password"
+                  name="confirmPassword"
+                  required={true}
+                  onChange={handleConfirmPassword}
+                  error={errors.confirmPassword}
+                  InputProps={{
+                    type: showConfirmPassword ? "text" : "password",
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={toggleShowConfirmPassword}
+                          edge="end"
+                        >
+                          {showConfirmPassword ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                />
+                <Grid container spacing={1}>
+                  <Grid item xs={12} md={6}>
+                    <FormControl
+                      variant="outlined"
+                      required
+                      className={classes.formControl}
+                      error={errors.degree.length !== 0}
+                    >
+                      <InputLabel id="degree-label">Degree</InputLabel>
+                      <Select
+                        labelId="degree-label"
+                        id="degree"
+                        name="degree"
+                        value={student.degree}
+                        onChange={handleStudent}
+                        label="Degree"
+                      >
+                        {constants.DEGREE.map((degree) => (
+                          <MenuItem key={degree} value={degree}>
+                            {degree}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      <FormHelperText>{errors.degree}</FormHelperText>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <FormControl
+                      variant="outlined"
+                      required
+                      className={classes.formControl}
+                      error={errors.admissionYear.length !== 0}
+                    >
+                      <InputLabel id="admission-year-label">
+                        Admission Year
+                      </InputLabel>
+                      <Select
+                        labelId="admission-year-label"
+                        id="admission-year"
+                        name="admissionYear"
+                        value={student.admissionYear}
+                        onChange={handleStudent}
+                        label="Admission Year"
+                      >
+                        {[...Array(20).keys()].map((number) => (
+                          <MenuItem
+                            key={number}
+                            value={`${currentYear - number}`}
+                          >
+                            {currentYear - number}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      <FormHelperText>{errors.admissionYear}</FormHelperText>
+                    </FormControl>
+                  </Grid>
+                  <FormControl
+                    variant="outlined"
+                    required
+                    className={classes.formControl}
+                    error={errors.department.length !== 0}
+                  >
+                    <InputLabel id="department-label">Department</InputLabel>
+                    <Select
+                      labelId="department-label"
+                      id="department"
+                      name="department"
+                      value={student.department}
+                      onChange={handleStudent}
+                      label="Department"
+                    >
+                      {constants.BRANCHES.map((branch) => (
+                        <MenuItem key={branch} value={branch}>
+                          {branch}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>{errors.department}</FormHelperText>
+                  </FormControl>
+                </Grid>
+                <FormControlLabel
+                  style={{ marginBottom: "10px", color: "#757575" }}
+                  control={
+                    <Checkbox
+                      value="hasPubKey"
+                      color="primary"
+                      checked={hasPubKey}
+                      onChange={handleHasPubKey}
+                    />
+                  }
+                  label="Do you have a public key? (If you don't, enter a pin and passphrase below to generate a new public key-pair for yourself)"
+                />
+                {!hasPubKey && (
+                  <React.Fragment>
+                    <FormField
+                      label="Pin (4-digit number)"
+                      name="pin"
+                      required={true}
+                      onChange={handleStudent}
+                      error={errors.pin}
+                      InputProps={{
+                        type: showPin ? "text" : "password",
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle pin visibility"
+                              onClick={toggleShowPin}
+                              edge="end"
+                            >
+                              {showPin ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                    <FormField
+                      label="Encryption Passphrase"
+                      name="passphrase"
+                      required={true}
+                      onChange={handleStudent}
+                      error={errors.passphrase}
+                    />
+                  </React.Fragment>
+                )}
+                {hasPubKey && (
+                  <FormField
+                    label="Public Key"
+                    name="customPublicKey"
+                    required={true}
+                    onChange={handleStudent}
+                    error={errors.customPublicKey}
+                    multiline={true}
+                    maxRows={Infinity}
+                  />
+                )}
+                <Button
+                  onClick={handleFormSubmit}
+                  size="large"
+                  color="primary"
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                >
+                  Register
+                </Button>
+              </div>
+            </form>
+            <Typography
+              style={{ color: "#303F9E", fontSize: 15, marginBottom: "15px" }}
+            >
+              Already have an account?
+              <Link style={{ color: "#303F9E" }} to={`/student/login`}>
+                {" "}
+                Login
+              </Link>
+            </Typography>
+          </Paper>
+        </Box>
+      </React.Fragment>
+    )
+}
+
 
 export default Register;

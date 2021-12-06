@@ -3,14 +3,18 @@ const FacultyController = require("./controllers/FacultyController");
 const ApplicationController = require("./controllers/ApplicationController");
 const uploader = require("./utilities/uploader");
 const auth = require("./middleware/auth");
-
+const authOtp = require("./controllers/AuthController");
 module.exports = (app) => {
   app.get("/api/check", (req, res) => {
     res.json("Hello World");
   });
 
   //Student Routes
-  app.post("/api/student/register", StudentController.registerStudent);
+  app.post(
+    "/api/student/register",
+    auth.verifyOTP,
+    StudentController.registerStudent
+  );
   app.post("/api/student/login", StudentController.loginStudent);
   app.get("/api/student", auth.loginRequired, StudentController.getAllStudents);
   app.get(
@@ -25,7 +29,13 @@ module.exports = (app) => {
   );
 
   //Faculty Routes
-  app.post("/api/faculty/register", FacultyController.registerFaculty);
+  app.post("/api/sendOtpRegister", authOtp.sendOTP);
+
+  app.post(
+    "/api/faculty/register",
+    auth.verifyOTP,
+    FacultyController.registerFaculty
+  );
   app.post("/api/faculty/login", FacultyController.loginFaculty);
   app.get(
     "/api/faculty",
