@@ -1,7 +1,7 @@
 import { React, useState, useContext } from "react";
 import {
     Typography, Dialog,
-    DialogTitle,
+    DialogTitle, Paper,
     DialogContent,
     DialogContentText,
     DialogActions
@@ -111,11 +111,11 @@ const OtpPage = (props) => {
                         key in our database for sending your rewards to you.
                     </DialogContentText>
                     <Typography variant="body1">Public Key</Typography>
-                    {/* <Paper elevation={0} className={classes.key} square>
+                    <Paper elevation={0} className={classes.key} square>
                         <Typography variant="body2" style={{ wordWrap: "break-word" }}>
                             {keys.publicKey}
                         </Typography>
-                    </Paper> */}
+                    </Paper>
 
                 </DialogContent>
                 <DialogActions>
