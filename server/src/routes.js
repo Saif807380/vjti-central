@@ -33,7 +33,6 @@ module.exports = (app) => {
 
   app.post(
     "/api/faculty/register",
-    auth.verifyOTP,
     FacultyController.registerFaculty
   );
   app.post("/api/faculty/login", FacultyController.loginFaculty);

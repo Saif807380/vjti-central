@@ -174,7 +174,7 @@ const Register = () => {
     dispatch({ type: REQUEST_AUTH });
     event.preventDefault();
     if (isFormValid()) {
-      register({ dispatch, user: faculty, userType: "faculty" }).then((res) => {
+      register({ dispatch, body: faculty, userType: "faculty" }).then((res) => {
         if (res.error) {
           setSeverity("error");
           setMessage(res.error);

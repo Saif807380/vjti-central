@@ -52,10 +52,10 @@ export const sendOTP = ({ dispatch, email, type }) => {
 };
 
 
-export const register = async ({ dispatch, data, userType }) => {
+export const register = async ({ dispatch, body, userType }) => {
   try {
     const res = await axios.post(BASE_URL + `/${userType}/register`, {
-      ...data
+      ...body
     });
     dispatch({
       type: AUTH_SUCCESS,
