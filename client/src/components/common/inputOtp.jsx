@@ -71,7 +71,7 @@ const OtpPage = (props) => {
     const handleClick = () => {
         if (otp.length === 6) {
             if (props.type === "Register") {
-                register({ dispatch, data: { ...props.values, otp: otp }, userType: "student" }).then((res) => {
+                register({ dispatch, body: { ...props.values, otp: otp }, userType: "student" }).then((res) => {
                     if (res.error) {
                         setSeverity("error");
                         setMessage(res.error);
