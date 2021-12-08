@@ -1,22 +1,18 @@
-const { randomBytes } = require("crypto");
-const secp256k1 = require("secp256k1");
-function getPrivateKey() {
-  while (true) {
-    const privKey = randomBytes(32);
-    if (secp256k1.privateKeyVerify(privKey)) return privKey;
-  }
-}
+var ellipticcurve = require("starkbank-ecdsa");
+var curves = require("starkbank-ecdsa/ellipticcurve/curve");
+var PrivateKey = ellipticcurve.PrivateKey;
 
 module.exports = {
   createWallet() {
-    const privKey = getPrivateKey();
-    const pubKey = Buffer.from(secp256k1.publicKeyCreate(privKey)).toString(
-      "hex"
-    );
-    const privKeyHex = Buffer.from(privKey).toString("hex");
+    let privateKey = new PrivateKey(curves.p256);
+    let publicKey = privateKey.publicKey().toPem();
+    let pub1 = publicKey.split("\n");
+    let pubkey = pub1[1] + pub1[2];
+    let priv1 = privateKey.toPem().split("\n");
+    let privkey = priv1[1] + priv1[2] + priv1[3];
     let data = {
-      privateKey: privKeyHex,
-      publicKey: pubKey
+      privateKey: privkey,
+      publicKey: pubkey
     };
     return data;
   }
