@@ -2,6 +2,7 @@ const Application = require("../models/Application");
 const Student = require("../models/Student");
 const Faculty = require("../models/Faculty");
 const Record = require("../models/Record");
+const SignTransaction = require("../utilities/SignTransaction");
 const bucket = require("../config/firebase");
 const axios = require("axios");
 
@@ -14,7 +15,7 @@ module.exports = {
           error: "No file uploaded"
         });
       }
-      const existingApplication = await Application.find({
+      const existingApplication = await Application.findOne({
         title: req.body.title,
         studentID: req.body.studentID,
         startDate: req.body.startDate
@@ -135,8 +136,9 @@ module.exports = {
       console.log(reward, student.publicKey);
 
       const response = await axios.post(
-        process.env.VJ_CHAIN_NODE_URL + "/rewardStudent",
+        process.env.VJ_CHAIN_NODE_URL + "/makeTransaction",
         {
+          sender_public_key: process.env.FACULTY_PUBLIC_KEY,
           receiver_public_key: student.publicKey,
           bounty: reward
         },
@@ -153,8 +155,32 @@ module.exports = {
           .json({ error: "An error occurred while transfering the reward" });
       }
 
-      console.log(response.data);
+      //console.log(response.data);
+      tx_to_be_signed = response.data.sign_this;
+      tx_to_be_sent = response.data.send_this;
+      sig = SignTransaction.sign(tx_to_be_signed);
 
+      const response_txn = await axios.post(
+        process.env.VJ_CHAIN_NODE_URL + "/sendTransaction",
+        {
+          signature: sig,
+          transaction: tx_to_be_sent
+        },
+        {
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      if (response_txn.status !== 200) {
+        return res
+          .status(500)
+          .json({
+            error:
+              "An error occurred while transfering the reward. Invalid Transaction on VJChain"
+          });
+      }
       // await Record.create({
       //   applicationID: req.params.id,
       //   studentID: application.studentID,
