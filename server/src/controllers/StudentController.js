@@ -127,26 +127,51 @@ exports.getAllStudents = async (req, res) => {
   }
 };
 
+exports.getStudentRank=async(req, res)=>{
+  try {
+    const users = await Student.find({});
+    users.sort((a, b) => b.coinsAchieved - a.coinsAchieved);
+
+  for (let i = 0; i < users.length; i++) {
+    let totalPoints = users[i].coinsAchieved;
+    let usersWithRank = users.filter(user => user.coinsAchieved === totalPoints);
+    for (let user of usersWithRank) {
+      
+      user.rank = i + 1;
+      if(user._id==req.params.id){
+        return res.status(200).json({ "message":user.rank});
+      }
+    }
+    i += usersWithRank.length - 1;
+  }
+  await users.save();
+    return res.status(200).json({  });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
+
+
 exports.getStudent = async (req, res) => {
   try {
     let student = await Student.findById(req.params.studentID);
     if (!student) return res.status(404).json({ error: "Invalid Student ID" });
 
-    const response = await axios.post(
-      process.env.VJ_CHAIN_NODE_URL + "/checkBalance",
-      {
-        public_key: student.publicKey
-      },
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-    );
-    if (response.status !== 200)
-      return res.status(500).json({
-        error: "An error occurred while fetching wallet balance from VJ Chain"
-      });
+    // const response = await axios.post(
+    //   process.env.VJ_CHAIN_NODE_URL + "/checkBalance",
+    //   {
+    //     public_key: student.publicKey
+    //   },
+    //   {
+    //     headers: {
+    //       "Content-Type": "application/json"
+    //     }
+    //   }
+    // );
+    // if (response.status !== 200)
+    //   return res.status(500).json({
+    //     error: "An error occurred while fetching wallet balance from VJ Chain"
+    //   });
 
     return res.status(200).json({
       name: student.name,
@@ -156,7 +181,9 @@ exports.getStudent = async (req, res) => {
       department: student.department,
       year: student.admissionYear,
       degree: student.degree,
-      walletBalance: response.data,
+      coinsAchieved: student.coinsAchieved,
+      rank:student.rank,
+      walletBalance: 25,
       credentialsURL: student.credentialsURL
     });
   } catch (e) {

@@ -8,7 +8,7 @@ import ApplicationsList from "../applications/ApplicationsList";
 import ApplicationDetail from "../applications/ApplicationDetail";
 import StudentActions from "../applications/StudentActions";
 import NewApplication from "../applications/NewApplication";
-import DashboardLayout from "../../components/common/Dashboard";
+import DashboardLayout from "../../components/DashboardLayout/index";
 const Student = () => {
   return (
     <Switch>

@@ -7,7 +7,7 @@ import ProtectedRoute from "../../components/ProtectedRoute";
 import ApplicationDetail from "../applications/ApplicationDetail";
 import FacultyActions from "../applications/FacultyActions";
 import ApplicationsList from "../applications/ApplicationsList";
-import DashboardLayout from "../../components/common/Dashboard";
+import DashboardLayout from "../../components/DashboardLayout/index";
 const Faculty = () => {
   return (
     <Switch>

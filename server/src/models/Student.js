@@ -41,6 +41,16 @@ const student = new mongoose.Schema({
     type: String,
     default: ""
   },
+  rank:{
+    type: Number,
+    required: false,
+    default: 0
+  },
+  coinsAchieved:{
+    type: Number,
+    required: false,
+    default:0
+  },
   admissionYear: {
     type: Number,
     required: true

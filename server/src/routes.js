@@ -4,6 +4,7 @@ const ApplicationController = require("./controllers/ApplicationController");
 const uploader = require("./utilities/uploader");
 const auth = require("./middleware/auth");
 const authOtp = require("./controllers/AuthController");
+ 
 module.exports = (app) => {
   app.get("/api/check", (req, res) => {
     res.json("Hello World");
@@ -35,6 +36,8 @@ module.exports = (app) => {
     "/api/faculty/register",
     FacultyController.registerFaculty
   );
+  app.get("/api/student/:id/rank",auth.loginRequired,StudentController.getStudentRank);
+
   app.post("/api/faculty/login", FacultyController.loginFaculty);
   app.get(
     "/api/faculty",

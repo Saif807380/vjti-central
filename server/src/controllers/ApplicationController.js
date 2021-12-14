@@ -132,7 +132,8 @@ module.exports = {
       if (!student) {
         return res.status(404).json({ error: "Invalid Student ID" });
       }
-
+     student.coinsAchieved+=reward;
+     await student.save();
       console.log(reward, student.publicKey);
 
       const response = await axios.post(
