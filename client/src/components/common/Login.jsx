@@ -5,8 +5,6 @@ import {
   Typography,
   Button,
   Paper,
-  FormControlLabel,
-  Checkbox,
   InputAdornment,
   IconButton
 } from "@material-ui/core";
@@ -58,12 +56,10 @@ const Login = (props) => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberme, setRememberme] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleEmail = (e) => setEmail(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
-  const handleRememberme = (e) => setRememberme(e.target.checked);
   const toggleShowPassword = () => setShowPassword(!showPassword);
 
   const [errors, updateErrors] = useState({
@@ -122,7 +118,7 @@ const Login = (props) => {
         dispatch,
         email,
         password,
-        rememberme,
+        rememberme: true,
         userType: props.userType
       }).then((res) => {
         if (res.error) {
@@ -183,18 +179,6 @@ const Login = (props) => {
                   </InputAdornment>
                 )
               }}
-            />
-            <FormControlLabel
-              style={{ marginBottom: "5px" }}
-              control={
-                <Checkbox
-                  value="remember"
-                  color="primary"
-                  checked={rememberme}
-                  onChange={handleRememberme}
-                />
-              }
-              label="Remember Me"
             />
             <div>
               <Button

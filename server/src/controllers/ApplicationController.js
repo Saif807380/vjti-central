@@ -5,6 +5,7 @@ const Record = require("../models/Record");
 const SignTransaction = require("../utilities/SignTransaction");
 const bucket = require("../config/firebase");
 const axios = require("axios");
+const path = require("path");
 
 //All IDs are default mongo provided IDs
 module.exports = {
@@ -18,15 +19,18 @@ module.exports = {
       console.log(req.body);
       const existingApplication = await Application.findOne({
         title: req.body.title,
-        studentID: req.body.studentID,
-        domainAchievement: req.body.domainAchievement
+        studentID: req.body.studentID
       });
       if (existingApplication) {
         return res.status(400).json({
           error: "An application for this achievement already exists"
         });
       }
-      const blob = bucket.file(req.file.originalname);
+
+      const fileName = `${path.parse(req.file.originalname).name}_${
+        req.body.studentID
+      }_${Date.now()}`;
+      const blob = bucket.file(fileName);
       const fileUrl = `https://firebasestorage.googleapis.com/v0/b/${
         bucket.name
       }/o/${encodeURI(blob.name)}?alt=media`;

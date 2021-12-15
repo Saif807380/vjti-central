@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Box, Button } from "@material-ui/core";
-import { Delete, Edit } from "@material-ui/icons";
+import { Delete } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import { SnackbarContext } from "../../context/SnackbarContext";
 import { useAuthState } from "../../context/AuthContext";
@@ -29,14 +29,6 @@ const StudentActions = (props) => {
   };
   return (
     <Box display="flex" justifyContent={props.position}>
-      <Button
-        variant="contained"
-        color="primary"
-        style={{ marginRight: "10px" }}
-        startIcon={<Edit />}
-      >
-        Edit
-      </Button>
       <Button
         variant="contained"
         style={{ backgroundColor: "#f44336", color: "white" }}

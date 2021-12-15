@@ -448,7 +448,7 @@ const Register = () => {
                     }}
                   />
                   <FormField
-                    label="Encryption Passphrase"
+                    label="Encryption Passphrase (12 - 24 characters)"
                     name="passphrase"
                     required={true}
                     onChange={handleStudent}

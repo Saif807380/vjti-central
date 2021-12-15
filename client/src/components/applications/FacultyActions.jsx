@@ -108,8 +108,11 @@ const FacultyActions = (props) => {
           <DialogTitle>Approve/Reject Application</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Please select a reward from below if you want to approve the
-              application.
+              Please{" "}
+              {props.applicationData.domainAchievement !== "Other"
+                ? "select a reward from below"
+                : "enter a reward below"}{" "}
+              if you want to approve the application.
             </DialogContentText>
             <>
               {props.applicationData.domainAchievement !== "Other" ? (
