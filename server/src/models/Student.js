@@ -41,15 +41,15 @@ const student = new mongoose.Schema({
     type: String,
     default: ""
   },
-  rank:{
+  rank: {
     type: Number,
     required: false,
     default: 0
   },
-  coinsAchieved:{
+  coinsAchieved: {
     type: Number,
     required: false,
-    default:0
+    default: 0
   },
   admissionYear: {
     type: Number,

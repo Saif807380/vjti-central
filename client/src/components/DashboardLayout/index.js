@@ -1,10 +1,10 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import NavBar from "./DashboardView/Navbar";
 import MainDashboard from "./DashboardView";
 import { useAuthState } from "../../context/AuthContext";
 import { getUser } from "../../actions/authActions";
-
+import Spinner from "../Spinner";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,42 +30,42 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     flex: "1 1 auto",
-    height: "100%",
-  
+    height: "100%"
   }
 }));
 
 const DashboardLayout = () => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-  const { userType, userID, token,userCoins } = useAuthState();
-  const [details, setDetailsList] = useState([]);
+  const { userType, userID, token } = useAuthState();
+  const [details, setDetails] = useState({});
   const [loading, setLoading] = useState(false);
- 
+
   useEffect(() => {
     setLoading(true);
     if (userType === "student") {
-   
       getUser({ id: userID, token, userType }).then((fetchedStudents) => {
-        console.log(fetchedStudents);
-        const details = [
-          fetchedStudents.data["name"],
-          fetchedStudents.data["studentID"],
-          fetchedStudents.data["email"],
-          fetchedStudents.data["department"],
-          fetchedStudents.data["degree"],
-          fetchedStudents.data["year"],
-          fetchedStudents.data["coins"],
-        ];
-        console.log(details);
-        setDetailsList(fetchedStudents.data);
+        // const details = [
+        //   fetchedStudents.data["name"],
+        //   fetchedStudents.data["studentID"],
+        //   fetchedStudents.data["email"],
+        //   fetchedStudents.data["department"],
+        //   fetchedStudents.data["degree"],
+        //   fetchedStudents.data["year"],
+        //   fetchedStudents.data["coins"],
+        // ];
+        // console.log(details);
+        setDetails(fetchedStudents.data);
         setLoading(false);
       });
-    
+    } else {
+      setLoading(false);
     }
   }, [token, userID, userType]);
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
     <div className={classes.root}>
       <NavBar
         onMobileClose={() => setMobileNavOpen(false)}
@@ -76,7 +76,6 @@ const DashboardLayout = () => {
         <div className={classes.contentContainer}>
           <div className={classes.content}>
             <MainDashboard detailList={details} />
-        
           </div>
         </div>
       </div>

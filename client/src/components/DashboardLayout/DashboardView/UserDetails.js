@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 import {
   Box,
   Divider,
@@ -7,126 +6,83 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  TableContainer,
-  makeStyles
+  TableContainer
 } from "@material-ui/core";
 
-
-
-
-const useStyles = makeStyles(() => ({
-  root: {
-    height: "100%"
-  },
-  actions: {
-    justifyContent: "flex-end"
-  }
-}));
-
-const UserDetails= ({ detailList,className, setCounter, ...rest }) => {
-
-  const [isLoading, setIsLoading] = useState(false);
-  
-  
- 
-  
-
-  return  (
-  <>
-    
+const UserDetails = ({ detailList }) => {
+  return (
+    <>
       <Divider />
-      
-        <Box>
-       
-        <TableContainer component={Box} style={{marginTop:'20px'}}>
-        <Table>
-         
-          <TableBody>
-        
-              <TableRow >
+      <Box>
+        <TableContainer component={Box} style={{ marginTop: "20px" }}>
+          <Table>
+            <TableBody>
+              <TableRow>
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
-               
-                    {"Name"}
-              
+                  {"Name"}
                 </TableCell>
-              
+
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
-                 {detailList.name}
+                  {detailList.name}
                 </TableCell>
               </TableRow>
-              <TableRow >
+              <TableRow>
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
-               
-                    {"ID"}
-              
+                  {"ID"}
                 </TableCell>
-              
+
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
-                 {detailList.studentID}
+                  {detailList.studentID}
                 </TableCell>
               </TableRow>
-              <TableRow >
+              <TableRow>
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
-               
-                    {"Email"}
-              
+                  {"Email"}
                 </TableCell>
-              
+
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
-                 {detailList.email}
+                  {detailList.email}
                 </TableCell>
               </TableRow>
-              <TableRow >
+              <TableRow>
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
-               
-                    {"Coin Balance"}
-              
+                  {"Wallet Balance"}
                 </TableCell>
-              
+
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
-                 {detailList.walletBalance}
+                  {detailList.walletBalance}
                 </TableCell>
               </TableRow>
-              <TableRow >
+              <TableRow>
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
-               
-                    {"Degree"}
-              
+                  {"Degree"}
                 </TableCell>
-              
+
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
-                 {detailList.degree}
+                  {detailList.degree}
                 </TableCell>
               </TableRow>
-              <TableRow >
+              <TableRow>
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
-               
-                    {"Credentials"}
-              
+                  {"Credentials"}
                 </TableCell>
-              
+
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
-                <a
-                    href={detailList.credentialsURL}  
-                target="_blank"
+                  <a
+                    href={detailList.credentialsURL}
+                    target="_blank"
                     rel="noopener noreferrer"
                   >
                     Click here to view encrypted credentials
                   </a>
-                
                 </TableCell>
               </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Box>
-   </> 
-  
+    </>
   );
 };
 
-UserDetails.propTypes = {
-  className: PropTypes.string
-};
-
-export default UserDetails
+export default UserDetails;

@@ -51,7 +51,6 @@ export const sendOTP = ({ dispatch, email, type }) => {
     });
 };
 
-
 export const register = async ({ dispatch, body, userType }) => {
   try {
     const res = await axios.post(BASE_URL + `/${userType}/register`, {

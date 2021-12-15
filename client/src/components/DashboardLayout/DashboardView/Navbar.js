@@ -1,6 +1,4 @@
-import React, { useEffect } from "react";
-import { Link as RouterLink, useLocation } from "react-router-dom";
-import PropTypes from "prop-types";
+import React from "react";
 import {
   Avatar,
   Box,
@@ -10,35 +8,11 @@ import {
   Hidden,
   List,
   Typography,
-  makeStyles,
-  useTheme
+  makeStyles
 } from "@material-ui/core";
-import {
-  User,
-  GitHub,
-  Linkedin,
-  Twitter
-} from "react-feather";
-
-import { useAuthState } from "../../../context/AuthContext";
-const items = [
-  {
-    icon: GitHub,
-    title: "GitHub"
-  },
-  {
-    icon: Linkedin,
-    title: "LinkedIn"
-  },
-  {
-    icon: Twitter,
-    title: "Twitter"
-  }
-];
-
+import { User, GitHub, Linkedin, Twitter } from "react-feather";
 
 const useStyles = makeStyles((theme) => ({
-  
   item: {
     display: "flex",
     paddingTop: 0,
@@ -55,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     marginRight: theme.spacing(1),
-    color:  theme.palette.primary.main
+    color: theme.palette.primary.main
   },
   title: {
     marginRight: "auto"
@@ -84,60 +58,54 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     width: 64,
     height: 64,
-    backgroundColor: theme.palette.primary.main,
-
+    backgroundColor: theme.palette.primary.main
   }
 }));
 
-const NavBar = ({ detailList,onMobileClose, openMobile, setContents }) => {
+const NavBar = ({ detailList, onMobileClose, openMobile }) => {
   const classes = useStyles();
-  const { user } = useAuthState();
-const theme=useTheme();
-console.log("=============");
-console.log(detailList);
   const content = (
     <Box height="100%" display="flex" flexDirection="column">
       <Box alignItems="center" display="flex" flexDirection="column" p={2}>
-        <Avatar className={classes.avatar} src={User}  />
+        <Avatar className={classes.avatar} src={User} />
         <Typography className={classes.name} color="textPrimary" variant="h5">
-        {detailList.name}
+          {detailList.name}
         </Typography>
       </Box>
       <Divider />
       <Box p={2}>
-        <List> 
-          {detailList.github!="" &&
-             <Button
-               activeClassName={classes.active}
-               className={classes.button}
-               href={detailList.github}
-             >
-               { <GitHub className={classes.icon} size="20" />}
-               <span className={classes.title}>Github</span>
-             </Button>
-              }
-         
-         {detailList.github!="" && <Button
-               activeClassName={classes.active}
-               className={classes.button}
-               href={detailList.linkedin}
-             >
-             { <Linkedin className={classes.icon} size="20" />} 
-               <span className={classes.title}>LinkedIn</span>
-             </Button>
-}
-{detailList.github!="" &&
-             <Button
-               activeClassName={classes.active}
-               className={classes.button}
-               href={detailList.twitter}
-             >
-               { <Twitter className={classes.icon} size="20" />}
-               <span className={classes.title}>Twitter</span>
-             </Button>
-}
-         
+        <List>
+          {detailList.github && (
+            <Button
+              activeClassName={classes.active}
+              className={classes.button}
+              href={detailList.github}
+            >
+              {<GitHub className={classes.icon} size="20" />}
+              <span className={classes.title}>Github</span>
+            </Button>
+          )}
 
+          {detailList.github && (
+            <Button
+              activeClassName={classes.active}
+              className={classes.button}
+              href={detailList.linkedin}
+            >
+              {<Linkedin className={classes.icon} size="20" />}
+              <span className={classes.title}>LinkedIn</span>
+            </Button>
+          )}
+          {detailList.github && (
+            <Button
+              activeClassName={classes.active}
+              className={classes.button}
+              href={detailList.twitter}
+            >
+              {<Twitter className={classes.icon} size="20" />}
+              <span className={classes.title}>Twitter</span>
+            </Button>
+          )}
         </List>
       </Box>
       <Box flexGrow={1} />
@@ -169,17 +137,6 @@ console.log(detailList);
       </Hidden>
     </>
   );
-};
-
-NavBar.propTypes = {
-  onMobileClose: PropTypes.func,
-  openMobile: PropTypes.bool,
-  setContents: PropTypes.func
-};
-
-NavBar.defaultProps = {
-  onMobileClose: () => {},
-  openMobile: false
 };
 
 export default NavBar;

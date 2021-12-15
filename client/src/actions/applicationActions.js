@@ -2,17 +2,16 @@ import axios from "axios";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
-export const getStudentRank = async ({ id,token }) => {
-
+export const getStudentRank = async ({ id, token }) => {
   try {
     const res = await axios.get(BASE_URL + `/student/${id}/rank`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
     });
-    console.log(res.data);
+
     return {
-      data: res.data.message,
+      data: res.data.rank,
       status: res.status
     };
   } catch (err) {
@@ -21,7 +20,7 @@ export const getStudentRank = async ({ id,token }) => {
       status: err.response.status
     };
   }
-}
+};
 export const getApplicationDetails = async ({ id, token }) => {
   try {
     const res = await axios.get(BASE_URL + `/applications/${id}`, {
@@ -136,17 +135,11 @@ export const verifyApplication = async ({ body, token }) => {
   }
 };
 
-export const approveApplication = async ({
-  title,
-  date,
-  reward,
-  id,
-  token
-}) => {
+export const approveApplication = async ({ reward, id, token }) => {
   try {
     const res = await axios.post(
       BASE_URL + `/applications/${id}/approve`,
-      { title, date, reward },
+      { reward },
       {
         headers: {
           Authorization: `Bearer ${token}`
