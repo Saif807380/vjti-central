@@ -15,15 +15,15 @@ module.exports = {
           error: "No file uploaded"
         });
       }
+      console.log(req.body);
       const existingApplication = await Application.findOne({
         title: req.body.title,
         studentID: req.body.studentID,
-        startDate: req.body.startDate
+        domainAchievement: req.body.domainAchievement
       });
       if (existingApplication) {
         return res.status(400).json({
-          error:
-            "An application with the same combination of Student ID, title and start date already exists"
+          error: "An application for this achievement already exists"
         });
       }
       const blob = bucket.file(req.file.originalname);
@@ -132,7 +132,8 @@ module.exports = {
       if (!student) {
         return res.status(404).json({ error: "Invalid Student ID" });
       }
-
+      student.coinsAchieved += reward;
+      await student.save();
       console.log(reward, student.publicKey);
 
       const response = await axios.post(
@@ -174,12 +175,10 @@ module.exports = {
       );
 
       if (response_txn.status !== 200) {
-        return res
-          .status(500)
-          .json({
-            error:
-              "An error occurred while transfering the reward. Invalid Transaction on VJChain"
-          });
+        return res.status(500).json({
+          error:
+            "An error occurred while transfering the reward. Invalid Transaction on VJChain"
+        });
       }
       // await Record.create({
       //   applicationID: req.params.id,

@@ -127,6 +127,33 @@ exports.getAllStudents = async (req, res) => {
   }
 };
 
+exports.getStudentRank = async (req, res) => {
+  try {
+    const users = await Student.find({});
+    users.sort((a, b) => b.coinsAchieved - a.coinsAchieved);
+
+    for (let i = 0; i < users.length; i++) {
+      let totalPoints = users[i].coinsAchieved;
+      let usersWithRank = users.filter(
+        (user) => user.coinsAchieved === totalPoints
+      );
+      for (let user of usersWithRank) {
+        user.rank = i + 1;
+        // if (user._id == req.params.id) {
+        //   return res.status(200).json({ message: user.rank });
+        // }
+        await user.save();
+      }
+      i += usersWithRank.length - 1;
+    }
+
+    const rank = await Student.findById(req.params.id).select("rank").lean();
+    return res.status(200).json({ rank: rank.rank });
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
+
 exports.getStudent = async (req, res) => {
   try {
     let student = await Student.findById(req.params.studentID);
@@ -156,6 +183,8 @@ exports.getStudent = async (req, res) => {
       department: student.department,
       year: student.admissionYear,
       degree: student.degree,
+      coinsAchieved: student.coinsAchieved,
+      rank: student.rank,
       walletBalance: response.data,
       credentialsURL: student.credentialsURL
     });
