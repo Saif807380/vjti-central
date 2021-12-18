@@ -6,73 +6,73 @@ const SignTransaction = require("../utilities/SignTransaction");
 const bucket = require("../config/firebase");
 const axios = require("axios");
 const path = require("path");
-const pdfparse=require("pdf-parse");
-var removeDiacritics = require('diacritics').remove;
-const removePunctuation = require('remove-punctuation');
-
+const pdfparse = require("pdf-parse");
+var removeDiacritics = require("diacritics").remove;
+const removePunctuation = require("remove-punctuation");
 
 //All IDs are default mongo provided IDs
 module.exports = {
   async applyForReward(req, res) {
     try {
-
-      var ocrText;
+      let ocrText;
       if (!req.file) {
         return res.status(400).json({
           error: "No file uploaded"
         });
       }
-      
-      pdfparse(req.file.buffer).then(async function(data){
-            ocrText=removePunctuation(removeDiacritics(data.text.toLowerCase().split("\n").join("").split(" ").join("")));
-            console.log("OCR TEXT");
-            console.log(ocrText);
-            const existingApplication = await Application.findOne({
-              ocrText: req.body.studentID+ocrText,
-              studentID: req.body.studentID
-            });
-            if (existingApplication) {
-              return res.status(400).json({
-                error: "An application for this achievement already exists"
-              });
-            }
 
-      const fileName = `${path.parse(req.file.originalname).name}_${
-        req.body.studentID
-      }_${Date.now()}`;
-      const blob = bucket.file(fileName);
-      const fileUrl = `https://firebasestorage.googleapis.com/v0/b/${
-        bucket.name
-      }/o/${encodeURI(blob.name)}?alt=media`;
-      console.log(fileUrl);
-      // Create writable stream and specifying file mimetype
-      const blobWriter = blob.createWriteStream({
-        metadata: {
-          contentType: req.file.mimetype
+      pdfparse(req.file.buffer).then(async function (data) {
+        ocrText = removePunctuation(
+          removeDiacritics(
+            data.text.toLowerCase().split("\n").join("").split(" ").join("")
+          )
+        );
+        const existingApplication = await Application.findOne({
+          ocrText: ocrText,
+          studentID: req.body.studentID
+        });
+        if (existingApplication) {
+          return res.status(400).json({
+            error: "An application for this achievement already exists"
+          });
         }
-      });
-      console.log(blobWriter);
-      blobWriter.on("error", async (err) =>
-        res.status(500).json({ error: err.message })
-      );
-      blobWriter.end(req.file.buffer);
 
-      const application = await Application.create({
-        ...req.body,
-        ocrText: req.body.studentID+ocrText,
-        files: [fileUrl]
-      });
+        const fileName = `${path.parse(req.file.originalname).name}_${
+          req.body.studentID
+        }_${Date.now()}`;
+        const blob = bucket.file(fileName);
+        const fileUrl = `https://firebasestorage.googleapis.com/v0/b/${
+          bucket.name
+        }/o/${encodeURI(blob.name)}?alt=media`;
 
-      await Student.findByIdAndUpdate(req.body.studentID, {
-        $push: { applications: application }
+        // Create writable stream and specifying file mimetype
+        const blobWriter = blob.createWriteStream({
+          metadata: {
+            contentType: req.file.mimetype
+          }
+        });
+
+        blobWriter.on("error", async (err) =>
+          res.status(500).json({ error: err.message })
+        );
+        blobWriter.end(req.file.buffer);
+
+        const application = await Application.create({
+          ...req.body,
+          ocrText: ocrText,
+          files: [fileUrl]
+        });
+
+        await Student.findByIdAndUpdate(req.body.studentID, {
+          $push: { applications: application }
+        });
+        await Faculty.findByIdAndUpdate(req.body.facultyID, {
+          $push: { applications: application }
+        });
+        return res.status(201).json({
+          message: "Application for reward created, status pending"
+        });
       });
-      await Faculty.findByIdAndUpdate(req.body.facultyID, {
-        $push: { applications: application }
-      });
-      return res.status(201).json({
-        message: "Application for reward created, status pending"
-      });
-    })
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }

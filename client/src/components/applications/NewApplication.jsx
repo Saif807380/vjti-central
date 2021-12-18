@@ -347,6 +347,7 @@ const NewApplication = () => {
                   type="file"
                   name="file"
                   id="file"
+                  accept="application/pdf"
                   style={{ display: "none" }}
                   onChange={(e) => setFile(e.target.files[0])}
                 />
