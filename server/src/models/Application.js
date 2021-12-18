@@ -77,6 +77,10 @@ const ApplicationSchema = new Schema(
       type: Number,
       required: false,
       default: 0
+    },
+    ocrText: {
+      type: String,
+      required: true
     }
   },
   { timestamps: true }
