@@ -99,7 +99,10 @@ const Register = () => {
     passphrase: ""
   });
   
-  const branchMap = {"BTech": constants.BTECH, "MTech": constants.MTECH, "MCA": constants.MCA, "Diploma": constants.DIPLOMA};
+  const branchMap = {"BTech": constants.BTECH, 
+                     "MTech": constants.MTECH, 
+                     "MCA": constants.MCA, 
+                     "Diploma": constants.DIPLOMA};
 
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
