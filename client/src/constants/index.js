@@ -43,6 +43,20 @@ const constants = {
 
   DEGREE: ["BTech", "MTech", "MCA", "Diploma"],
   DOMAINS: ["Hackathon", "Competition", "Research Paper", "Other"],
+  DEPARTMENTS: [
+    "Civil & Environmental Engineering",
+    "Computer Engineering and Information Technology",
+    "Electrical Engineering",
+    "Mechanical Engineering",
+    "Production Engineering",
+    "Structural Engineering",
+    "Textile Manufacturing",
+    "Humanities & Management",
+    "Mathematics",
+    "Physics",
+    "Technical & Applied Chemistry",
+    "MCA"
+  ],
   STEPS: {
     STUDENTS: [
       "Register yourself with your public key or generate a new key pair",

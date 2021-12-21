@@ -285,9 +285,9 @@ const Register = () => {
                 onChange={handleFaculty}
                 label="Department"
               >
-                {constants.BRANCHES.map((branch) => (
-                  <MenuItem key={branch} value={branch}>
-                    {branch}
+                {constants.DEPARTMENTS.map((dept) => (
+                  <MenuItem key={dept} value={dept}>
+                    {dept}
                   </MenuItem>
                 ))}
               </Select>
