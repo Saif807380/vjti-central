@@ -7,7 +7,7 @@ const constants = {
     "BTech Mechanical Engineering",
     "BTech Civil Engineering",
     "BTech Textile Technology",
-    "BTech Production Engineering",  
+    "BTech Production Engineering"
   ],
 
   MTECH: [
@@ -29,9 +29,9 @@ const constants = {
     "MTech Civil Engineering (Construction Management)",
     "MTech Textile Technology"
   ],
-  
+
   MCA: ["MCA"],
-  
+
   DIPLOMA: [
     "Diploma in Electrical Engineering",
     "Diploma in Electronics Engineering",
