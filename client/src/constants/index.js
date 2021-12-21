@@ -1,14 +1,46 @@
 const constants = {
-  BRANCHES: [
-    "Computer Engineering",
-    "Information Technology",
-    "Electronics",
-    "EXTC",
-    "Mechanical Engineering",
-    "Civil Engineering",
-    "Textile Engineering",
-    "Production Engineering"
+  BTECH: [
+    "BTech Computer Engineering",
+    "BTech Information Technology",
+    "BTech Electronics Engineering",
+    "BTech Electronics & Telecommunication Engineering",
+    "BTech Mechanical Engineering",
+    "BTech Civil Engineering",
+    "BTech Textile Technology",
+    "BTech Production Engineering"
   ],
+
+  MTECH: [
+    "MTech Computer Engineering",
+    "MTech Computer Engineering (NIMS)",
+    "MTech Computer Engineering (SE)",
+    "MTech Electrical Engineering (Control Systems)",
+    "MTech Electrical Engineering (Power Systems)",
+    "MTech Electronics Engineering",
+    "MTech Electronics & Telecommunication Engineering",
+    "MTech Mechanical Engineering (Machine Design)",
+    "MTech Mechanical Engineering (Automobile Engineering)",
+    "MTech Mechanical Engineering (CAD/CAM and Automation)",
+    "MTech Mechanical Engineering (Thermal Engineering)",
+    "MTech Production Engineering (Production Technology)",
+    "MTech Production Engineering (Project Management)",
+    "MTech Civil Engineering (Structural Engineering)",
+    "MTech Civil Engineering (Environmental Engineering)",
+    "MTech Civil Engineering (Construction Management)",
+    "MTech Textile Technology"
+  ],
+
+  MCA: ["MCA"],
+
+  DIPLOMA: [
+    "Diploma in Electrical Engineering",
+    "Diploma in Electronics Engineering",
+    "Diploma in Mechanical Engineering",
+    "Diploma in Civil Engineering",
+    "Diploma in Textile Manufacturing",
+    "Diploma in Chemical Engineering"
+  ],
+
   DEGREE: ["BTech", "MTech", "MCA", "Diploma"],
   DOMAINS: ["Hackathon", "Competition", "Research Paper", "Other"],
   STEPS: {

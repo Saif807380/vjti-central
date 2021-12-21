@@ -99,6 +99,13 @@ const Register = () => {
     passphrase: ""
   });
 
+  const branchMap = {
+    BTech: constants.BTECH,
+    MTech: constants.MTECH,
+    MCA: constants.MCA,
+    Diploma: constants.DIPLOMA
+  };
+
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -388,29 +395,33 @@ const Register = () => {
                     <FormHelperText>{errors.admissionYear}</FormHelperText>
                   </FormControl>
                 </Grid>
-                <FormControl
-                  variant="outlined"
-                  required
-                  className={classes.formControl}
-                  error={errors.department.length !== 0}
-                >
-                  <InputLabel id="department-label">Department</InputLabel>
-                  <Select
-                    labelId="department-label"
-                    id="department"
-                    name="department"
-                    value={student.department}
-                    onChange={handleStudent}
-                    label="Department"
-                  >
-                    {constants.BRANCHES.map((branch) => (
-                      <MenuItem key={branch} value={branch}>
-                        {branch}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText>{errors.department}</FormHelperText>
-                </FormControl>
+                {student.degree && (
+                  <>
+                    <FormControl
+                      variant="outlined"
+                      required
+                      className={classes.formControl}
+                      error={errors.department.length !== 0}
+                    >
+                      <InputLabel id="department-label">Branch</InputLabel>
+                      <Select
+                        labelId="department-label"
+                        id="department"
+                        name="department"
+                        value={student.department}
+                        onChange={handleStudent}
+                        label="Branch"
+                      >
+                        {branchMap[student.degree].map((branch) => (
+                          <MenuItem key={branch} value={branch}>
+                            {branch}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      <FormHelperText>{errors.department}</FormHelperText>
+                    </FormControl>
+                  </>
+                )}
               </Grid>
               <FormControlLabel
                 style={{ marginBottom: "10px", color: "#757575" }}
