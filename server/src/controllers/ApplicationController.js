@@ -7,8 +7,9 @@ const bucket = require("../config/firebase");
 const axios = require("axios");
 const path = require("path");
 const pdfparse = require("pdf-parse");
-var removeDiacritics = require("diacritics").remove;
+const removeDiacritics = require("diacritics").remove;
 const removePunctuation = require("remove-punctuation");
+const stringSimilarity = require("string-similarity");
 
 //All IDs are default mongo provided IDs
 module.exports = {
@@ -27,16 +28,20 @@ module.exports = {
             data.text.toLowerCase().split("\n").join("").split(" ").join("")
           )
         );
-        const existingApplication = await Application.findOne({
-          ocrText: ocrText,
+        const existingApplication = await Application.find({
           studentID: req.body.studentID
         });
-        if (existingApplication) {
-          return res.status(400).json({
+        console.log(existingApplication);
+        for(var i=0;i<existingApplication.length;i++){
+          var result=stringSimilarity.compareTwoStrings(existingApplication[i].ocrText,ocrText);
+          console.log(result);
+          if(result>0.9){
+            return res.status(400).json({
             error: "An application for this achievement already exists"
           });
+          }
         }
-
+     
         const fileName = `${path.parse(req.file.originalname).name}_${
           req.body.studentID
         }_${Date.now()}`;
@@ -69,10 +74,12 @@ module.exports = {
         await Faculty.findByIdAndUpdate(req.body.facultyID, {
           $push: { applications: application }
         });
+      
         return res.status(201).json({
           message: "Application for reward created, status pending"
         });
       });
+    
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }

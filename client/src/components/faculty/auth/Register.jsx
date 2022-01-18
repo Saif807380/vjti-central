@@ -24,6 +24,8 @@ import FormField from "../../../components/FormField";
 import constants from "../../../constants";
 import { register } from "../../../actions/authActions";
 import { REQUEST_AUTH, AUTH_ERROR } from "../../../reducers/types";
+import { sendOTP } from "../../../actions/authActions";
+import OtpPageFaculty from "../../common/inputOtpFaculty";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,7 +65,7 @@ const Register = () => {
   const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
+  const [formData, setFormData] = useState(null);
   const [faculty, setFaculty] = useState({
     facultyID: "",
     name: "",
@@ -132,12 +134,26 @@ const Register = () => {
         ...prevErrors,
         email: "* Email can't be Empty"
       }));
-    } else if (!faculty.email.includes(".vjti.ac.in")) {
+    } else if (!faculty.email.includes("vjti.ac.in")) {
       formIsValid = false;
       updateErrors((prevErrors) => ({
         ...prevErrors,
         email: "* Please use VJTI Email ID only"
       }));
+    } else {
+      let isFacultyEmail = false;
+      for (let i = 0; i < constants.FACULTY_EMAILS.length; i++) {
+        if (constants.FACULTY_EMAILS[i] == faculty.email) {
+          isFacultyEmail = true;
+        }
+      }
+      if (!isFacultyEmail) {
+        formIsValid = false;
+        updateErrors((prevErrors) => ({
+          ...prevErrors,
+          email: "* Please enter a valid Faculty email ID only"
+        }));
+      }
     }
     if (faculty.password.length < 8) {
       formIsValid = false;
@@ -174,24 +190,42 @@ const Register = () => {
     dispatch({ type: REQUEST_AUTH });
     event.preventDefault();
     if (isFormValid()) {
-      register({ dispatch, body: faculty, userType: "faculty" }).then((res) => {
-        if (res.error) {
-          setSeverity("error");
-          setMessage(res.error);
-          setOpen(true);
-        } else {
-          setSeverity("success");
-          setMessage("You have successfully registered.");
-          setOpen(true);
-          history.push(`/faculty/login`);
+
+      sendOTP({ dispatch, email: faculty.email, type: "Register" }).then(
+        (res) => {
+          if (res.status === 200) {
+            setFormData({
+              faculty,
+              hash: res.data.hash
+            });
+          } else {
+            setSeverity("error");
+            setMessage(res.error);
+            setOpen(true);
+          }
         }
-      });
+      );
+
+      // register({ dispatch, body: faculty, userType: "faculty" }).then((res) => {
+      //   if (res.error) {
+      //     setSeverity("error");
+      //     setMessage(res.error);
+      //     setOpen(true);
+      //   } else {
+      //     setSeverity("success");
+      //     setMessage("You have successfully registered.");
+      //     setOpen(true);
+      //     history.push(`/faculty/login`);
+      //   }
+      // });
     }
     dispatch({ type: AUTH_ERROR });
   };
 
   return loading ? (
     <Spinner />
+  ) : formData ? (
+    <OtpPageFaculty type="Register" values={formData} />
   ) : (
     <Box
       className={classes.root}
