@@ -158,13 +158,19 @@ module.exports = {
       student.coinsAchieved += reward;
       await student.save();
       console.log(reward, student.publicKey);
+      
+      let msg = {
+        'appln_id': req.params.id,
+        'status': 'Approved'
+      }
 
       const response = await axios.post(
         process.env.VJ_CHAIN_NODE_URL + "/makeTransaction",
         {
           sender_public_key: process.env.FACULTY_PUBLIC_KEY,
           receiver_public_key: student.publicKey,
-          bounty: reward
+          bounty: reward,
+          message: JSON.stringify(msg)
         },
         {
           headers: {
