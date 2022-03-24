@@ -1,4 +1,9 @@
 const constants = {
+  FACULTY_EMAILS:["director@vjti.ac.in",
+   "faculty@ce.vjti.ac.in",
+   "pamantry_b18@ce.vjti.ac.in",
+   "msdesai_b18@ce.vjti.ac.in"
+  ],
   BTECH: [
     "BTech Computer Engineering",
     "BTech Information Technology",

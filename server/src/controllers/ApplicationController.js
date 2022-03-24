@@ -7,8 +7,9 @@ const bucket = require("../config/firebase");
 const axios = require("axios");
 const path = require("path");
 const pdfparse = require("pdf-parse");
-var removeDiacritics = require("diacritics").remove;
+const removeDiacritics = require("diacritics").remove;
 const removePunctuation = require("remove-punctuation");
+const stringSimilarity = require("string-similarity");
 
 //All IDs are default mongo provided IDs
 module.exports = {
@@ -27,16 +28,20 @@ module.exports = {
             data.text.toLowerCase().split("\n").join("").split(" ").join("")
           )
         );
-        const existingApplication = await Application.findOne({
-          ocrText: ocrText,
+        const existingApplications = await Application.find({
           studentID: req.body.studentID
         });
-        if (existingApplication) {
-          return res.status(400).json({
+        
+        for(let i=0;i<existingApplications.length;i++){
+          const result=stringSimilarity.compareTwoStrings(existingApplications[i].ocrText,ocrText);
+      
+          if(result>0.9){
+            return res.status(400).json({
             error: "An application for this achievement already exists"
           });
+          }
         }
-
+     
         const fileName = `${path.parse(req.file.originalname).name}_${
           req.body.studentID
         }_${Date.now()}`;
@@ -69,10 +74,12 @@ module.exports = {
         await Faculty.findByIdAndUpdate(req.body.facultyID, {
           $push: { applications: application }
         });
+      
         return res.status(201).json({
           message: "Application for reward created, status pending"
         });
       });
+    
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }
@@ -112,25 +119,7 @@ module.exports = {
     }
   },
 
-  async verifyApplication(req, res) {
-    try {
-      const record = await Record.findOne({
-        studentID: req.body.studentID,
-        title: req.body.title,
-        date: req.body.date
-      });
-
-      if (!record) {
-        return res.status(200).json({ message: "Verification Successful" });
-      } else {
-        return res.status(200).json({ message: "Verification Unsuccessful" });
-      }
-    } catch (e) {
-      return res.status(500).json({ error: e.message });
-    }
-  },
-
-  async approveApplication(req, res) {
+   async approveApplication(req, res) {
     try {
       const reward = req.body.reward;
       let application = await Application.findById(req.params.id);
@@ -202,14 +191,7 @@ module.exports = {
             "An error occurred while transfering the reward. Invalid Transaction on VJChain"
         });
       }
-      // await Record.create({
-      //   applicationID: req.params.id,
-      //   studentID: application.studentID,
-      //   facultyID: application.facultyID,
-      //   domainAchievement: application.domainAchievement,
-      //   title: req.body.title,
-      //   date: req.body.date
-      // });
+     
 
       application.status = "Accepted";
       application.reward = reward;

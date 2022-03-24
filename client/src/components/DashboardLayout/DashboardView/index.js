@@ -31,7 +31,7 @@ const MainDashboard = ({ detailList }) => {
       </Grid>
       <Grid item lg={4} sm={6} xl={3} xs={12} container spacing={3}>
         <Grid item xs={12}>
-          <Total counter={rank} cardTitle="Institute Rank" />
+          <Total counter={rank} cardTitle="Your Rank in Institute" />
           <Grid item xs={12}>
             <Total
               counter={detailList.coinsAchieved}

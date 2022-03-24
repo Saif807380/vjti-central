@@ -41,6 +41,7 @@
     "remove-punctuation": "0.0.4",
     "secp256k1": "^4.0.2",
     "starkbank-ecdsa": "^1.1.4",
+    "string-similarity": "^4.0.4",
     "validator": "^13.6.0"
   },
   "devDependencies": {
