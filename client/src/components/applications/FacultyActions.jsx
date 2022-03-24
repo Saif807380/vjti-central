@@ -253,7 +253,7 @@ const FacultyActions = (props) => {
         </Dialog>
       </MuiPickersUtilsProvider>
       <Box display="flex" justifyContent={props.position}>
-        <Button id="faculty-button" variant="contained" color="primary" >
+      <Button variant="contained" color="primary" onClick={handleOpen}>
           Approve / Reject
         </Button>
       </Box>

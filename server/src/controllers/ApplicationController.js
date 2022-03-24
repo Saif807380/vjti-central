@@ -28,12 +28,12 @@ module.exports = {
             data.text.toLowerCase().split("\n").join("").split(" ").join("")
           )
         );
-        const existingApplication = await Application.find({
+        const existingApplications = await Application.find({
           studentID: req.body.studentID
         });
         
-        for(let i=0;i<existingApplication.length;i++){
-          const result=stringSimilarity.compareTwoStrings(existingApplication[i].ocrText,ocrText);
+        for(let i=0;i<existingApplications.length;i++){
+          const result=stringSimilarity.compareTwoStrings(existingApplications[i].ocrText,ocrText);
       
           if(result>0.9){
             return res.status(400).json({

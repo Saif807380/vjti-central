@@ -1,5 +1,3 @@
-import { CellWifi } from "@material-ui/icons"
-
 const constants = {
   FACULTY_EMAILS:["director@vjti.ac.in",
    "faculty@ce.vjti.ac.in",
