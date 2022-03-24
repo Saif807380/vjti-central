@@ -7,7 +7,7 @@ const authOtp = require("./controllers/AuthController");
  
 module.exports = (app) => {
   app.get("/api/check", (req, res) => {
-    res.json("Hello World");
+    res.json("Connected");
   });
 
   //Student Routes
@@ -67,11 +67,7 @@ module.exports = (app) => {
     auth.loginRequired,
     ApplicationController.getApplication
   );
-  app.post(
-    "/api/applications/verify",
-    auth.loginRequired,
-    ApplicationController.verifyApplication
-  );
+ 
   app.post(
     "/api/applications/:id/approve",
     auth.loginRequired,

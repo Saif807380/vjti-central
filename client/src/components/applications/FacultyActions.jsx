@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router-dom";
 import {
@@ -28,6 +28,7 @@ import {
 } from "../../actions/applicationActions";
 import { SnackbarContext } from "../../context/SnackbarContext";
 import constants from "../../constants";
+
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -102,6 +103,7 @@ const FacultyActions = (props) => {
   };
 
   return (
+
     <React.Fragment>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Dialog open={isOpen} onClose={handleClose}>
@@ -251,7 +253,7 @@ const FacultyActions = (props) => {
         </Dialog>
       </MuiPickersUtilsProvider>
       <Box display="flex" justifyContent={props.position}>
-        <Button variant="contained" color="primary" onClick={handleOpen}>
+        <Button id="faculty-button" variant="contained" color="primary" >
           Approve / Reject
         </Button>
       </Box>

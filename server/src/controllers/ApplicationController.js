@@ -31,10 +31,10 @@ module.exports = {
         const existingApplication = await Application.find({
           studentID: req.body.studentID
         });
-        console.log(existingApplication);
-        for(var i=0;i<existingApplication.length;i++){
-          var result=stringSimilarity.compareTwoStrings(existingApplication[i].ocrText,ocrText);
-          console.log(result);
+        
+        for(let i=0;i<existingApplication.length;i++){
+          const result=stringSimilarity.compareTwoStrings(existingApplication[i].ocrText,ocrText);
+      
           if(result>0.9){
             return res.status(400).json({
             error: "An application for this achievement already exists"
@@ -119,25 +119,7 @@ module.exports = {
     }
   },
 
-  async verifyApplication(req, res) {
-    try {
-      const record = await Record.findOne({
-        studentID: req.body.studentID,
-        title: req.body.title,
-        date: req.body.date
-      });
-
-      if (!record) {
-        return res.status(200).json({ message: "Verification Successful" });
-      } else {
-        return res.status(200).json({ message: "Verification Unsuccessful" });
-      }
-    } catch (e) {
-      return res.status(500).json({ error: e.message });
-    }
-  },
-
-  async approveApplication(req, res) {
+   async approveApplication(req, res) {
     try {
       const reward = req.body.reward;
       let application = await Application.findById(req.params.id);
@@ -209,14 +191,7 @@ module.exports = {
             "An error occurred while transfering the reward. Invalid Transaction on VJChain"
         });
       }
-      // await Record.create({
-      //   applicationID: req.params.id,
-      //   studentID: application.studentID,
-      //   facultyID: application.facultyID,
-      //   domainAchievement: application.domainAchievement,
-      //   title: req.body.title,
-      //   date: req.body.date
-      // });
+     
 
       application.status = "Accepted";
       application.reward = reward;

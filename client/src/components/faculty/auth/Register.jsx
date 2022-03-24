@@ -143,7 +143,7 @@ const Register = () => {
     } else {
       let isFacultyEmail = false;
       for (let i = 0; i < constants.FACULTY_EMAILS.length; i++) {
-        if (constants.FACULTY_EMAILS[i] == faculty.email) {
+        if (constants.FACULTY_EMAILS[i] === faculty.email) {
           isFacultyEmail = true;
         }
       }
@@ -206,18 +206,6 @@ const Register = () => {
         }
       );
 
-      // register({ dispatch, body: faculty, userType: "faculty" }).then((res) => {
-      //   if (res.error) {
-      //     setSeverity("error");
-      //     setMessage(res.error);
-      //     setOpen(true);
-      //   } else {
-      //     setSeverity("success");
-      //     setMessage("You have successfully registered.");
-      //     setOpen(true);
-      //     history.push(`/faculty/login`);
-      //   }
-      // });
     }
     dispatch({ type: AUTH_ERROR });
   };

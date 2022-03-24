@@ -65,20 +65,6 @@ const OtpPageFaculty = (props) => {
     const handleClick = () => {
         if (otp.length === 6) {
             if (props.type === "Register") {
-
-                // register({ dispatch, body: faculty, userType: "faculty" }).then((res) => {
-                //   if (res.error) {
-                //     setSeverity("error");
-                //     setMessage(res.error);
-                //     setOpen(true);
-                //   } else {
-                //     setSeverity("success");
-                //     setMessage("You have successfully registered.");
-                //     setOpen(true);
-                //     history.push(`/faculty/login`);
-                //   }
-                // });
-                console.log(props.values);
                 register({
                     dispatch,
                     body: { ...props.values, otp: otp },
