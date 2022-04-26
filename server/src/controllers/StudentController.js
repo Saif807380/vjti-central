@@ -18,53 +18,10 @@ exports.registerStudent = async (req, res) => {
         error: "Student with this ID or email already exists"
       });
     }
-    let publicKey = req.body.customPublicKey;
-    let privateKey = "";
-    let fileUrl = "";
-    delete req.body.customPublicKey;
-
-    if (!publicKey) {
-      let keys = WalletCreation.createWallet();
-      publicKey = keys.publicKey;
-      privateKey = keys.privateKey;
-
-      const data = {
-        name: req.body.name,
-        email: req.body.email,
-        publicKey: publicKey,
-        privateKey: privateKey,
-        pin: req.body.pin
-      };
-
-      const encrypted = EncryptCredentials.encryptCredentials(
-        data,
-        req.body.passphrase
-      );
-
-      const filename = String(req.body.studentID) + "_credentials.txt";
-      const blob = bucket.file(filename);
-      fileUrl = `https://firebasestorage.googleapis.com/v0/b/${
-        bucket.name
-      }/o/${encodeURI(blob.name)}?alt=media`;
-
-      const blobWriter = blob.createWriteStream({
-        metadata: {
-          contentType: "text/plain"
-        }
-      });
-      blobWriter.on("error", async (err) =>
-        res.status(500).json({ error: err.message + " blob" })
-      );
-      blobWriter.write(encrypted, () => {
-        console.log("written file contents");
-      });
-      blobWriter.end();
-    }
-
+  
     const newStudent = await Student.create({
       ...req.body,
-      publicKey: publicKey,
-      credentialsURL: fileUrl
+
     });
     const token = auth.signToken(newStudent._id);
     res.status(201).json({
@@ -72,10 +29,6 @@ exports.registerStudent = async (req, res) => {
       token,
       data: {
         userID: newStudent._id,
-        keys: {
-          publicKey: publicKey,
-          privateKey: privateKey
-        }
       }
     });
   } catch (e) {
@@ -87,14 +40,12 @@ exports.registerStudent = async (req, res) => {
 //Student Login
 exports.loginStudent = async (req, res) => {
   try {
-    const { email, password } = req.body;
-
-    const student = await Student.findOne({ email }).select("+password");
-
-    if (
-      !student ||
-      !(await student.correctPassword(password, student.password))
-    ) {
+    
+console.log(req.body.pubkey);
+    const student = await Student.findOne({publicKey: req.body.pubkey })
+console.log("Found")
+console.log(student)
+    if (!student) {
       return res.status(401).json({ error: "Incorrect email or password" });
     }
 
@@ -158,7 +109,7 @@ exports.getStudent = async (req, res) => {
   try {
     let student = await Student.findById(req.params.studentID);
     if (!student) return res.status(404).json({ error: "Invalid Student ID" });
-
+   
     const response = await axios.post(
       process.env.VJ_CHAIN_NODE_URL + "/checkBalance",
       {
@@ -174,7 +125,7 @@ exports.getStudent = async (req, res) => {
       return res.status(500).json({
         error: "An error occurred while fetching wallet balance from VJ Chain"
       });
-
+console.log(response);
     return res.status(200).json({
       name: student.name,
       studentID: student.studentID,

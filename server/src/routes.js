@@ -20,7 +20,6 @@ module.exports = (app) => {
   app.get("/api/student", auth.loginRequired, StudentController.getAllStudents);
   app.get(
     "/api/student/:id/applications",
-    auth.loginRequired,
     ApplicationController.getStudentApplications
   );
   app.get(

@@ -31,16 +31,14 @@ exports.registerFaculty = async (req, res) => {
 };
 
 //Faculty Login
+
 exports.loginFaculty = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    
+console.log(req.body.pubkey);
+    const faculty = await Faculty.findOne({publicKey: req.body.pubkey })
 
-    const faculty = await Faculty.findOne({ email }).select("+password");
-
-    if (
-      !faculty ||
-      !(await faculty.correctPassword(password, faculty.password))
-    ) {
+    if (!faculty) {
       return res.status(401).json({ error: "Incorrect email or password" });
     }
 

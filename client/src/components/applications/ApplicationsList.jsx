@@ -118,9 +118,10 @@ const ApplicationsList = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => {
-                  history.push("/student/applications/new");
-                }}
+                // onClick={() => {
+                //   history.push("/student/applications/new");
+                // }}
+                onClick={window.vjcoin.coinTransfer}
                 startIcon={<Add />}
               >
                 New Application

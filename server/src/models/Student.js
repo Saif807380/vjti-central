@@ -35,11 +35,7 @@ const student = new mongoose.Schema({
   },
   publicKey: {
     type: String,
-    default: "" // remove this after connecting to vj chain
-  },
-  credentialsURL: {
-    type: String,
-    default: ""
+  
   },
   rank: {
     type: Number,

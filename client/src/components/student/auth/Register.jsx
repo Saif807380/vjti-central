@@ -80,9 +80,7 @@ const Register = () => {
     department: "",
     degree: "",
     admissionYear: "",
-    customPublicKey: "",
-    pin: "",
-    passphrase: ""
+    publicKey: localStorage.getItem("pubkey")
   });
 
   const [errors, updateErrors] = useState({
@@ -94,9 +92,7 @@ const Register = () => {
     department: "",
     degree: "",
     admissionYear: "",
-    customPublicKey: "",
-    pin: "",
-    passphrase: ""
+
   });
 
   const branchMap = {
@@ -109,15 +105,11 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [showPin, setShowPin] = useState(false);
-  const [hasPubKey, setHasPubKey] = useState(false);
-
   const handleConfirmPassword = (e) => setConfirmPassword(e.target.value);
   const toggleShowPassword = () => setShowPassword(!showPassword);
   const toggleShowConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
-  const toggleShowPin = () => setShowPin(!showPin);
-  const handleHasPubKey = (e) => setHasPubKey(e.target.checked);
+
 
   const handleStudent = (e) => {
     setStudent((prevStudent) => ({
@@ -137,9 +129,6 @@ const Register = () => {
       department: "",
       degree: "",
       admissionYear: "",
-      customPublicKey: "",
-      pin: "",
-      passphrase: ""
     });
     if (student.studentID.length !== 9) {
       updateErrors((prevErrors) => ({
@@ -203,34 +192,6 @@ const Register = () => {
       }));
       formIsValid = false;
     }
-    if (hasPubKey && !student.customPublicKey.length) {
-      updateErrors((prevErrors) => ({
-        ...prevErrors,
-        customPublicKey: "* Please enter a valid public key"
-      }));
-      formIsValid = false;
-    }
-    if (!hasPubKey) {
-      if (
-        student.pin.length !== 4 ||
-        isNaN(student.pin) ||
-        +student.pin < 1000 ||
-        +student.pin > 9999
-      ) {
-        updateErrors((prevErrors) => ({
-          ...prevErrors,
-          pin: "* Please enter a valid 4-digit pin"
-        }));
-        formIsValid = false;
-      }
-      if (student.passphrase.length < 12) {
-        updateErrors((prevErrors) => ({
-          ...prevErrors,
-          passphrase: "* Passphrase should be at least 12 characters long"
-        }));
-        formIsValid = false;
-      }
-    }
 
     return formIsValid;
   };
@@ -259,6 +220,7 @@ const Register = () => {
     <OtpPage type="Register" values={formData} />
   ) : (
     <React.Fragment>
+
       <Box
         className={classes.root}
         display="flex"
@@ -269,7 +231,17 @@ const Register = () => {
         <Paper elevation={isSmallScreen ? 0 : 3} className={classes.paper}>
           <div style={{ marginTop: "24px" }}>
             <Typography variant="h5">Student Registration</Typography>
+
           </div>
+          <div style={{ marginTop: "24px" }}>
+            <Typography variant="h6">Generated Public Key: </Typography>
+
+          </div>
+          <div style={{ marginTop: "24px" }}>
+            <Typography variant="h6">Please fill in the other details to complete the process</Typography>
+          </div>
+
+
           <form className={classes.form} noValidate>
             <div className={classes.formInner}>
               <FormField
@@ -294,6 +266,7 @@ const Register = () => {
                 error={errors.email}
               />
               <FormField
+
                 label="Password"
                 name="password"
                 required={true}
@@ -423,7 +396,10 @@ const Register = () => {
                   </>
                 )}
               </Grid>
-              <FormControlLabel
+
+
+
+              {/* <FormControlLabel
                 style={{ marginBottom: "10px", color: "#757575" }}
                 control={
                   <Checkbox
@@ -477,7 +453,7 @@ const Register = () => {
                   multiline={true}
                   maxRows={Infinity}
                 />
-              )}
+              )} */}
               <Button
                 onClick={handleFormSubmit}
                 size="large"

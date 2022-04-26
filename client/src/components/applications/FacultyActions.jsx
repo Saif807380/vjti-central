@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FacultyActions = (props) => {
+  localStorage.setItem("studentpubkey", props.applicationData.studentID.publicKey)
   const history = useHistory();
   const classes = useStyles();
   const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
@@ -63,33 +64,42 @@ const FacultyActions = (props) => {
   };
 
   const handleApprove = async () => {
-    if (+reward <= 0) {
-      updateErrors((prevErrors) => ({
-        ...prevErrors,
-        reward: "Reward cannot be negative"
-      }));
-      return;
-    }
-    handleClose();
-    props.setLoading(true);
-    approveApplication({
-      id: props.applicationData._id,
-      token,
-      reward: +reward
-    }).then((res) => {
-      if (res.error) {
-        setSeverity("error");
-        setMessage(res.error);
-        setOpen(true);
-        return;
-      } else {
-        history.replace(`/faculty/applications/${props.applicationData._id}`);
-        setSeverity("success");
-        setMessage("Application approved. Reward will be mined shortly.");
-        setOpen(true);
+    localStorage.setItem("coins", reward);
+    window.vjcoin.coinTransfer();
+    let id = setInterval(frame, 1000);
+    function frame() {
+      if (localStorage.getItem("transactionstatus") === "success") {
+        approveApplication({
+          id: props.applicationData._id,
+          token,
+          reward: +reward
+        }).then((res) => {
+          if (res.error) {
+            setSeverity("error");
+            setMessage(res.error);
+            setOpen(true);
+            return;
+          } else {
+            history.replace(`/faculty/applications/${props.applicationData._id}`);
+            setSeverity("success");
+            setMessage("Application approved. Reward will be mined shortly.");
+            setOpen(true);
+          }
+          props.setLoading(false);
+        });
+        clearInterval(id);
+        handleClose();
+        props.setLoading(true);
       }
-      props.setLoading(false);
-    });
+    }
+    // if (+reward <= 0) {
+    //   updateErrors((prevErrors) => ({
+    //     ...prevErrors,
+    //     reward: "Reward cannot be negative"
+    //   }));
+    //   return;
+    // }
+
   };
 
   const handleReject = async () => {
@@ -253,7 +263,7 @@ const FacultyActions = (props) => {
         </Dialog>
       </MuiPickersUtilsProvider>
       <Box display="flex" justifyContent={props.position}>
-      <Button variant="contained" color="primary" onClick={handleOpen}>
+        <Button variant="contained" color="primary" onClick={handleOpen}>
           Approve / Reject
         </Button>
       </Box>

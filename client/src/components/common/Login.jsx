@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Login = (props) => {
   const classes = useStyles();
-  const { isAuthenticated, loading, userType } = useAuthState();
+  const { isAuthenticated, userType } = useAuthState();
   const dispatch = useAuthDispatch();
   const history = useHistory();
   const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
@@ -61,70 +61,84 @@ const Login = (props) => {
   const handleEmail = (e) => setEmail(e.target.value);
   const handlePassword = (e) => setPassword(e.target.value);
   const toggleShowPassword = () => setShowPassword(!showPassword);
+  const [loading, setLoading] = useState(false);
+
+
 
   const [errors, updateErrors] = useState({
     email: "",
     password: ""
   });
 
-  useEffect(() => {
-    if (isAuthenticated && userType === props.userType) {
-      history.push(`/${props.userType}/applications`);
-    }
-  }, [history, isAuthenticated, userType, props.userType]);
+  const handleGenerate = async (event) => {
+    console.log(localStorage.getItem("pubkey"));
+    if (localStorage.getItem("pubkey") === null) {
 
-  const isFormValid = () => {
-    let formIsValid = true;
-    if (!email) {
-      formIsValid = false;
-      updateErrors((prevErrors) => ({
-        ...prevErrors,
-        email: "* Email can't be Empty"
-      }));
-    } else if (!email.includes(".vjti.ac.in")) {
-      formIsValid = false;
-      updateErrors((prevErrors) => ({
-        ...prevErrors,
-        email: "* Please use VJTI Email ID only"
-      }));
-    } else {
-      updateErrors((prevErrors) => ({
-        ...prevErrors,
-        email: ""
-      }));
-    }
+      window.vjcoin.register();
+      event.preventDefault();
+      let id = setInterval(frame, 1000);
+      function frame() {
+        if (localStorage.getItem("pubkey") !== null) {
 
-    if (password.length < 8) {
-      formIsValid = false;
-      updateErrors((prevErrors) => ({
-        ...prevErrors,
-        password: "* Password too short"
-      }));
-    } else {
-      updateErrors((prevErrors) => ({
-        ...prevErrors,
-        password: ""
-      }));
-    }
+          history.replace(`/student/register`);
+          clearInterval(id);
+        }
+      }
+    } else
+      history.replace(`/student/register`);
 
-    return formIsValid;
+
+
   };
+  const handleLogin = async (event) => {
+    if (localStorage.getItem("pubkey") === null) {
 
-  const handleFormSubmit = (event) => {
-    dispatch({ type: REQUEST_AUTH });
-    event.preventDefault();
-    if (isFormValid()) {
+      window.vjcoin.login();
+      event.preventDefault();
+      let id = setInterval(frame, 1000);
+      function frame() {
+        if (localStorage.getItem("pubkey") !== null) {
+
+          const pubkey = localStorage.getItem("pubkey");
+          login({
+            dispatch,
+            pubkey,
+            rememberme: true,
+            userType: props.userType
+          }).then((res) => {
+            if (res.error) {
+              setSeverity("error");
+              setMessage(res.error);
+              event.preventDefault();
+              setOpen(true);
+            } else {
+              setSeverity("success");
+              setMessage("You have successfully logged in.");
+              setOpen(true);
+              history.push(`/${props.userType}/applications`);
+            }
+          });
+
+
+          clearInterval(id);
+        }
+      }
+    }
+    else {
+      event.preventDefault();
+      const pubkey = localStorage.getItem("pubkey");
       login({
         dispatch,
-        email,
-        password,
+        pubkey,
         rememberme: true,
         userType: props.userType
       }).then((res) => {
         if (res.error) {
           setSeverity("error");
           setMessage(res.error);
+
           setOpen(true);
+          event.preventDefault();
         } else {
           setSeverity("success");
           setMessage("You have successfully logged in.");
@@ -132,9 +146,16 @@ const Login = (props) => {
           history.push(`/${props.userType}/applications`);
         }
       });
+
+
     }
-    dispatch({ type: AUTH_ERROR });
   };
+
+  useEffect(() => {
+
+
+
+  }, []);
 
   return loading ? (
     <Spinner />
@@ -147,54 +168,40 @@ const Login = (props) => {
       alignItems="center"
     >
       <Paper elevation={3} className={classes.paper}>
-        <div style={{ marginTop: "24px" }}>
-          <Typography variant="h5">{props.name} Login</Typography>
-        </div>
+
         <form className={classes.form} noValidate>
-          <div className={classes.formInner}>
-            <FormField
-              label="Email"
-              name="email"
-              required={true}
-              onChange={handleEmail}
-              error={errors.email}
-            />
-            <FormField
-              label="Password"
-              name="password"
-              required={true}
-              onChange={handlePassword}
-              error={errors.password}
-              InputProps={{
-                type: showPassword ? "text" : "password",
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={toggleShowPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-            />
-            <div>
-              <Button
-                onClick={handleFormSubmit}
-                size="large"
-                color="primary"
-                type="submit"
-                fullWidth
-                variant="contained"
-              >
-                Login
-              </Button>
-            </div>
+
+          <div>
+
+            <Button
+              onClick={handleGenerate}
+              size="large"
+              color="primary"
+              type="submit"
+              fullWidth
+              variant="contained"
+            >
+              Are you a new user? Generate Key Pair
+            </Button>
+          </div>
+          <br>
+          </br>
+
+
+          <div>
+            <Button
+              onClick={handleLogin}
+              size="large"
+              color="primary"
+              type="submit"
+              fullWidth
+              variant="contained"
+            >
+              Import existing
+            </Button>
           </div>
         </form>
-        <Typography
+        {/* <Typography
           style={{ color: "#303F9E", fontSize: 15, marginBottom: "15px" }}
         >
           Don't have an account?
@@ -202,9 +209,9 @@ const Login = (props) => {
             {" "}
             Sign Up
           </Link>
-        </Typography>
+        </Typography> */}
       </Paper>
-    </Box>
+    </Box >
   );
 };
 

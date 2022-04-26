@@ -141,58 +141,7 @@ module.exports = {
       await student.save();
       console.log(reward, student.publicKey);
       
-      let msg = {
-        'appln_id': req.params.id,
-        'status': 'Approved'
-      }
-
-      const response = await axios.post(
-        process.env.VJ_CHAIN_NODE_URL + "/makeTransaction",
-        {
-          sender_public_key: process.env.FACULTY_PUBLIC_KEY,
-          receiver_public_key: student.publicKey,
-          bounty: reward,
-          message: JSON.stringify(msg)
-        },
-        {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      );
-
-      if (response.status !== 200) {
-        return res
-          .status(500)
-          .json({ error: "An error occurred while transfering the reward" });
-      }
-
-      //console.log(response.data);
-      tx_to_be_signed = response.data.sign_this;
-      tx_to_be_sent = response.data.send_this;
-      sig = SignTransaction.sign(tx_to_be_signed);
-
-      const response_txn = await axios.post(
-        process.env.VJ_CHAIN_NODE_URL + "/sendTransaction",
-        {
-          signature: sig,
-          transaction: tx_to_be_sent
-        },
-        {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        }
-      );
-
-      if (response_txn.status !== 200) {
-        return res.status(500).json({
-          error:
-            "An error occurred while transfering the reward. Invalid Transaction on VJChain"
-        });
-      }
-     
-
+    
       application.status = "Accepted";
       application.reward = reward;
       await application.save();

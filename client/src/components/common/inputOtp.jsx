@@ -80,12 +80,7 @@ const OtpPage = (props) => {
             setOpen(true);
           } else {
             setIsRegistered(true);
-            if (res.data.data.keys.privateKey) {
-              setKeys(res.data.data.keys);
-              setIsRegistered(true);
-            } else {
-              setIsRegistered(true);
-            }
+            history.push(`/student/applications`);
             setSeverity("success");
             setMessage("You have successfully registered.");
             setOpen(true);
@@ -101,7 +96,7 @@ const OtpPage = (props) => {
 
   return (
     <>
-      <Dialog open={isRegistered}>
+      {/* <Dialog open={isRegistered}>
         <DialogTitle>Key Pair</DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -128,7 +123,7 @@ const OtpPage = (props) => {
             Continue
           </Button>
         </DialogActions>
-      </Dialog>
+      </Dialog> */}
 
       <section id="otpSection">
         <div className="center_div">

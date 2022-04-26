@@ -24,6 +24,10 @@ const faculty = new mongoose.Schema({
     required: true,
     select: false
   },
+  publicKey: {
+    type: String,
+    default: "" // remove this after connecting to vj chain
+  },
   department: {
     type: String,
     required: true
