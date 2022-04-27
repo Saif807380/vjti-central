@@ -3,15 +3,10 @@ import { AUTH_SUCCESS, AUTH_ERROR } from "../reducers/types";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
 
-export const login = async ({
-  dispatch,
- pubkey,
- rememberme,
-  userType
-}) => {
+export const login = async ({ dispatch, pubkey, rememberme, userType }) => {
   try {
     const res = await axios.post(BASE_URL + `/${userType}/login`, {
-    pubkey
+      pubkey
     });
     dispatch({
       type: AUTH_SUCCESS,
@@ -78,6 +73,7 @@ export const getUser = async ({ id, token, userType }) => {
         Authorization: `Bearer ${token}`
       }
     });
+    console.log(res);
     return {
       data: res.data,
       status: res.status

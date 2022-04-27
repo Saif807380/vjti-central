@@ -91,8 +91,7 @@ const Register = () => {
     confirmPassword: "",
     department: "",
     degree: "",
-    admissionYear: "",
-
+    admissionYear: ""
   });
 
   const branchMap = {
@@ -109,7 +108,6 @@ const Register = () => {
   const toggleShowPassword = () => setShowPassword(!showPassword);
   const toggleShowConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
-
 
   const handleStudent = (e) => {
     setStudent((prevStudent) => ({
@@ -128,7 +126,7 @@ const Register = () => {
       confirmPassword: "",
       department: "",
       degree: "",
-      admissionYear: "",
+      admissionYear: ""
     });
     if (student.studentID.length !== 9) {
       updateErrors((prevErrors) => ({
@@ -220,7 +218,6 @@ const Register = () => {
     <OtpPage type="Register" values={formData} />
   ) : (
     <React.Fragment>
-
       <Box
         className={classes.root}
         display="flex"
@@ -231,16 +228,19 @@ const Register = () => {
         <Paper elevation={isSmallScreen ? 0 : 3} className={classes.paper}>
           <div style={{ marginTop: "24px" }}>
             <Typography variant="h5">Student Registration</Typography>
-
+          </div>
+          <div
+            style={{ padding: "24px", width: "100%", wordWrap: "break-word" }}
+          >
+            <Typography variant="h6">
+              Generated Public Key: {student.publicKey}{" "}
+            </Typography>
           </div>
           <div style={{ marginTop: "24px" }}>
-            <Typography variant="h6">Generated Public Key: </Typography>
-
+            <Typography variant="h6">
+              Please fill in the other details to complete the process
+            </Typography>
           </div>
-          <div style={{ marginTop: "24px" }}>
-            <Typography variant="h6">Please fill in the other details to complete the process</Typography>
-          </div>
-
 
           <form className={classes.form} noValidate>
             <div className={classes.formInner}>
@@ -266,7 +266,6 @@ const Register = () => {
                 error={errors.email}
               />
               <FormField
-
                 label="Password"
                 name="password"
                 required={true}
@@ -396,8 +395,6 @@ const Register = () => {
                   </>
                 )}
               </Grid>
-
-
 
               {/* <FormControlLabel
                 style={{ marginBottom: "10px", color: "#757575" }}
