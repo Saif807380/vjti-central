@@ -73,7 +73,8 @@ const Register = () => {
     password: "",
     department: "",
     position: "",
-    description: ""
+    description: "",
+    publicKey: localStorage.getItem("pubkey")
   });
 
   const [errors, updateErrors] = useState({
@@ -134,27 +135,29 @@ const Register = () => {
         ...prevErrors,
         email: "* Email can't be Empty"
       }));
-    } else if (!faculty.email.includes("vjti.ac.in")) {
-      formIsValid = false;
-      updateErrors((prevErrors) => ({
-        ...prevErrors,
-        email: "* Please use VJTI Email ID only"
-      }));
-    } else {
-      let isFacultyEmail = false;
-      for (let i = 0; i < constants.FACULTY_EMAILS.length; i++) {
-        if (constants.FACULTY_EMAILS[i] === faculty.email) {
-          isFacultyEmail = true;
-        }
-      }
-      if (!isFacultyEmail) {
-        formIsValid = false;
-        updateErrors((prevErrors) => ({
-          ...prevErrors,
-          email: "* Please enter a valid Faculty email ID only"
-        }));
-      }
     }
+    // else if (!faculty.email.includes("ce.vjti.ac.in")) {
+    //   formIsValid = false;
+    //   updateErrors((prevErrors) => ({
+    //     ...prevErrors,
+    //     email: "* Please use VJTI Email ID only"
+    //   }));
+    // }
+    // else {
+    //   let isFacultyEmail = false;
+    //   for (let i = 0; i < constants.FACULTY_EMAILS.length; i++) {
+    //     if (constants.FACULTY_EMAILS[i] === faculty.email) {
+    //       isFacultyEmail = true;
+    //     }
+    //   }
+    //   if (!isFacultyEmail) {
+    //     formIsValid = false;
+    //     updateErrors((prevErrors) => ({
+    //       ...prevErrors,
+    //       email: "* Please enter a valid Faculty email ID only"
+    //     }));
+    //   }
+    // }
     if (faculty.password.length < 8) {
       formIsValid = false;
       updateErrors((prevErrors) => ({

@@ -64,13 +64,14 @@ const Login = (props) => {
   const [loading, setLoading] = useState(false);
 
 
-
+  console.log(props);
   const [errors, updateErrors] = useState({
     email: "",
     password: ""
   });
 
   const handleGenerate = async (event) => {
+    console.log("Palak")
     console.log(localStorage.getItem("pubkey"));
     if (localStorage.getItem("pubkey") === null) {
 
@@ -79,16 +80,15 @@ const Login = (props) => {
       let id = setInterval(frame, 1000);
       function frame() {
         if (localStorage.getItem("pubkey") !== null) {
-
-          history.replace(`/student/register`);
           clearInterval(id);
+          console.log(userType);
+          history.push(`/${props.userType}/register`);
         }
       }
-    } else
-      history.replace(`/student/register`);
-
-
-
+    } else {
+      console.log(userType);
+      history.push(`/${props.userType}/register`);
+    }
   };
   const handleLogin = async (event) => {
     if (localStorage.getItem("pubkey") === null) {

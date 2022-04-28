@@ -136,7 +136,7 @@ console.log(response);
       degree: student.degree,
       coinsAchieved: student.coinsAchieved,
       rank: student.rank,
-      walletBalance: response.data,
+      walletBalance: 0,
       credentialsURL: student.credentialsURL
     });
   } catch (e) {

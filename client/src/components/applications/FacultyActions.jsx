@@ -68,7 +68,7 @@ const FacultyActions = (props) => {
     window.vjcoin.coinTransfer();
     let id = setInterval(frame, 1000);
     function frame() {
-      if (localStorage.getItem("transactionstatus") === "success") {
+      if (localStorage.getItem("status") === "success") {
         approveApplication({
           id: props.applicationData._id,
           token,
@@ -83,12 +83,13 @@ const FacultyActions = (props) => {
             history.replace(`/faculty/applications/${props.applicationData._id}`);
             setSeverity("success");
             setMessage("Application approved. Reward will be mined shortly.");
+            handleClose();
+            clearInterval(id);
             setOpen(true);
           }
           props.setLoading(false);
         });
-        clearInterval(id);
-        handleClose();
+
         props.setLoading(true);
       }
     }

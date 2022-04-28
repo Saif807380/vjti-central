@@ -80,11 +80,11 @@ const Header = () => {
     >
       {isAuthenticated ? (
         <div>
-          {userType === "student" && (
-            <MenuItem onClick={() => navigationHandler(`/${userType}/profile`)}>
-              <p>Profile</p>
-            </MenuItem>
-          )}
+
+          <MenuItem onClick={() => navigationHandler(`/${userType}/profile`)}>
+            <p>Profile</p>
+          </MenuItem>
+
           <MenuItem
             onClick={() => navigationHandler(`/${userType}/applications`)}
           >
@@ -127,19 +127,19 @@ const Header = () => {
           <div className={classes.sectionDesktop}>
             {isAuthenticated ? (
               <div>
-                {userType === "student" && (
-                  <Button
-                    onClick={() => navigationHandler(`/${userType}/profile`)}
-                    color="inherit"
-                    className={`${classes.navButton} ${classes.button}`}
-                    disableRipple
-                    disableFocusRipple
-                  >
-                    <Typography variant="body1" noWrap>
-                      Profile
-                    </Typography>
-                  </Button>
-                )}
+
+                <Button
+                  onClick={() => navigationHandler(`/${userType}/profile`)}
+                  color="inherit"
+                  className={`${classes.navButton} ${classes.button}`}
+                  disableRipple
+                  disableFocusRipple
+                >
+                  <Typography variant="body1" noWrap>
+                    Profile
+                  </Typography>
+                </Button>
+
                 <Button
                   onClick={() => navigationHandler(`/${userType}/applications`)}
                   color="inherit"

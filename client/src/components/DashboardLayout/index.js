@@ -43,24 +43,12 @@ const DashboardLayout = () => {
 
   useEffect(() => {
     setLoading(true);
-    if (userType === "student") {
+   
       getUser({ id: userID, token, userType }).then((fetchedStudents) => {
-        // const details = [
-        //   fetchedStudents.data["name"],
-        //   fetchedStudents.data["studentID"],
-        //   fetchedStudents.data["email"],
-        //   fetchedStudents.data["department"],
-        //   fetchedStudents.data["degree"],
-        //   fetchedStudents.data["year"],
-        //   fetchedStudents.data["coins"],
-        // ];
-        // console.log(details);
         setDetails(fetchedStudents.data);
         setLoading(false);
       });
-    } else {
-      setLoading(false);
-    }
+ 
   }, [token, userID, userType]);
 
   return loading ? (

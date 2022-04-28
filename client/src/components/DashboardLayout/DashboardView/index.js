@@ -12,6 +12,7 @@ const MainDashboard = ({ detailList }) => {
   const { userType, userID, token } = useAuthState();
 
   useEffect(() => {
+    if(userType == "student"){
     setIsLoading(true);
     getStudentRank({ id: userID, token }).then((res) => {
       if (!res.error) {
@@ -20,6 +21,7 @@ const MainDashboard = ({ detailList }) => {
       setIsLoading(false);
     });
     return () => setIsLoading(false);
+  }
   }, [token, userID, userType]);
 
   return isLoading ? (
@@ -29,9 +31,10 @@ const MainDashboard = ({ detailList }) => {
       <Grid item lg={8} md={12} xl={9} xs={12}>
         <UserDetails detailList={detailList} />
       </Grid>
+      {userType == "student" ?
       <Grid item lg={4} sm={6} xl={3} xs={12} container spacing={3}>
         <Grid item xs={12}>
-          <Total counter={rank} cardTitle="Your Rank in Institute" />
+        <Total counter={rank} cardTitle="Your Rank in Institute" />
           <Grid item xs={12}>
             <Total
               counter={detailList.coinsAchieved}
@@ -39,7 +42,7 @@ const MainDashboard = ({ detailList }) => {
             />
           </Grid>
         </Grid>
-      </Grid>
+      </Grid> : <></>}
     </Grid>
   );
 };
