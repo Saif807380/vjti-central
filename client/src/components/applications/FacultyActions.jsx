@@ -66,15 +66,13 @@ const FacultyActions = (props) => {
 
   const handleApprove = async () => {
 
-    localStorage.setItem("coins", reward);
-
-    window.vjcoin.coinTransfer(reward);
+    window.vjcoin.coinTransfer(reward, props.applicationData.studentID.publicKey);
     let id = setInterval(frame, 1000);
     setLoading(true);
     function frame() {
       if (localStorage.getItem("status") === "success") {
         localStorage.setItem("status", "undefined");
-        localStorage.setItem("coins", "undefined");
+
         approveApplication({
           id: props.applicationData._id,
           token,
