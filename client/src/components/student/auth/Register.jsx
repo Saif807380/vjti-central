@@ -160,7 +160,7 @@ const Register = () => {
         email: "* Please use VJTI Email ID only"
       }));
     }
-    if (student.password.length < 8) {
+    /* if (student.password.length < 8) {
       formIsValid = false;
       updateErrors((prevErrors) => ({
         ...prevErrors,
@@ -173,7 +173,7 @@ const Register = () => {
         ...prevErrors,
         confirmPassword: "* Password and Confirm Password do not match"
       }));
-    }
+    }*/
     if (!student.department) {
       updateErrors((prevErrors) => ({
         ...prevErrors,
@@ -227,9 +227,10 @@ const Register = () => {
         <DialogTitle>Key Pair</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Here's the public key that was generated for you through the VJChain Wallet. You can download
-            your credentials file from your profile after you complete the regitration process. We store your Public
-            key in our database for sending your rewards to you.
+            Here's the public key that was generated for you through the VJChain
+            Wallet. You can download your credentials file from your profile
+            after you complete the regitration process. We store your Public key
+            in our database for sending your rewards to you.
           </DialogContentText>
           <Typography variant="body1">Public Key</Typography>
           <Paper elevation={0} className={classes.key} square>
@@ -243,7 +244,7 @@ const Register = () => {
             variant="contained"
             color="primary"
             onClick={() => {
-              setIsRegistered(false)
+              setIsRegistered(false);
             }}
           >
             Continue
@@ -299,7 +300,7 @@ const Register = () => {
                   onChange={handleStudent}
                   error={errors.email}
                 />
-                <FormField
+                {/*<FormField
                   label="Password"
                   name="password"
                   required={true}
@@ -344,7 +345,7 @@ const Register = () => {
                       </InputAdornment>
                     )
                   }}
-                />
+                />*/}
                 <Grid container spacing={1}>
                   <Grid item xs={12} md={6}>
                     <FormControl
