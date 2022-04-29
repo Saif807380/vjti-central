@@ -164,7 +164,7 @@ const Register = () => {
     //     }));
     //   }
     // }
-    if (faculty.password.length < 8) {
+    /* if (faculty.password.length < 8) {
       formIsValid = false;
       updateErrors((prevErrors) => ({
         ...prevErrors,
@@ -177,7 +177,7 @@ const Register = () => {
         ...prevErrors,
         confirmPassword: "* Password and Confirm Password do not match"
       }));
-    }
+    }*/
     if (!faculty.department) {
       updateErrors((prevErrors) => ({
         ...prevErrors,
@@ -199,7 +199,6 @@ const Register = () => {
     dispatch({ type: REQUEST_AUTH });
     event.preventDefault();
     if (isFormValid()) {
-
       sendOTP({ dispatch, email: faculty.email, type: "Register" }).then(
         (res) => {
           if (res.status === 200) {
@@ -214,7 +213,6 @@ const Register = () => {
           }
         }
       );
-
     }
     dispatch({ type: AUTH_ERROR });
   };
@@ -229,9 +227,10 @@ const Register = () => {
         <DialogTitle>Key Pair</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Here's the public key that was generated for you through the VJChain Wallet. You can download
-            your credentials file from your profile after you complete the regitration process. We store your Public
-            key in our database for sending your rewards to you.
+            Here's the public key that was generated for you through the VJChain
+            Wallet. You can download your credentials file from your profile
+            after you complete the regitration process. We store your Public key
+            in our database for sending your rewards to you.
           </DialogContentText>
           <Typography variant="body1">Public Key</Typography>
           <Paper elevation={0} className={classes.key} square>
@@ -245,7 +244,7 @@ const Register = () => {
             variant="contained"
             color="primary"
             onClick={() => {
-              setIsRegistered(false)
+              setIsRegistered(false);
             }}
           >
             Continue
@@ -286,7 +285,7 @@ const Register = () => {
                 onChange={handleFaculty}
                 error={errors.email}
               />
-              <FormField
+              {/* <FormField
                 label="Password"
                 name="password"
                 required={true}
@@ -328,7 +327,7 @@ const Register = () => {
                   )
                 }}
               />
-
+*/}
               <FormControl
                 variant="outlined"
                 required
