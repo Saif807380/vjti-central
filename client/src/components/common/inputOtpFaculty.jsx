@@ -60,7 +60,7 @@ const OtpPageFaculty = (props) => {
     const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
     const [otp, setOtp] = useState("");
 
-    const [isRegistered, setIsRegistered] = useState(false);
+    
 
     const handleClick = () => {
         if (otp.length === 6) {
