@@ -65,15 +65,16 @@ const FacultyActions = (props) => {
   };
 
   const handleApprove = async () => {
+
     localStorage.setItem("coins", reward);
-    console.log(1);
-    await new Promise(resolve => setTimeout(resolve, 10000)); // 3 sec
-    console.log(2);
-    window.vjcoin.coinTransfer();
+
+    window.vjcoin.coinTransfer(reward);
     let id = setInterval(frame, 1000);
     setLoading(true);
     function frame() {
       if (localStorage.getItem("status") === "success") {
+        localStorage.setItem("status", "undefined");
+        localStorage.setItem("coins", "undefined");
         approveApplication({
           id: props.applicationData._id,
           token,
@@ -87,8 +88,7 @@ const FacultyActions = (props) => {
             return;
           } else {
             history.replace(`/faculty/applications/${props.applicationData._id}`);
-            localStorage.setItem("status", "undefined");
-            localStorage.setItem("coins", "undefined");
+
             setSeverity("success");
             setMessage("Application approved. Reward will be mined shortly.");
             handleClose();
