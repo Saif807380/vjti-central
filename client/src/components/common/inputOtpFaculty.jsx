@@ -75,7 +75,7 @@ const OtpPageFaculty = (props) => {
                         setMessage(res.error);
                         setOpen(true);
                     } else {
-                        setIsRegistered(true);
+
                         setSeverity("success");
                         setMessage("You have successfully registered.");
                         setOpen(true);
@@ -92,30 +92,6 @@ const OtpPageFaculty = (props) => {
 
     return (
         <>
-            <Dialog open={isRegistered}>
-                <DialogTitle>Key Pair</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Here's the public key that was generated for you. You can download
-                        your encrypted credentials file from your profile. This file can be
-                        imported into the VJTI-Blockchain Wallet App. We store your Public
-                        key in our database for sending your rewards to you.
-                    </DialogContentText>
-                    <Typography variant="body1">Public Key</Typography>
-
-                </DialogContent>
-                <DialogActions>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                            history.push(`/student/login`);
-                        }}
-                    >
-                        Continue
-                    </Button>
-                </DialogActions>
-            </Dialog>
 
             <section id="otpSection">
                 <div className="center_div">

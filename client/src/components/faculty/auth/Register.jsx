@@ -12,7 +12,13 @@ import {
   MenuItem,
   Select,
   IconButton,
-  FormHelperText
+  FormHelperText,
+  Grid,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
@@ -96,7 +102,7 @@ const Register = () => {
   const toggleShowPassword = () => setShowPassword(!showPassword);
   const toggleShowConfirmPassword = () =>
     setShowConfirmPassword(!showConfirmPassword);
-
+  const [isRegistered, setIsRegistered] = useState(true);
   const handleFaculty = (e) => {
     setFaculty((prevFaculty) => ({
       ...prevFaculty,
@@ -218,143 +224,172 @@ const Register = () => {
   ) : formData ? (
     <OtpPageFaculty type="Register" values={formData} />
   ) : (
-    <Box
-      className={classes.root}
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-    >
-      <Paper elevation={isSmallScreen ? 0 : 3} className={classes.paper}>
-        <div style={{ marginTop: "24px" }}>
-          <Typography variant="h5">Faculty Registration</Typography>
-        </div>
-        <form className={classes.form} noValidate>
-          <div className={classes.formInner}>
-            <FormField
-              label="Faculty ID"
-              name="facultyID"
-              required={true}
-              onChange={handleFaculty}
-              error={errors.facultyID}
-            />
-            <FormField
-              label="Faculty Name"
-              name="name"
-              required={true}
-              onChange={handleFaculty}
-              error={errors.name}
-            />
-            <FormField
-              label="Email"
-              name="email"
-              required={true}
-              onChange={handleFaculty}
-              error={errors.email}
-            />
-            <FormField
-              label="Password"
-              name="password"
-              required={true}
-              onChange={handleFaculty}
-              error={errors.password}
-              InputProps={{
-                type: showPassword ? "text" : "password",
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={toggleShowPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-            />
-            <FormField
-              label="Confirm Password"
-              name="confirmPassword"
-              required={true}
-              onChange={handleConfirmPassword}
-              error={errors.confirmPassword}
-              InputProps={{
-                type: showConfirmPassword ? "text" : "password",
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={toggleShowConfirmPassword}
-                      edge="end"
-                    >
-                      {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-            />
-
-            <FormControl
-              variant="outlined"
-              required
-              className={classes.formControl}
-              error={errors.department.length !== 0}
-            >
-              <InputLabel id="department-label">Department</InputLabel>
-              <Select
-                labelId="department-label"
-                id="department"
-                name="department"
-                value={faculty.department}
-                onChange={handleFaculty}
-                label="Department"
-              >
-                {constants.DEPARTMENTS.map((dept) => (
-                  <MenuItem key={dept} value={dept}>
-                    {dept}
-                  </MenuItem>
-                ))}
-              </Select>
-              <FormHelperText>{errors.department}</FormHelperText>
-            </FormControl>
-            <FormField
-              label="Position"
-              name="position"
-              required={true}
-              onChange={handleFaculty}
-              error={errors.position}
-            />
-            <FormField
-              label="Description"
-              name="description"
-              required={false}
-              onChange={handleFaculty}
-              error={""}
-            />
-            <Button
-              onClick={handleFormSubmit}
-              size="large"
-              color="primary"
-              type="submit"
-              fullWidth
-              variant="contained"
-            >
-              Register
-            </Button>
+    <>
+      <Dialog open={isRegistered}>
+        <DialogTitle>Key Pair</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Here's the public key that was generated for you through the VJChain Wallet. You can download
+            your credentials file from your profile after you complete the regitration process. We store your Public
+            key in our database for sending your rewards to you.
+          </DialogContentText>
+          <Typography variant="body1">Public Key</Typography>
+          <Paper elevation={0} className={classes.key} square>
+            <Typography variant="body2" style={{ wordWrap: "break-word" }}>
+              {faculty.publicKey}
+            </Typography>
+          </Paper>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setIsRegistered(false)
+            }}
+          >
+            Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Box
+        className={classes.root}
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Paper elevation={isSmallScreen ? 0 : 3} className={classes.paper}>
+          <div style={{ marginTop: "24px" }}>
+            <Typography variant="h5">Faculty Registration</Typography>
           </div>
-        </form>
-        <Typography
-          style={{ color: "#303F9E", fontSize: 15, marginBottom: "15px" }}
-        >
-          Already have an account?
-          <Link style={{ color: "#303F9E" }} to={`/faculty/login`}>
-            {" "}
-            Login
-          </Link>
-        </Typography>
-      </Paper>
-    </Box>
+          <form className={classes.form} noValidate>
+            <div className={classes.formInner}>
+              <FormField
+                label="Faculty ID"
+                name="facultyID"
+                required={true}
+                onChange={handleFaculty}
+                error={errors.facultyID}
+              />
+              <FormField
+                label="Faculty Name"
+                name="name"
+                required={true}
+                onChange={handleFaculty}
+                error={errors.name}
+              />
+              <FormField
+                label="Email"
+                name="email"
+                required={true}
+                onChange={handleFaculty}
+                error={errors.email}
+              />
+              <FormField
+                label="Password"
+                name="password"
+                required={true}
+                onChange={handleFaculty}
+                error={errors.password}
+                InputProps={{
+                  type: showPassword ? "text" : "password",
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={toggleShowPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <FormField
+                label="Confirm Password"
+                name="confirmPassword"
+                required={true}
+                onChange={handleConfirmPassword}
+                error={errors.confirmPassword}
+                InputProps={{
+                  type: showConfirmPassword ? "text" : "password",
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={toggleShowConfirmPassword}
+                        edge="end"
+                      >
+                        {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  )
+                }}
+              />
+
+              <FormControl
+                variant="outlined"
+                required
+                className={classes.formControl}
+                error={errors.department.length !== 0}
+              >
+                <InputLabel id="department-label">Department</InputLabel>
+                <Select
+                  labelId="department-label"
+                  id="department"
+                  name="department"
+                  value={faculty.department}
+                  onChange={handleFaculty}
+                  label="Department"
+                >
+                  {constants.DEPARTMENTS.map((dept) => (
+                    <MenuItem key={dept} value={dept}>
+                      {dept}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>{errors.department}</FormHelperText>
+              </FormControl>
+              <FormField
+                label="Position"
+                name="position"
+                required={true}
+                onChange={handleFaculty}
+                error={errors.position}
+              />
+              <FormField
+                label="Description"
+                name="description"
+                required={false}
+                onChange={handleFaculty}
+                error={""}
+              />
+              <Button
+                onClick={handleFormSubmit}
+                size="large"
+                color="primary"
+                type="submit"
+                fullWidth
+                variant="contained"
+              >
+                Register
+              </Button>
+            </div>
+          </form>
+          <Typography
+            style={{ color: "#303F9E", fontSize: 15, marginBottom: "15px" }}
+          >
+            Already have an account?
+            <Link style={{ color: "#303F9E" }} to={`/faculty/login`}>
+              {" "}
+              Login
+            </Link>
+          </Typography>
+        </Paper>
+      </Box>
+    </>
   );
 };
 

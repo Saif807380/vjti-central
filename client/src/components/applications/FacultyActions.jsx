@@ -18,7 +18,7 @@ import {
 } from "@material-ui/core";
 import { Clear, CheckCircle } from "@material-ui/icons";
 import { useAuthState } from "../../context/AuthContext";
-
+import Spinner from "../../components/Spinner";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import FormField from "../FormField";
@@ -54,6 +54,7 @@ const FacultyActions = (props) => {
       reward: ""
     });
   };
+  const [loading, setLoading] = useState(false);
 
   const { token } = useAuthState();
   const [isOpen, setIsOpen] = useState(false);
@@ -65,8 +66,12 @@ const FacultyActions = (props) => {
 
   const handleApprove = async () => {
     localStorage.setItem("coins", reward);
+    console.log(1);
+    await new Promise(resolve => setTimeout(resolve, 10000)); // 3 sec
+    console.log(2);
     window.vjcoin.coinTransfer();
     let id = setInterval(frame, 1000);
+    setLoading(true);
     function frame() {
       if (localStorage.getItem("status") === "success") {
         approveApplication({
@@ -74,6 +79,7 @@ const FacultyActions = (props) => {
           token,
           reward: +reward
         }).then((res) => {
+          setLoading(false);
           if (res.error) {
             setSeverity("error");
             setMessage(res.error);
@@ -81,6 +87,8 @@ const FacultyActions = (props) => {
             return;
           } else {
             history.replace(`/faculty/applications/${props.applicationData._id}`);
+            localStorage.setItem("status", "undefined");
+            localStorage.setItem("coins", "undefined");
             setSeverity("success");
             setMessage("Application approved. Reward will be mined shortly.");
             handleClose();
@@ -113,7 +121,9 @@ const FacultyActions = (props) => {
     handleClose();
   };
 
-  return (
+  return loading ? (
+    <Spinner />
+  ) : (
 
     <React.Fragment>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>

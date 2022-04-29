@@ -71,23 +71,32 @@ const Login = (props) => {
   });
 
   const handleGenerate = async (event) => {
-    console.log("Palak")
+
     console.log(localStorage.getItem("pubkey"));
     if (localStorage.getItem("pubkey") === null) {
 
       window.vjcoin.register();
       event.preventDefault();
+
       let id = setInterval(frame, 1000);
+      setLoading(true);
       function frame() {
         if (localStorage.getItem("pubkey") !== null) {
           clearInterval(id);
           console.log(userType);
+          setLoading(false);
           history.push(`/${props.userType}/register`);
         }
       }
     } else {
-      console.log(userType);
-      history.push(`/${props.userType}/register`);
+
+      setSeverity("error");
+      setMessage("You currently have a logged in account. Try importing account to connect to wallet");
+      setOpen(true);
+      event.preventDefault();
+      // setLoading(false);
+      // history.push(`/${props.userType}/register`);
+
     }
   };
   const handleLogin = async (event) => {
@@ -95,7 +104,9 @@ const Login = (props) => {
 
       window.vjcoin.login();
       event.preventDefault();
+
       let id = setInterval(frame, 1000);
+      setLoading(true);
       function frame() {
         if (localStorage.getItem("pubkey") !== null) {
 
@@ -110,11 +121,13 @@ const Login = (props) => {
               setSeverity("error");
               setMessage(res.error);
               event.preventDefault();
+              setLoading(false);
               setOpen(true);
             } else {
               setSeverity("success");
               setMessage("You have successfully logged in.");
               setOpen(true);
+              setLoading(false);
               history.push(`/${props.userType}/applications`);
             }
           });
