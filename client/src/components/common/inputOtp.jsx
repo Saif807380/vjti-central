@@ -1,12 +1,7 @@
 import { React, useState, useContext } from "react";
 import {
   Typography,
-  Dialog,
-  DialogTitle,
-  Paper,
-  DialogContent,
-  DialogContentText,
-  DialogActions
+
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import OtpInput from "react-otp-input";
@@ -64,7 +59,6 @@ const OtpPage = (props) => {
     privateKey: ""
   });
 
-  const [isRegistered, setIsRegistered] = useState(false);
 
   const handleClick = () => {
     if (otp.length === 6) {
@@ -79,7 +73,7 @@ const OtpPage = (props) => {
             setMessage(res.error);
             setOpen(true);
           } else {
-            setIsRegistered(true);
+
             history.push(`/student/applications`);
             setSeverity("success");
             setMessage("You have successfully registered.");
@@ -96,34 +90,6 @@ const OtpPage = (props) => {
 
   return (
     <>
-      {/* <Dialog open={isRegistered}>
-        <DialogTitle>Key Pair</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Here's the public key that was generated for you. You can download
-            your encrypted credentials file from your profile. This file can be
-            imported into the VJTI-Blockchain Wallet App. We store your Public
-            key in our database for sending your rewards to you.
-          </DialogContentText>
-          <Typography variant="body1">Public Key</Typography>
-          <Paper elevation={0} className={classes.key} square>
-            <Typography variant="body2" style={{ wordWrap: "break-word" }}>
-              {keys.publicKey}
-            </Typography>
-          </Paper>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              history.push(`/student/login`);
-            }}
-          >
-            Continue
-          </Button>
-        </DialogActions>
-      </Dialog> */}
 
       <section id="otpSection">
         <div className="center_div">

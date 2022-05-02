@@ -7,13 +7,9 @@ import {
   Button,
   Paper,
   FormControl,
-  FormControlLabel,
-  Checkbox,
-  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
-  IconButton,
   FormHelperText,
   Grid,
   Dialog,
@@ -22,7 +18,6 @@ import {
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import { SnackbarContext } from "../../../context/SnackbarContext";
 import { useAuthDispatch } from "../../../context/AuthContext";
@@ -106,13 +101,6 @@ const Register = () => {
     Diploma: constants.DIPLOMA
   };
 
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const handleConfirmPassword = (e) => setConfirmPassword(e.target.value);
-  const toggleShowPassword = () => setShowPassword(!showPassword);
-  const toggleShowConfirmPassword = () =>
-    setShowConfirmPassword(!showConfirmPassword);
   const [isRegistered, setIsRegistered] = useState(true);
   const handleStudent = (e) => {
     setStudent((prevStudent) => ({
@@ -160,20 +148,7 @@ const Register = () => {
         email: "* Please use VJTI Email ID only"
       }));
     }
-    /* if (student.password.length < 8) {
-      formIsValid = false;
-      updateErrors((prevErrors) => ({
-        ...prevErrors,
-        password: "* Password too short"
-      }));
-    }
-    if (student.password !== confirmPassword) {
-      formIsValid = false;
-      updateErrors((prevErrors) => ({
-        ...prevErrors,
-        confirmPassword: "* Password and Confirm Password do not match"
-      }));
-    }*/
+
     if (!student.department) {
       updateErrors((prevErrors) => ({
         ...prevErrors,
@@ -264,18 +239,6 @@ const Register = () => {
             <div style={{ marginTop: "24px" }}>
               <Typography variant="h5">Student Registration</Typography>
             </div>
-            {/* <div
-              style={{ padding: "24px", width: "100%", wordWrap: "break-word" }}
-            >
-              <Typography variant="h6">
-                Generated Public Key: {student.publicKey}{" "}
-              </Typography>
-            </div>
-            <div style={{ marginTop: "24px" }}>
-              <Typography variant="h6">
-                Please fill in the other details to complete the process
-              </Typography>
-            </div> */}
 
             <form className={classes.form} noValidate>
               <div className={classes.formInner}>
@@ -300,52 +263,7 @@ const Register = () => {
                   onChange={handleStudent}
                   error={errors.email}
                 />
-                {/*<FormField
-                  label="Password"
-                  name="password"
-                  required={true}
-                  onChange={handleStudent}
-                  error={errors.password}
-                  InputProps={{
-                    type: showPassword ? "text" : "password",
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={toggleShowPassword}
-                          edge="end"
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    )
-                  }}
-                />
-                <FormField
-                  label="Confirm Password"
-                  name="confirmPassword"
-                  required={true}
-                  onChange={handleConfirmPassword}
-                  error={errors.confirmPassword}
-                  InputProps={{
-                    type: showConfirmPassword ? "text" : "password",
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={toggleShowConfirmPassword}
-                          edge="end"
-                        >
-                          {showConfirmPassword ? (
-                            <Visibility />
-                          ) : (
-                            <VisibilityOff />
-                          )}
-                        </IconButton>
-                      </InputAdornment>
-                    )
-                  }}
-                />*/}
+
                 <Grid container spacing={1}>
                   <Grid item xs={12} md={6}>
                     <FormControl

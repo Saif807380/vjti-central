@@ -32,7 +32,7 @@ exports.registerStudent = async (req, res) => {
       }
     });
   } catch (e) {
-    console.log(e.message);
+  
     return res.status(500).json({ error: e.message });
   }
 };
@@ -41,10 +41,9 @@ exports.registerStudent = async (req, res) => {
 exports.loginStudent = async (req, res) => {
   try {
     
-console.log(req.body.pubkey);
+
     const student = await Student.findOne({publicKey: req.body.pubkey })
-console.log("Found")
-console.log(student)
+
     if (!student) {
       return res.status(401).json({ error: "Incorrect email or password" });
     }
@@ -125,7 +124,7 @@ exports.getStudent = async (req, res) => {
       return res.status(500).json({
         error: "An error occurred while fetching wallet balance from VJ Chain"
       });
-console.log(response);
+
     return res.status(200).json({
       name: student.name,
       studentID: student.studentID,

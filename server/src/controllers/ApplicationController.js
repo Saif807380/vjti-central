@@ -139,7 +139,7 @@ module.exports = {
       }
       student.coinsAchieved += reward;
       await student.save();
-      console.log(reward, student.publicKey);
+   
       
     
       application.status = "Accepted";

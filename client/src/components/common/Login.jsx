@@ -2,21 +2,16 @@ import React, { useEffect, useState, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Box,
-  Typography,
   Button,
   Paper,
-  InputAdornment,
-  IconButton
 } from "@material-ui/core";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+
 import Spinner from "../../components/Spinner";
 import { useAuthState, useAuthDispatch } from "../../context/AuthContext";
 import { useHistory } from "react-router-dom";
 import { login } from "../../actions/authActions";
 import { SnackbarContext } from "../../context/SnackbarContext";
-import { REQUEST_AUTH, AUTH_ERROR } from "../../reducers/types";
-import FormField from "../../components/FormField";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,25 +49,16 @@ const Login = (props) => {
   const history = useHistory();
   const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
 
-  const handleEmail = (e) => setEmail(e.target.value);
-  const handlePassword = (e) => setPassword(e.target.value);
-  const toggleShowPassword = () => setShowPassword(!showPassword);
+
   const [loading, setLoading] = useState(false);
 
 
-  console.log(props);
-  const [errors, updateErrors] = useState({
-    email: "",
-    password: ""
-  });
+
 
   const handleGenerate = async (event) => {
 
-    console.log(localStorage.getItem("pubkey"));
+
     if (localStorage.getItem("pubkey") === null) {
 
       window.vjcoin.register();
@@ -83,7 +69,7 @@ const Login = (props) => {
       function frame() {
         if (localStorage.getItem("pubkey") !== null) {
           clearInterval(id);
-          console.log(userType);
+
           setLoading(false);
           history.push(`/${props.userType}/register`);
         }
@@ -94,8 +80,6 @@ const Login = (props) => {
       setMessage("You currently have a logged in account. Try importing account to connect to wallet");
       setOpen(true);
       event.preventDefault();
-      // setLoading(false);
-      // history.push(`/${props.userType}/register`);
 
     }
   };

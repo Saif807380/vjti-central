@@ -7,20 +7,16 @@ import {
   Button,
   Paper,
   FormControl,
-  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
-  IconButton,
   FormHelperText,
-  Grid,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 import Spinner from "../../../components/Spinner";
 import { Link } from "react-router-dom";
@@ -28,7 +24,6 @@ import { useAuthState, useAuthDispatch } from "../../../context/AuthContext";
 import { SnackbarContext } from "../../../context/SnackbarContext";
 import FormField from "../../../components/FormField";
 import constants from "../../../constants";
-import { register } from "../../../actions/authActions";
 import { REQUEST_AUTH, AUTH_ERROR } from "../../../reducers/types";
 import { sendOTP } from "../../../actions/authActions";
 import OtpPageFaculty from "../../common/inputOtpFaculty";
@@ -67,7 +62,7 @@ const Register = () => {
   const classes = useStyles();
   const { loading } = useAuthState();
   const dispatch = useAuthDispatch();
-  const history = useHistory();
+
   const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
@@ -94,14 +89,7 @@ const Register = () => {
     description: ""
   });
 
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const handleConfirmPassword = (e) => setConfirmPassword(e.target.value);
-  const toggleShowPassword = () => setShowPassword(!showPassword);
-  const toggleShowConfirmPassword = () =>
-    setShowConfirmPassword(!showConfirmPassword);
   const [isRegistered, setIsRegistered] = useState(true);
   const handleFaculty = (e) => {
     setFaculty((prevFaculty) => ({

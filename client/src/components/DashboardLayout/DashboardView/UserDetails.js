@@ -26,7 +26,7 @@ const UserDetails = ({ detailList }) => {
   const [errors, updateErrors] = useState({
     title: ""
   });
-  const { userType, userID, token } = useAuthState();
+  const { userType } = useAuthState();
   const clearErrors = () => {
     updateErrors({
       title: ""
@@ -75,7 +75,7 @@ const UserDetails = ({ detailList }) => {
     }
 
     // for secret key
-    var iv = Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    iv = Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     let hash3 = crypto.createHash("sha1");
     let temp_data3 = hash3.update(password, "utf-8");
     let gen_hash3 = temp_data3.digest().slice(0, 16);
@@ -165,7 +165,7 @@ const UserDetails = ({ detailList }) => {
                   {detailList.name}
                 </TableCell>
               </TableRow>
-              {userType=="student"?     <TableRow>
+              {userType==="student"?     <TableRow>
         
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
                   {"ID"}
@@ -184,7 +184,7 @@ const UserDetails = ({ detailList }) => {
                   {detailList.email}
                 </TableCell>
               </TableRow>
-              {userType=="student"?    <TableRow>
+              {userType==="student"?    <TableRow>
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
                   {"Wallet Balance"}
                 </TableCell>
@@ -193,7 +193,7 @@ const UserDetails = ({ detailList }) => {
                   {detailList.walletBalance}
                 </TableCell>
               </TableRow> :<></>}
-              {userType=="student"?    <TableRow>
+              {userType==="student"?    <TableRow>
                 <TableCell style={{ fontSize: "1.1rem", textAlign: "center" }}>
                   {"Degree"}
                 </TableCell>

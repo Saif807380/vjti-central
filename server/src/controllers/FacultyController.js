@@ -35,7 +35,7 @@ exports.registerFaculty = async (req, res) => {
 exports.loginFaculty = async (req, res) => {
   try {
     
-console.log(req.body.pubkey);
+
     const faculty = await Faculty.findOne({publicKey: req.body.pubkey })
 
     if (!faculty) {

@@ -73,7 +73,7 @@ export const getUser = async ({ id, token, userType }) => {
         Authorization: `Bearer ${token}`
       }
     });
-    console.log(res);
+    
     return {
       data: res.data,
       status: res.status

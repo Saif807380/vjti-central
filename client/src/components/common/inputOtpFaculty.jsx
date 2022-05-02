@@ -1,12 +1,7 @@
 import { React, useState, useContext } from "react";
 import {
     Typography,
-    Dialog,
-    DialogTitle,
-    Paper,
-    DialogContent,
-    DialogContentText,
-    DialogActions
+
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import OtpInput from "react-otp-input";
@@ -60,7 +55,7 @@ const OtpPageFaculty = (props) => {
     const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
     const [otp, setOtp] = useState("");
 
-    
+
 
     const handleClick = () => {
         if (otp.length === 6) {
