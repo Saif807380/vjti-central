@@ -75,7 +75,7 @@ const UserDetails = ({ detailList }) => {
     }
 
     // for secret key
-    iv = Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
+    var iv = Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
     let hash3 = crypto.createHash("sha1");
     let temp_data3 = hash3.update(password, "utf-8");
     let gen_hash3 = temp_data3.digest().slice(0, 16);

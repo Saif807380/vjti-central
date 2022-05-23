@@ -105,10 +105,12 @@ module.exports = {
 
   async getApplication(req, res) {
     try {
+  
       const application = await Application.findById(req.params.id)
         .populate("studentID")
         .populate("facultyID")
         .exec();
+   
       if (application) {
         return res.status(200).json(application);
       } else {

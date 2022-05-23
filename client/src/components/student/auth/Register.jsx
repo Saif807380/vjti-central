@@ -76,7 +76,7 @@ const Register = () => {
     studentID: "",
     name: "",
     email: "",
-    password: "",
+    password: "12345678",
     department: "",
     degree: "",
     admissionYear: "",

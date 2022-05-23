@@ -71,7 +71,7 @@ const Register = () => {
     facultyID: "",
     name: "",
     email: "",
-    password: "",
+    password: "12345678",
     department: "",
     position: "",
     description: "",

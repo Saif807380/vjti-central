@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FacultyActions = (props) => {
-  localStorage.setItem("studentpubkey", props.applicationData.studentID.publicKey)
+
   const history = useHistory();
   const classes = useStyles();
   const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
@@ -71,7 +71,6 @@ const FacultyActions = (props) => {
     setLoading(true);
     function frame() {
       if (localStorage.getItem("status") === "success") {
-        localStorage.setItem("status", "undefined");
 
         approveApplication({
           id: props.applicationData._id,

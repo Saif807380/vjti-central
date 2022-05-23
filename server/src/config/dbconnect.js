@@ -15,6 +15,11 @@ function connect() {
     connectionString = process.env.MONGO_URI_PROD;
   }
 
+  if (process.env.NODE_ENV == "test") {
+    console.log("Node env testing detected");
+    //connectionString = process.env.MONGO_URI_PROD;
+  }
+
   mongoose.connect(connectionString, mongooseOptions);
   mongoose.Promise = global.Promise;
   mongoose.connection.on("open", () => console.log(`MongoDB Connected`));

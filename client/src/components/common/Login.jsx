@@ -58,7 +58,7 @@ const Login = (props) => {
 
   const handleGenerate = async (event) => {
 
-
+    let secondsRemaining = 60;
     if (localStorage.getItem("pubkey") === null) {
 
       window.vjcoin.register();
@@ -69,10 +69,15 @@ const Login = (props) => {
       function frame() {
         if (localStorage.getItem("pubkey") !== null) {
           clearInterval(id);
-
           setLoading(false);
           history.push(`/${props.userType}/register`);
         }
+        if (secondsRemaining === 0) {
+          clearInterval(id);
+          setMessage("Please try again");
+        }
+        secondsRemaining--;
+
       }
     } else {
 

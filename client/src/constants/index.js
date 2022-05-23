@@ -64,18 +64,18 @@ const constants = {
   ],
   STEPS: {
     STUDENTS: [
-      "Register yourself with your public key or generate a new key pair",
+      "Import account with your secret key credentials or Register yourself with generating a new key pair",
       "Create a new application for your achievement, submit a certificate for verification and select a faculty that will verify your application",
-      "Receive VJ Coins as reward upon faculty approval. The coins will be transferred post mining",
-      "Rewards can be spent in the Canteen, Library, etc",
-      "View your pending/approved/rejected applications and check your balance in your profile"
+      "Receive VJ Coins as reward upon faculty approvals,Rewards can be spent in the Canteen, Library, etc",
+      "View your pending/approved/rejected applications",
+      "Check your wallet balance in profile and Download credentails from your profile section"
     ],
     FACULTY: [
-      "Register by creating an account",
+      "Import account with your secret key credentials or Register yourself with generating a new key pair",
       "Review student application details and view certificate of achievement",
-      "Enter application title and date of achievement from the details to verify",
       "We provide verification check to confirm that the application hasn't already been rewarded by a different faculty",
-      "Approve/reject application and reward appropriate amount of VJ Coins"
+      "Approve/reject application and reward appropriate amount of VJ Coins",
+      "Download credentails from your profile section "
     ]
   },
   REWARDS: {
