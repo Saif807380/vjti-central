@@ -84,12 +84,14 @@ const FacultyActions = (props) => {
             setOpen(true);
             return;
           } else {
+            localStorage.setItem("status", undefined);
             history.replace(`/faculty/applications/${props.applicationData._id}`);
 
             setSeverity("success");
             setMessage("Application approved. Reward will be mined shortly.");
             handleClose();
             clearInterval(id);
+
             setOpen(true);
           }
           props.setLoading(false);
