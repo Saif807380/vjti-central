@@ -1,4 +1,5 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
+
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {
@@ -18,7 +19,7 @@ import {
   DialogContentText,
   DialogActions
 } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { SnackbarContext } from "../../../context/SnackbarContext";
 import { useAuthDispatch } from "../../../context/AuthContext";
 import FormField from "../../../components/FormField";
@@ -63,13 +64,31 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-let currentYear = new Date().getFullYear();
+
 
 const Register = () => {
   const classes = useStyles();
   const dispatch = useAuthDispatch();
   const theme = useTheme();
   const { setOpen, setSeverity, setMessage } = useContext(SnackbarContext);
+  let currentYear = new Date().getFullYear();
+  const history = useHistory();
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    setLoading(true);
+    if (localStorage.getItem("pubkey") !== null) {
+
+      setLoading(false);
+
+    } else {
+      setSeverity("error");
+      setMessage("Please Generate Key Pair from Wallet before continuing");
+      setOpen(true)
+      history.push(`/student/login`);
+    }
+
+
+  }, []);
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [formData, setFormData] = useState(null);
   const [student, setStudent] = useState({

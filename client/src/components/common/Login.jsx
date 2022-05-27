@@ -59,11 +59,12 @@ const Login = (props) => {
   const handleGenerate = async (event) => {
 
     let secondsRemaining = 60;
+
     if (localStorage.getItem("pubkey") === null) {
 
       window.vjcoin.register();
       event.preventDefault();
-
+      localStorage.setItem("reg_complete", false);
       let id = setInterval(frame, 1000);
       setLoading(true);
       function frame() {
@@ -72,9 +73,13 @@ const Login = (props) => {
           setLoading(false);
           history.push(`/${props.userType}/register`);
         }
+        console.log(secondsRemaining);
         if (secondsRemaining === 0) {
           clearInterval(id);
+          setSeverity("error");
           setMessage("Please try again");
+          setOpen(true);
+          setLoading(false);
         }
         secondsRemaining--;
 
@@ -89,6 +94,7 @@ const Login = (props) => {
     }
   };
   const handleLogin = async (event) => {
+    let secondsRemaining = 60;
     if (localStorage.getItem("pubkey") === null) {
 
       window.vjcoin.login();
@@ -124,6 +130,17 @@ const Login = (props) => {
 
           clearInterval(id);
         }
+        console.log(secondsRemaining);
+        if (secondsRemaining === 0) {
+
+          clearInterval(id);
+          setSeverity("error");
+          setMessage("Please try again");
+          setOpen(true);
+          setLoading(false);
+        }
+        secondsRemaining--;
+
       }
     }
     else {

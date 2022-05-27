@@ -70,11 +70,11 @@ const OtpPageFaculty = (props) => {
                         setMessage(res.error);
                         setOpen(true);
                     } else {
-
+                        history.push(`/faculty/applications`);
                         setSeverity("success");
                         setMessage("You have successfully registered.");
                         setOpen(true);
-                        history.push(`/faculty/login`);
+
                     }
                 });
             }
