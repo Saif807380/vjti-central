@@ -73,7 +73,7 @@ const Login = (props) => {
           setLoading(false);
           history.push(`/${props.userType}/register`);
         }
-        console.log(secondsRemaining);
+
         if (secondsRemaining === 0) {
           clearInterval(id);
           setSeverity("error");
@@ -130,7 +130,7 @@ const Login = (props) => {
 
           clearInterval(id);
         }
-        console.log(secondsRemaining);
+
         if (secondsRemaining === 0) {
 
           clearInterval(id);

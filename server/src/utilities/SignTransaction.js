@@ -10,7 +10,7 @@ module.exports = {
     let signature = ecdsa.sign(txn, privateKey);
     let sig_final =
       "[" + signature.r.toString() + ", " + signature.s.toString() + "]";
-    console.log(sig_final);
+   
     return sig_final;
   }
 };
