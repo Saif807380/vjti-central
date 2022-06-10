@@ -1,4 +1,4 @@
-# <h3 align="center">Encouraging Student Partipicipation in Extra Curricular Achievements using an Incentivization Platform</h3>
+# <h3 align="center">Encouraging Student Participation in Extra Curricular Achievements using an Incentivization Platform</h3>
 
 <hr />
 
